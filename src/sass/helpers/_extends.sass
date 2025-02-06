@@ -1,0 +1,44 @@
+%show
+    display: block
+    visibility: visible
+
+%hidden
+    display: none
+    visibility: hidden
+
+%reset-outline
+    outline: none
+
+%reset-link
+    text-decoration: none
+
+%reset-table
+    margin: 0
+    border-collapse: collapse
+    border-spacing: 0
+
+%reset-appearance
+    appearance: none
+    -moz-appearance: none
+    -webkit-appearance: none
+
+%reset-list
+    width: auto
+    height: auto
+    margin: 0
+    padding: 0
+    border: 0
+    float: none
+    background: none
+
+%reset-underline
+    text-decoration: none
+
+    &:hover
+        text-decoration: underline
+
+%reset-box-height
+    &:after
+        display: block
+        clear: both
+        content: ''

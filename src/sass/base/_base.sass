@@ -1,0 +1,95 @@
+img
+    display: block
+
+.bold, strong, dt
+    font-weight: bold
+
+.hidden
+    @extend %hidden
+
+input[type="text"] , input[type="submit"] , input[type="button"]
+    -webkit-appearance: none
+
+input,
+textarea,
+select,
+button,
+a
+    font-family: $font-family-base
+    color: $font-color-base
+
+    &:hover
+        color: $font-color-base
+
+b
+    font-weight: bold
+
+em
+    font-weight: bold
+    color: $page-color
+
+table
+    border-collapse: collapse
+    border-spacing: 0
+
+body
+    font-family: $font-family-base
+    font-size: $font-size-base
+    line-height: $line-for-base
+    color: $font-color-base
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+
+*, ::after, ::before
+    box-sizing: initial
+
+
+html, body, #root
+    +size(100%, 100%)
+
+#app_main
+    +size(100%, null null 68.3%)
+
+#app_free_main
+    +size(100%, null null 80%)
+
+// error-message
+.error-message
+    font-size: $font-size-12
+    line-height: $line-for-12
+    color: $error
+
+.m-error-message
+    font-size: $m-font-size-12
+    line-height: $m-line-for-12
+    color: $error
+
+// layout
+.u-container
+    +size(1024px)
+    +margin(0 auto)
+
+.m-container
+    +size(88.888889vw)
+    +margin(0 auto)
+    font-size: $m-font-size-base
+
+// common
+.require
+    color: $error
+
+// popup
+.popup-container
+    z-index: 1000
+
+// word-break
+.text-wrap
+    word-break: break-all
+
+// header-nav
+.input-header-major-select .input-select__control
+    +size(130px, 40px)
+
+.input-header-major-select-m .input-select__control
+    border-color: $page-color
+    +size(26.944444vw, 13.111111vw)
