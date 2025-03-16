@@ -1,8 +1,8 @@
 // style
-import "../style/project.sass";
+import 'views/main/style/project.sass';
 
 //component
-import SideBar from "../components/SideBar";
+import SideBar from 'views/main/components/SideBar';
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
