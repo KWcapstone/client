@@ -1,10 +1,8 @@
 // style
-import 'views/desktop/main/style/side-bar.sass';
+import "../style/side-bar.sass";
 
 const SideBar = () => {
-  return (
-    <div className="side-wrap"></div>
-  )
-}
+  return <div className="side-wrap"></div>;
+};
 
 export default SideBar;
