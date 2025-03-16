@@ -3,12 +3,14 @@ import '@/views/main/style/project.sass';
 
 //component
 import SideBar from '@/views/main/components/SideBar';
+import useSpeechToText from '@/views/main/components/useSpeechToText.js';
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectPage = () => {
   const [sort, setSort] = useState<string>("all");
+  const { transcript:any, listening, toggleListening } = useSpeechToText();
 
   return (
     <div className="main">
@@ -45,6 +47,10 @@ const ProjectPage = () => {
             {/* <div className="order-warp"></div> */}
           </div>
         </div>
+        {/* <textarea className="transcript" value={transcript} onChange={() => {}} />
+        <button onClick={toggleListening}>
+          {listening ? '음성인식 중지' : '음성인식 시작'}
+        </button> */}
       </div>
     </div>
   );
