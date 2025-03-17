@@ -1,16 +1,21 @@
 // style
-import '@/views/main/style/project.sass';
+import "@/views/main/style/project.sass";
 
-//component
-import SideBar from '@/views/main/components/SideBar';
-import useSpeechToText from '@/views/main/components/useSpeechToText.js';
+// component
+import SideBar from "@/views/main/components/SideBar";
+import useSpeechToText from "@/views/main/components/useSpeechToText";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectPage = () => {
   const [sort, setSort] = useState<string>("all");
-  const { transcript:any, listening, toggleListening } = useSpeechToText();
+  const { transcript, listening, toggleListening } = useSpeechToText();
+
+  // ✅ transcript 값이 변경될 때 로그 확인
+  useEffect(() => {
+    console.log("현재 인식된 텍스트:", transcript);
+  }, [transcript]);
 
   return (
     <div className="main">
@@ -44,13 +49,15 @@ const ProjectPage = () => {
                 </li>
               </ul>
             </div>
-            {/* <div className="order-warp"></div> */}
           </div>
         </div>
-        {/* <textarea className="transcript" value={transcript} onChange={() => {}} />
+
+        {/* ✅ transcript가 화면에 정상적으로 표시됨 */}
+        <textarea className="transcript" value={transcript} readOnly />
+
         <button onClick={toggleListening}>
-          {listening ? '음성인식 중지' : '음성인식 시작'}
-        </button> */}
+          {listening ? "음성인식 중지" : "음성인식 시작"}
+        </button>
       </div>
     </div>
   );
