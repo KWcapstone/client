@@ -8,43 +8,32 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectPage = () => {
-  const [sort, setSort] = useState<string>("all");
+  const [tab, setTab] = useState<string>("all");
+  const [order, setOrder] = useState<boolean>(true);
 
   return (
     <div className="main">
       <SideBar />
-      {/* <div className="project-wrap">
+      <div className="project-wrap">
         <div className="nevigation-wrap">
           <div className="title-wrap">
             <h2>전체 회의</h2>
             <div className="search-wrap">
               <input type="text" placeholder="회의명 검색" />
-              <Link to="/meeting">+새로 만들기</Link>
+              <Link to="/meeting">새로 만들기</Link>
             </div>
           </div>
           <div className="sort-wrap">
             <div className="tab-wrap">
               <ul>
-                <li className={sort === "all" ? "active" : ""}>
-                  <button type="button" onClick={() => setSort("all")}>
-                    전체
-                  </button>
-                </li>
-                <li className={sort === "mine" ? "active" : ""}>
-                  <button type="button" onClick={() => setSort("mine")}>
-                    내 회의
-                  </button>
-                </li>
-                <li className={sort === "invite" ? "active" : ""}>
-                  <button type="button" onClick={() => setSort("invite")}>
-                    초대된 회의
-                  </button>
-                </li>
+                <li className={tab === "all" ? "active" : ""} onClick={() => setTab("all")}>전체</li>
+                <li className={tab === "mine" ? "active" : ""} onClick={() => setTab("mine")}>내 회의</li>
+                <li className={tab === "invite" ? "active" : ""} onClick={() => setTab("invite")}>초대된 회의</li>
               </ul>
             </div>
-            <div className="sort-wrap">
-              <button>최신순</button>
-              <ul>
+            <div className="order-wrap">
+              <button onClick={() => setOrder(!order)}>{ order ? "최신순" : "오래된 순"}</button>
+              <ul className={order ? "active" : ""}>
                 <li>최신순</li>
                 <li>오래된 순</li>
               </ul>
@@ -89,7 +78,7 @@ const ProjectPage = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

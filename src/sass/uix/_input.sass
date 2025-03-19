@@ -1,0 +1,24 @@
+%input-default
+    +box-sizing(border-box)
+    +padding(10px 12px)
+    +border(1px solid $gray-100)
+    outline: none
+    background-color: $gray-50
+
+    &::placeholder
+        color: #777
+
+    &:focus
+        outline: none
+
+
+@mixin input($width: null,$height: null, $radius: null)
+    @extend %input-default
+
+    @if $width != null
+        @include size($width, $height)
+
+    @if $radius != null
+        @include border-radius($radius)
+    @else
+        @include border-radius(0)

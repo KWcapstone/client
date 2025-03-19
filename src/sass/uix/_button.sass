@@ -8,31 +8,15 @@
     text-decoration: none
     outline: none
     cursor: pointer
+    border: 0
 
-@mixin btn($type: null, $border: null, $radius: null)
+@mixin btn($width: null,$height: null, $radius: null)
     @extend %btn-default
-
-    @if $type == page
-        @extend %btn-page
-    @else if $type == sub-page
-        @extend %btn-page
-    @else if $type == cancel
-        @extend %btn-cancel
-    @else if $type == edit
-        @extend %btn-edit
-    @else if $type == comment
-        @extend %btn-comment
-    @else if $type == white
-        @extend %btn-white
-    @else
-        background-color: transparent
-
-    @if $border != null
-        @include border($border)
-    @else
-        @include border(0)
+    
+    @if $width != null
+        @include size($width, $height)
 
     @if $radius != null
         @include border-radius($radius)
     @else
-        @include border-radius(3px)
+        @include border-radius(0)
