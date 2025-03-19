@@ -5,12 +5,12 @@
 .side-wrap
   +size(240px, 100%)
   +box-sizing(border-box)
-  +padding(16px)
   border-right: 1px solid $gray-50
   background-color: $gray-50
+  position: fixed
 
   .top-wrap
-    +padding(12px 0)
+    +padding(12px 16px)
     +flex-box(space-between, center)
 
     .logo-wrap
@@ -24,34 +24,115 @@
     button
       +size(32px, 32px)
       +btn()
-      +background('@/assets/imgs/common/new_notice.svg',no-repeat, center)
+      +background('@/assets/imgs/icon/new_notice.svg',no-repeat, center)
+      cursor: pointer
     
     .new
-      +background('@/assets/imgs/common/new_notice.svg',no-repeat, center)
+      +background('@/assets/imgs/icon/new_notice.svg',no-repeat, center)
 
-  
   .user-wrap
-    +flex-box(normal, center, 8px)
-    +padding(12px)
-    +background('@/assets/imgs/common/arrow_down.svg',no-repeat, 175px)
-    background-color: $gray-100
-    border-radius: 8px
+    +padding(0 16px)
     
-    img
-      +size(30px, 30px)
-      background-color: $gray-300
-      border-radius: 20px
+    .user
+      +padding(12px)
+      +flex-box(normal, center, 8px)
+      border-radius: 8px
+      background-color: $gray-100
+      +background('@/assets/imgs/icon/arrow_down.svg',no-repeat, 175px)
 
-    .info-wrap
-      .name
-        font-size: 14px
-        font-weight: bold
-        line-height: 21px
 
-      .email
-        font-size: 12px
-        color: $gray-600
-        font-weight: 500
-        line-height: 18px
+      img
+        +size(30px, 30px)
+        background-color: $gray-300
+        border-radius: 20px
+
+      .info-wrap
+        .name
+          font-size: 14px
+          font-weight: bold
+          line-height: 21px
+
+        .email
+          font-size: 12px
+          color: $gray-600
+          font-weight: 500
+          line-height: 18px
 
   .list-wrap
+    +padding(20px 16px)
+
+    li
+      +flex-box(normal, center, 8px)
+      +padding(8px 12px)
+      line-height: 21px
+      border-radius: 8px
+      letter-spacing: -0.154px
+
+      &:before
+        display: block
+        +size(18px, 18px)
+
+    .project::before
+      content : url('@/assets/imgs/icon/project.svg')
+
+    .mic
+      &:before
+        content : url('@/assets/imgs/icon/mic.svg')
+      
+      .flex
+        gap: 5px
+
+      .dot
+        +flex-box(center, center, 5px)
+
+        &:before
+          +size(2px, 2px)
+          display: block
+          content: ""
+          border-radius: 1px
+          background: $gray-600
+
+    .note::before
+      content : url('@/assets/imgs/icon/note.svg')
+      
+    .order
+      font-weight: bold
+      background-color: $gray-100
+
+  .time-wrap
+    +size(100%)
+    +padding(16px)
+    +box-sizing(border-box)
+    position: absolute
+    bottom: 0
+    border-top: 1px solid $gray-200
+
+    p
+      font-size: 12px
+      font-weight: 500
+      line-height: 18px
+
+    .time
+      line-height: 21px
+      font-weight: 500
+      
+      b
+        color: $purple-500
+    
+    .bar
+      +size(100%, 8px)
+      +margin(12px 0)
+      border-radius: 50px
+      background: $gray-200
+      
+      .status
+        +size(184px, 8px)
+        background: $purple-400
+        border-radius: 50px
+    
+    .remainder
+      font-size: 12px
+      font-weight: 500
+      line-height: 18px
+      color: $gray-700
+          

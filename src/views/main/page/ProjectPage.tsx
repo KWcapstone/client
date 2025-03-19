@@ -13,7 +13,7 @@ const ProjectPage = () => {
   return (
     <div className="main">
       <SideBar />
-      <div className="project-wrap">
+      {/* <div className="project-wrap">
         <div className="nevigation-wrap">
           <div className="title-wrap">
             <h2>전체 회의</h2>
@@ -89,7 +89,7 @@ const ProjectPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
