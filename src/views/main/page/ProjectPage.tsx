@@ -3,19 +3,12 @@ import "@/views/main/style/project.sass";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
-import useSpeechToText from "@/views/main/components/useSpeechToText";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectPage = () => {
   const [sort, setSort] = useState<string>("all");
-  const { transcript, listening, toggleListening } = useSpeechToText();
-
-  // ✅ transcript 값이 변경될 때 로그 확인
-  useEffect(() => {
-    console.log("현재 인식된 텍스트:", transcript);
-  }, [transcript]);
 
   return (
     <div className="main">
@@ -49,15 +42,53 @@ const ProjectPage = () => {
                 </li>
               </ul>
             </div>
+            <div className="sort-wrap">
+              <button>최신순</button>
+              <ul>
+                <li>최신순</li>
+                <li>오래된 순</li>
+              </ul>
+            </div>
           </div>
         </div>
-
-        {/* ✅ transcript가 화면에 정상적으로 표시됨 */}
-        <textarea className="transcript" value={transcript} readOnly />
-
-        <button onClick={toggleListening}>
-          {listening ? "음성인식 중지" : "음성인식 시작"}
-        </button>
+        <div className="card-wrap">
+          <div className="card">
+            <img src="" alt="" />
+            <div className="info-wrap">
+              <div className="title-wrap">
+                <div className="title">모아바 회의</div>
+                <div className="date">2025/1/16</div>
+              </div>
+              <div className="owner-wrap">
+                <div className="owner">모아바</div>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <img src="" alt="" />
+            <div className="info-wrap">
+              <div className="title-wrap">
+                <div className="title">모아바 회의</div>
+                <div className="date">2025/1/16</div>
+              </div>
+              <div className="owner-wrap">
+                <div className="owner">모아바</div>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <img src="" alt="" />
+            <div className="info-wrap">
+              <div className="title-wrap">
+                <div className="title">모아바 회의</div>
+                <div className="date">2025/1/16</div>
+              </div>
+              <div className="owner-wrap">
+                <div className="owner">모아바</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

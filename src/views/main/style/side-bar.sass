@@ -2,3 +2,56 @@
 @import '@/sass/helpers/_mixins.scss'
 @import '@/sass/uix/_button.sass'
 
+.side-wrap
+  +size(240px, 100%)
+  +box-sizing(border-box)
+  +padding(16px)
+  border-right: 1px solid $gray-50
+  background-color: $gray-50
+
+  .top-wrap
+    +padding(12px 0)
+    +flex-box(space-between, center)
+
+    .logo-wrap
+      .logo
+        +size(27px, 22px)
+        margin-right: 4.7px
+
+      .title
+        +size(75px, 32px)
+  
+    button
+      +size(32px, 32px)
+      +btn()
+      +background('@/assets/imgs/common/new_notice.svg',no-repeat, center)
+    
+    .new
+      +background('@/assets/imgs/common/new_notice.svg',no-repeat, center)
+
+  
+  .user-wrap
+    +flex-box(normal, center, 8px)
+    +padding(12px)
+    +background('@/assets/imgs/common/arrow_down.svg',no-repeat, 175px)
+    background-color: $gray-100
+    border-radius: 8px
+    
+    img
+      +size(30px, 30px)
+      background-color: $gray-300
+      border-radius: 20px
+
+    .info-wrap
+      .name
+        font-size: 14px
+        font-weight: bold
+        line-height: 21px
+
+      .email
+        font-size: 12px
+        color: $gray-600
+        font-weight: 500
+        line-height: 18px
+
+  .list-wrap

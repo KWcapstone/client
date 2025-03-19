@@ -1,5 +1,6 @@
 img
     display: block
+    image-rendering: -webkit-optimize-contrast
 
 .bold, strong, dt
     font-weight: bold
@@ -35,7 +36,7 @@ table
 body
     font-family: $font-family-base
     font-size: $font-size-base
-    line-height: $line-for-base
+    line-height: normal
     color: $font-color-base
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
@@ -48,31 +49,35 @@ html, body, #root
     +size(100%, 100%)
 
 #app_main
-    +size(100%, null null 68.3%)
+    // +size(100%, null null 68.3%)
 
 #app_free_main
-    +size(100%, null null 80%)
+    // +size(100%, null null 80%)
+
+main
+    // min-height: calc(100vh - 447px)
 
 // error-message
-.error-message
-    font-size: $font-size-12
-    line-height: $line-for-12
-    color: $error
+// .error-message
+//     +margin(top 10px)
+//     font-size: 12px
+//     line-height: 16px
+//     color: $error
 
-.m-error-message
-    font-size: $m-font-size-12
-    line-height: $m-line-for-12
-    color: $error
+//     &::before
+//         content: '※ '
+
+// .simple-error-message
+//     +margin(top 10px)
+
+//     .error-message
+//         margin: 0
 
 // layout
-.u-container
-    +size(1024px)
-    +margin(0 auto)
+.container
+    // min-width: 1280px
+    // +margin(0 auto)
 
-.m-container
-    +size(88.888889vw)
-    +margin(0 auto)
-    font-size: $m-font-size-base
 
 // common
 .require
@@ -86,10 +91,5 @@ html, body, #root
 .text-wrap
     word-break: break-all
 
-// header-nav
-.input-header-major-select .input-select__control
-    +size(130px, 40px)
-
-.input-header-major-select-m .input-select__control
-    border-color: $page-color
-    +size(26.944444vw, 13.111111vw)
+.highlight
+    background-color: yellow

@@ -3,7 +3,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
-const useSpeechToText = () => {
+const UseSpeechToText = () => {
   const { transcript, listening } = useSpeechRecognition();
 
   const toggleListening = () => {
@@ -17,4 +17,4 @@ const useSpeechToText = () => {
   return { transcript, listening, toggleListening };
 };
 
-export default useSpeechToText;
+export default UseSpeechToText;
