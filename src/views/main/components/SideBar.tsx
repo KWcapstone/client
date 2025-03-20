@@ -1,24 +1,26 @@
 // style
 import "@/views/main/style/side-bar.sass";
+import logo from "@/assets/imgs/common/logo.svg";
+// import title from "@/assets/imgs/common/title.svg";
 
 // component
-import { useState } from "react";
+// import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SideBar = () => {
-  const [sort, setSort] = useState<string>("all");
+  // const [sort, setSort] = useState<string>("all");
 
   return (
     <div className="side-wrap">
       <div className="top-wrap">
         <Link to="/meeting" className="logo-wrap">
-          <img className="logo" src="@/assets/imgs/common/logo.svg" alt="LOGO" />
-          <img className="title" src="@/assets/imgs/common/title.svg" alt="MOABA" />
+          <img src={logo} alt="LOGO" />
         </Link>
         <button className="new"></button>
       </div>
       <div className="user-wrap">
         <div className="user">
+          x
           <img src="" alt="" />
           <div className="info-wrap">
             <div className="name">모아바</div>
@@ -29,18 +31,29 @@ const SideBar = () => {
       <div className="list-wrap">
         <ul>
           <li className="project order">전체 회의</li>
-          <li className="mic"><span className="flex"><span>음성</span><span className="dot">스크립트</span></span></li>
-          <li className="note"><span>요약본</span></li>
+          <li className="mic">
+            <span className="flex">
+              <span>음성</span>
+              <span className="dot">스크립트</span>
+            </span>
+          </li>
+          <li className="note">
+            <span>요약본</span>
+          </li>
         </ul>
       </div>
       <div className="time-wrap">
         <p>남은 시간</p>
-        <div className="time"><b>520분 남음</b> / 600분</div>
-        <div className="bar"><div className="status"></div></div>
+        <div className="time">
+          <b>520분 남음</b> / 600분
+        </div>
+        <div className="bar">
+          <div className="status"></div>
+        </div>
         <div className="remainder">다음 충전일까지 25일 남음</div>
       </div>
     </div>
-  )
+  );
 };
 
 export default SideBar;
