@@ -1,6 +1,7 @@
 // style
 import "@/views/main/style/side-bar.sass";
 import logo from "@/assets/imgs/common/logo.svg";
+import test from "@/assets/imgs/common/test.png";
 
 // component
 // import { useState } from "react";
@@ -19,7 +20,7 @@ const SideBar = () => {
       </div>
       <div className="user-wrap">
         <div className="user">
-          <img src="" alt="" />
+          <img src={test} alt="" />
           <div className="info-wrap">
             <div className="name">모아바</div>
             <div className="email">baek789@naver.com</div>
