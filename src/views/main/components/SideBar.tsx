@@ -1,7 +1,6 @@
 // style
 import "@/views/main/style/side-bar.sass";
 import logo from "@/assets/imgs/common/logo.svg";
-// import title from "@/assets/imgs/common/title.svg";
 
 // component
 // import { useState } from "react";
@@ -13,14 +12,13 @@ const SideBar = () => {
   return (
     <div className="side-wrap">
       <div className="top-wrap">
-        <Link to="/meeting" className="logo-wrap">
+        <Link to="/" className="logo-wrap">
           <img src={logo} alt="LOGO" />
         </Link>
         <button className="new"></button>
       </div>
       <div className="user-wrap">
         <div className="user">
-          x
           <img src="" alt="" />
           <div className="info-wrap">
             <div className="name">모아바</div>
