@@ -4,11 +4,25 @@ import logo from "@/assets/imgs/common/logo.svg";
 import test from "@/assets/imgs/common/test.png";
 
 // component
-// import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import path from "path";
 
 const SideBar = () => {
-  // const [sort, setSort] = useState<string>("all");
+  const [sort, setSort] = useState<string>("/");
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if(pathname === "/" || pathname === "/project"){
+      setSort("/project")
+    } else if(pathname === "/record") {
+      setSort("/record")
+    } else {
+      setSort("/summary")
+    }
+  }, [pathname]);
 
   return (
     <div className="side-wrap">
@@ -29,14 +43,14 @@ const SideBar = () => {
       </div>
       <div className="list-wrap">
         <ul>
-          <li className="project order">전체 회의</li>
-          <li className="mic">
+          <li className={`project ${sort === "/project" ? "active" : ""}`} onClick={() => navigate('/project')}>전체 회의</li>
+          <li className={`record ${sort === "/record" ? "active" : ""}`} onClick={() => navigate('/record')}>
             <span className="flex">
               <span>음성</span>
               <span className="dot">스크립트</span>
             </span>
           </li>
-          <li className="note">
+          <li className={`summary ${sort === "/summary" ? "active" : ""}`} onClick={() => navigate('/summary')}>
             <span>요약본</span>
           </li>
         </ul>
