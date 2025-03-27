@@ -49,9 +49,9 @@ const SideBar = () => {
               <span className="dot">스크립트</span>
             </span>
           </li>
-          <li className={`summary ${sort === "/summary" ? "active" : ""}`} onClick={() => navigate('/summary')}>
+          {/* <li className={`summary ${sort === "/summary" ? "active" : ""}`} onClick={() => navigate('/summary')}>
             <span>요약본</span>
-          </li>
+          </li> */}
         </ul>
       </div>
       <div className="time-wrap">

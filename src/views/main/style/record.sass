@@ -93,7 +93,8 @@
         +size(100%)
           
         tr
-          cursor: pointer
+          &:not(:has(th))
+            cursor: pointer
 
           &:not(:has(th)):hover
             border-radius: 8px
@@ -103,15 +104,30 @@
             color: $gray-600
 
             .craft-wrap
-              +flex-box(normal, center)
+              +flex-box(normal, center, 12px)
+
+              button
+                height: 16.5px
             
               .dwn
                 +btn()
                 +flex-box(center, center, 2px)
 
                 &:before
-                  +size(16px, 16px)
+                  +size(16px, 18px)
                   content : url('@/assets/imgs/icon/dwn.svg')
+
+              .del
+                +btn()
+                +flex-box(center, center, 2px)  
+                color: #EC2526
+
+                &::before
+                  +size(16px, 18px)
+                  content : url('@/assets/imgs/icon/del.svg')
+
+              .cancel
+                +btn()
 
           th, td
             +padding(8px)

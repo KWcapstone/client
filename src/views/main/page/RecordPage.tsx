@@ -92,7 +92,7 @@ const RecordPage = () => {
                         <div>{ checkCount }개 선택됨</div>
                         <button className="dwn">다운로드 하기</button>
                         <button className="del">삭제하기</button>
-                        <button className="cancel">취소</button>
+                        <button className="cancel" onClick={() => setData(data.map(row => ({ ...row, selected: false })))}>취소</button>
                       </div>
                     </th>
                   ) : (
