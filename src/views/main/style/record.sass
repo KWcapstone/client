@@ -91,13 +91,31 @@
       
       table
         +size(100%)
-
-        th
-          color: $gray-600
           
-        th, td
-          +padding(8px)
-          text-align: left
+        tr
+          cursor: pointer
 
-          &:first-child
-            +size(20px)
+          &:not(:has(th)):hover
+            border-radius: 8px
+            background-color: $gray-100
+
+          th
+            color: $gray-600
+
+            .craft-wrap
+              +flex-box(normal, center)
+            
+              .dwn
+                +btn()
+                +flex-box(center, center, 2px)
+
+                &:before
+                  +size(16px, 16px)
+                  content : url('@/assets/imgs/icon/dwn.svg')
+
+          th, td
+            +padding(8px)
+            text-align: left
+
+            &:first-child
+              +size(20px)

@@ -7,7 +7,6 @@ import test from "@/assets/imgs/common/test.png";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from "react-router-dom";
-import path from "path";
 
 const SideBar = () => {
   const [sort, setSort] = useState<string>("/");

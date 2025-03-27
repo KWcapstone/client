@@ -5,13 +5,15 @@ import arrow from "@/assets/imgs/icon/arrow_down_black.svg";
 // component
 import SideBar from "@/views/main/components/SideBar";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const RecordPage = () => {
   const [tab, setTab] = useState<string>("all");
   const [order, setOrder] = useState<boolean>(true);
   const [showOrder, setShowOrder] = useState<boolean>(false);
+  const [isCheck, setIsCheck] = useState<boolean>(false);
+  const [checkCount, setCheckCount] = useState<number>(0);
 
   const [data, setData] = useState([
     { id: 1, name: "test1", date: "", user: "", time: "", size: "", selected: false },
@@ -36,6 +38,13 @@ const RecordPage = () => {
     );
     setData(newData);
   };
+
+  useEffect(() => {
+    setIsCheck(data.some(row => row.selected));
+    const count = data.filter(row => row.selected).length;
+    setCheckCount(count);
+  }, [data]);
+  
 
   return (
     <div className="main">
@@ -73,10 +82,23 @@ const RecordPage = () => {
           <table>
             <thead>
               <tr>
-                <th>
-                  <input type="checkbox" checked={isAllSelected} onChange={handleSelectAll}/>
+                <th onClick={handleSelectAll}>
+                  <input type="checkbox" checked={isAllSelected}/>
                 </th>
-                <th>회의 이름</th>
+                {
+                  isCheck ? (
+                    <th>
+                      <div className="craft-wrap">
+                        <div>{ checkCount }개 선택됨</div>
+                        <button className="dwn">다운로드 하기</button>
+                        <button className="del">삭제하기</button>
+                        <button className="cancel">취소</button>
+                      </div>
+                    </th>
+                  ) : (
+                    <th>회의 이름</th>
+                  )
+                }
                 <th>생성일</th>
                 <th>생성자</th>
                 <th>음성 길이</th>
@@ -85,12 +107,11 @@ const RecordPage = () => {
             </thead>
             <tbody>
               {data.map((row) => (
-                <tr key={row.id}>
+                <tr key={row.id} onClick={() => handleSelectRow(row.id)}>
                   <td>
                     <input
                       type="checkbox"
                       checked={row.selected}
-                      onChange={() => handleSelectRow(row.id)}
                     />
                   </td>
                   <td>{row.name}</td>
