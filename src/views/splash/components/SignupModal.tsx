@@ -32,7 +32,7 @@ const SignupModal = ({ onCloseModal, onOpenLogin }: LoginModalProps) => {
         codeValue.length >= 1 &&
         pwValue.length >= 8
     );
-  }, []);
+  }, [nameValue, emailValue, codeValue, pwValue]);
 
   useEffect(() => {
     setNameError("");
