@@ -9,9 +9,10 @@ import { useState, useEffect } from "react";
 
 interface LoginModalProps {
   onCloseModal: () => void;
+  onOpenSignup: () => void;
 }
 
-const LoginModal = ({ onCloseModal }: LoginModalProps) => {
+const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
   const [active, setActive] = useState(false);
   const [idValue, setIdInput] = useState("");
   const [pwValue, setPwInput] = useState("");
@@ -108,7 +109,15 @@ const LoginModal = ({ onCloseModal }: LoginModalProps) => {
 
       <div className="modal-footer">
         <div className="modal-footer-text">비밀번호 재설정</div>
-        <div className="modal-footer-text">회원가입</div>
+        <div
+          className="modal-footer-text"
+          onClick={() => {
+            onCloseModal();
+            onOpenSignup();
+          }}
+        >
+          회원가입
+        </div>
       </div>
 
       <div className="modal-divider">
