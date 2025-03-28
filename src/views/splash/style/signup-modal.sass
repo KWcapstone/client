@@ -76,21 +76,33 @@ form
   .shake
     animation: shake 0.2s ease
 
-  .modal-email
-    +flex-box(center, center, 8px)
+  .modal-email-wrap
+    flex-direction: column
+
+    +flex-box(center, center)
     +size(100%)
     +margin(bottom 8px)
 
-    .modal-code-btn
-      color: $gray-900
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 150%;
+    .modal-email
+      +flex-box(center, center, 8px)
+      +size(100%)
 
-      +margin(0)
-      +size(180px, 40px)
-      +border(1px solid $gray-200)
+      .modal-code-btn
+        color: $gray-400
+        background-color: $gray-200
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%;
+
+        +margin(0)
+        +size(180px, 40px)
+        +border(1px solid $gray-200)
+        
+      .modal-code-btn-enable
+        color: $gray-900
+        background-color: $white
+        
 
   .modal-pw-info
     color: $gray-500
@@ -137,6 +149,7 @@ form
     font-style: normal;
     font-weight: 600;
     line-height: 150%;
+    cursor: pointer
 
 
 

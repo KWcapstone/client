@@ -24,6 +24,7 @@ const SplashPage = () => {
     setModalOpen(true);
     setModalType("login");
   };
+
   return (
     <>
       <Navbar onOpenModal={openModal} />
@@ -55,7 +56,10 @@ const SplashPage = () => {
               }
             }}
           >
-            <SignupModal onCloseModal={closeModal} />
+            <SignupModal
+              onCloseModal={closeModal}
+              onOpenLogin={openLoginModal}
+            />
           </div>
         )}
       </div>
