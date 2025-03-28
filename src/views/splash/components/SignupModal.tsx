@@ -7,9 +7,14 @@ import arrow_back from "@/assets/imgs/icon/arrow_back_outlined.svg";
 interface LoginModalProps {
   onCloseModal: () => void;
   onOpenLogin: () => void;
+  onOpenAgree: () => void;
 }
 
-const SignupModal = ({ onCloseModal, onOpenLogin }: LoginModalProps) => {
+const SignupModal = ({
+  onCloseModal,
+  onOpenLogin,
+  onOpenAgree,
+}: LoginModalProps) => {
   const [active, setActive] = useState(false);
 
   const [nameValue, setNameInput] = useState("");
@@ -93,7 +98,7 @@ const SignupModal = ({ onCloseModal, onOpenLogin }: LoginModalProps) => {
     // 추후 회원가입 실패 시 에러 메시지 표시
     // 성공
     console.log("회원가입 성공!");
-    onCloseModal();
+    onOpenAgree();
   };
 
   const handleCodeClick = () => {

@@ -7,14 +7,18 @@ import { useState, useRef } from "react";
 
 import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
+import AgreeModal from "@/views/splash/components/AgreeModal";
 
 const SplashPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<"login" | "signup" | null>(null);
+  const [modalType, setModalType] = useState<
+    "login" | "signup" | "agree" | null
+  >(null);
   const modalBackground = useRef<HTMLDivElement>(null);
 
   const openLoginModal = () => setModalType("login");
   const openSignupModal = () => setModalType("signup");
+  const openAgreeModal = () => setModalType("agree");
 
   const closeModal = () => {
     setModalOpen(false);
@@ -59,6 +63,23 @@ const SplashPage = () => {
             <SignupModal
               onCloseModal={closeModal}
               onOpenLogin={openLoginModal}
+              onOpenAgree={openAgreeModal}
+            />
+          </div>
+        )}
+
+        {modalType === "agree" && (
+          <div
+            className="modal-container"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                closeModal();
+              }
+            }}
+          >
+            <AgreeModal
+              onCloseModal={closeModal}
+              onOpenSignup={openSignupModal}
             />
           </div>
         )}
