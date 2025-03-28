@@ -3,41 +3,127 @@ import modal_close from "@/assets/imgs/icon/modal_close.svg";
 import kakao_login from "@/assets/imgs/common/kakao_login.svg";
 import google_login from "@/assets/imgs/common/google_login.svg";
 import naver_login from "@/assets/imgs/common/naver_login.svg";
+
+import { useState, useEffect } from "react";
+
 interface LoginModalProps {
   onCloseModal: () => void;
 }
 
 const LoginModal = ({ onCloseModal }: LoginModalProps) => {
+  const [active, setActive] = useState(false);
+  const [idValue, setIdInput] = useState("");
+  const [pwValue, setPwInput] = useState("");
+
+  const [idError, setIdError] = useState("");
+  const [pwError, setPwError] = useState("");
+  const [shake, setShake] = useState(false);
+
+  useEffect(() => {
+    setActive(idValue.includes("@") && pwValue.length >= 1);
+
+    // 입력 바뀌면 에러 초기화
+    setIdError("");
+  }, [idValue]);
+
+  useEffect(() => {
+    setActive(idValue.includes("@") && pwValue.length >= 1);
+
+    // 입력 바뀌면 에러 초기화
+    setPwError("");
+  }, [pwValue]);
+
+  // 로그인 버튼 애니메이션
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+
+  const handleLoginClick = () => {
+    let hasError = false;
+
+    if (!idValue) {
+      setIdError("이메일을 입력해주세요.");
+      hasError = true;
+    } else if (!idValue.includes("@")) {
+      setIdError("올바른 이메일 형식이 아닙니다.");
+      hasError = true;
+    }
+
+    if (!pwValue) {
+      setPwError("비밀번호를 입력해주세요.");
+      hasError = true;
+    }
+
+    if (hasError) {
+      triggerShake();
+      return;
+    }
+
+    // 추후 로그인 실패 시 에러 메시지 표시
+
+    // 성공
+    console.log("로그인 성공!");
+    onCloseModal();
+  };
+
   return (
     <div className="modal-content">
       <div onClick={onCloseModal} className="modal-close-btn">
-        <img src={modal_close}></img>
+        <img src={modal_close} alt="닫기" />
       </div>
+
       <p className="modal-title">로그인</p>
-      <form>
-        <label id="id">이메일</label>
-        <input id="id" type="text" placeholder="이메일을 입력해주세요" />
-        <label id="password">비밀번호</label>
+
+      <form onSubmit={(e) => e.preventDefault()}>
+        <label htmlFor="id">이메일</label>
+        <input
+          id="id"
+          type="text"
+          placeholder="이메일을 입력해주세요"
+          className={idError ? "modal-input modal-input-error" : "modal-input"}
+          onChange={(e) => setIdInput(e.target.value)}
+        />
+        {idError && <p className="modal-error">{idError}</p>}
+
+        <label htmlFor="password">비밀번호</label>
         <input
           id="password"
           type="password"
           placeholder="비밀번호를 입력해주세요"
+          className={pwError ? "modal-input modal-input-error" : "modal-input"}
+          onChange={(e) => setPwInput(e.target.value)}
         />
-        <button className="modal-login-btn-disable">로그인</button>
+        {pwError && <p className="modal-error">{pwError}</p>}
+
+        <button
+          type="button"
+          className={
+            active
+              ? `modal-login-btn-enable ${shake ? "shake" : ""}`
+              : `modal-login-btn-disable ${shake ? "shake" : ""}`
+          }
+          onClick={handleLoginClick}
+        >
+          로그인
+        </button>
       </form>
+
       <div className="modal-footer">
         <div className="modal-footer-text">비밀번호 재설정</div>
         <div className="modal-footer-text">회원가입</div>
       </div>
+
       <div className="modal-divider">
         <hr />
         SNS 계정으로 로그인
         <hr />
       </div>
+
       <div className="modal-sns-login">
-        <img src={kakao_login} />
-        <img src={google_login} />
-        <img src={naver_login} />
+        <img src={kakao_login} alt="kakao" />
+        <img src={google_login} alt="google" />
+        <img src={naver_login} alt="naver" />
       </div>
     </div>
   );
