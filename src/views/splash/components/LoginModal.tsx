@@ -112,7 +112,6 @@ const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
         <div
           className="modal-footer-text"
           onClick={() => {
-            onCloseModal();
             onOpenSignup();
           }}
         >
