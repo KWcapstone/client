@@ -1,5 +1,6 @@
 import "@/views/splash/style/login-modal.sass";
-import modal_close from "@/assets/imgs/icon/modal_close.svg";
+import Modal from "@/views/components/modal";
+
 import kakao_login from "@/assets/imgs/common/kakao_login.svg";
 import google_login from "@/assets/imgs/common/google_login.svg";
 import naver_login from "@/assets/imgs/common/naver_login.svg";
@@ -68,11 +69,7 @@ const LoginModal = ({ onCloseModal }: LoginModalProps) => {
   };
 
   return (
-    <div className="modal-content">
-      <div onClick={onCloseModal} className="modal-close-btn">
-        <img src={modal_close} alt="닫기" />
-      </div>
-
+    <Modal onCloseModal={onCloseModal}>
       <p className="modal-title">로그인</p>
 
       <form onSubmit={(e) => e.preventDefault()}>
@@ -125,7 +122,7 @@ const LoginModal = ({ onCloseModal }: LoginModalProps) => {
         <img src={google_login} alt="google" />
         <img src={naver_login} alt="naver" />
       </div>
-    </div>
+    </Modal>
   );
 };
 

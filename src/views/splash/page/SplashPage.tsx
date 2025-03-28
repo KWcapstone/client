@@ -1,6 +1,6 @@
 import Navbar from "@/views/splash/components/Navbar";
 import "@/views/splash/style/splash.sass";
-import "@/views/splash/style/login-modal.sass";
+import "@/views/components/style/modal.sass";
 
 import { useState, useRef } from "react";
 import LoginModal from "@/views/splash/components/LoginModal";
