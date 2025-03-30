@@ -68,3 +68,33 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 150%;
+
+.modal-agree-button-disable
+  background-color: $gray-200
+  color: $gray-400
+  font-weight: 600;
+
+.modal-error
+  color: $error
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  align-self: flex-start;
+
+  +margin(32px 0 0 0)
+  
+@keyframes shake
+  0%
+    transform: translateX(0)
+  25%
+    transform: translateX(-4px)
+  50%
+    transform: translateX(4px)
+  75%
+    transform: translateX(-4px)
+  100%
+    transform: translateX(0)
+
+.shake
+  animation: shake 0.2s ease
