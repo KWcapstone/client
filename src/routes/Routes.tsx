@@ -10,15 +10,10 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={</>}/> */}
         <Route path="/" element={<SplashPage />} />
-        <Route path="/">
-          <Route path="project" element={<ProjectPage/>}>
-            {/* <Route path=":id" element={</>}/> */}
-          </Route>
-          <Route path="record" element={<RecordPage/>}/>
-          <Route path="summary" element={<SummaryPage/>}/>
-        </Route>
+        <Route path="/project" element={<ProjectPage />} />
+        <Route path="/record" element={<RecordPage />} />
+        <Route path="/summary" element={<SummaryPage />} />
         {/* <Route path="/meeting" element={</>}/> */}
       </Routes>
     </BrowserRouter>
