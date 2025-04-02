@@ -62,6 +62,21 @@
 
         &::placeholder
           color: $gray-400
+      
+      .modal-input-pw-wrap
+        position: relative
+        +size(100%)
+
+        .password-eye
+          position: absolute
+          right: 15px
+          top: 50%
+          transform: translateY(-50%)
+          cursor: pointer
+
+          +size(20px)
+
+      
           
       .modal-input-error
         +border(1px solid $error)

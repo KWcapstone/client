@@ -3,6 +3,8 @@ import Modal from "@/views/components/modal";
 import { useState, useEffect } from "react";
 
 import arrow_back from "@/assets/imgs/icon/arrow_back_outlined.svg";
+import pw_show from "@/assets/imgs/icon/pw_show.svg";
+import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
 interface LoginModalProps {
   onCloseModal: () => void;
@@ -21,7 +23,9 @@ const SignupModal = ({
   const [emailValue, setEmailInput] = useState("");
   const [codeValue, setCodeInput] = useState("");
   const [pwValue, setPwInput] = useState("");
+  const [pwShow, setPwShow] = useState(false);
   const [pwConfirmValue, setPwConfirmInput] = useState("");
+  const [pwConfirmShow, setPwConfirmShow] = useState(false);
 
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -250,29 +254,51 @@ const SignupModal = ({
             <label htmlFor="password" className="modal-input-label">
               비밀번호
             </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="비밀번호를 입력해주세요"
-              className={
-                pwError ? "modal-input modal-input-error" : "modal-input"
-              }
-              onChange={handlePwInput}
-            />
+            <div className="modal-input-pw-wrap">
+              <input
+                type={pwShow ? "text" : "password"}
+                id="password"
+                placeholder="비밀번호를 입력해주세요"
+                className={
+                  pwError ? "modal-input modal-input-error" : "modal-input"
+                }
+                onChange={handlePwInput}
+              />
+              <img
+                src={pwShow ? pw_show : pw_hide}
+                alt="비밀번호 보기"
+                className="password-eye"
+                onClick={() => {
+                  setPwShow(!pwShow);
+                }}
+              />
+            </div>
             {pwError && <p className="modal-error">{pwError}</p>}
             <p className="modal-pw-info">
               영문/숫자/특수문자 중 2가지 이상 조합, 8자~15자리
             </p>
           </div>
           <div className="modal-inputs-wrap">
-            <input
-              type="password"
-              placeholder="비밀번호를 다시 한번 입력해주세요"
-              className={
-                pwConfirmError ? "modal-input modal-input-error" : "modal-input"
-              }
-              onChange={handlePwConfirmInput}
-            />
+            <div className="modal-input-pw-wrap">
+              <input
+                type={pwConfirmShow ? "text" : "password"}
+                placeholder="비밀번호를 다시 한번 입력해주세요"
+                className={
+                  pwConfirmError
+                    ? "modal-input modal-input-error"
+                    : "modal-input"
+                }
+                onChange={handlePwConfirmInput}
+              />
+              <img
+                src={pwConfirmShow ? pw_show : pw_hide}
+                alt="비밀번호 보기"
+                className="password-eye"
+                onClick={() => {
+                  setPwConfirmShow(!pwConfirmShow);
+                }}
+              />
+            </div>
             {pwConfirmError && <p className="modal-error">{pwConfirmError}</p>}
           </div>
         </div>
