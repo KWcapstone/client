@@ -42,7 +42,8 @@ const SignupModal = ({
         emailValue.includes("@") &&
         codeValue.length >= 1 &&
         pwValue.length >= 8 &&
-        pwConfirmValue === pwValue
+        pwConfirmValue === pwValue &&
+        isValidPassword(pwValue)
     );
   }, [nameValue, emailValue, codeValue, pwValue, pwConfirmValue]);
 
