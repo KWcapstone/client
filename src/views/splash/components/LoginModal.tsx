@@ -12,9 +12,14 @@ import { useState, useEffect } from "react";
 interface LoginModalProps {
   onCloseModal: () => void;
   onOpenSignup: () => void;
+  onOpenResetPw: () => void;
 }
 
-const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
+const LoginModal = ({
+  onCloseModal,
+  onOpenSignup,
+  onOpenResetPw,
+}: LoginModalProps) => {
   const [active, setActive] = useState(false);
   const [idValue, setIdInput] = useState("");
   const [pwValue, setPwInput] = useState("");
@@ -125,7 +130,14 @@ const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
       </form>
 
       <div className="modal-footer">
-        <div className="modal-footer-text">비밀번호 재설정</div>
+        <div
+          className="modal-footer-text"
+          onClick={() => {
+            onOpenResetPw();
+          }}
+        >
+          비밀번호 재설정
+        </div>
         <div
           className="modal-footer-text"
           onClick={() => {

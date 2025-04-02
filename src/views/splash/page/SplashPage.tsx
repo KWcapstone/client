@@ -8,17 +8,19 @@ import { useState, useRef } from "react";
 import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
 import AgreeModal from "@/views/splash/components/AgreeModal";
+import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
 
 const SplashPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<
-    "login" | "signup" | "agree" | null
+    "login" | "signup" | "agree" | "resetPw" | null
   >(null);
   const modalBackground = useRef<HTMLDivElement>(null);
 
   const openLoginModal = () => setModalType("login");
   const openSignupModal = () => setModalType("signup");
   const openAgreeModal = () => setModalType("agree");
+  const openResetPwModal = () => setModalType("resetPw");
 
   const closeModal = () => {
     setModalOpen(false);
@@ -46,7 +48,8 @@ const SplashPage = () => {
           >
             <LoginModal
               onCloseModal={closeModal}
-              onOpenSignup={openSignupModal} // 👈 이걸 props로 넘김
+              onOpenSignup={openSignupModal}
+              onOpenResetPw={openResetPwModal}
             />
           </div>
         )}
@@ -80,6 +83,21 @@ const SplashPage = () => {
             <AgreeModal
               onCloseModal={closeModal}
               onOpenSignup={openSignupModal}
+            />
+          </div>
+        )}
+        {modalType === "resetPw" && (
+          <div
+            className="modal-container"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                closeModal();
+              }
+            }}
+          >
+            <PasswordResetModal
+              onCloseModal={closeModal}
+              onOpenLogin={openLoginModal}
             />
           </div>
         )}
