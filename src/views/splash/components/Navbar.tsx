@@ -9,7 +9,9 @@ const Navbar = ({ onOpenModal }: NavbarProps) => {
   return (
     <nav className="navbar">
       <img src={logo} alt="logo" />
-      <button onClick={onOpenModal}>로그인/회원가입</button>
+      <button onClick={onOpenModal} className="btn">
+        로그인/회원가입
+      </button>
     </nav>
   );
 };
