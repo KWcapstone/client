@@ -4,6 +4,8 @@ import Modal from "@/views/components/modal";
 import kakao_login from "@/assets/imgs/common/kakao_login.svg";
 import google_login from "@/assets/imgs/common/google_login.svg";
 import naver_login from "@/assets/imgs/common/naver_login.svg";
+import pw_show from "@/assets/imgs/icon/pw_show.svg";
+import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
 import { useState, useEffect } from "react";
 
@@ -16,6 +18,7 @@ const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
   const [active, setActive] = useState(false);
   const [idValue, setIdInput] = useState("");
   const [pwValue, setPwInput] = useState("");
+  const [pwShow, setPwShow] = useState(false);
 
   const [idError, setIdError] = useState("");
   const [pwError, setPwError] = useState("");
@@ -89,13 +92,23 @@ const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
         <label htmlFor="password" className="modal-label">
           비밀번호
         </label>
-        <input
-          id="password"
-          type="password"
-          placeholder="비밀번호를 입력해주세요"
-          className={pwError ? "modal-input modal-input-error" : "modal-input"}
-          onChange={(e) => setPwInput(e.target.value)}
-        />
+        <div className="modal-password-input">
+          <input
+            id="password"
+            type={pwShow ? "text" : "password"}
+            placeholder="비밀번호를 입력해주세요"
+            className={
+              pwError ? "modal-input modal-input-error" : "modal-input"
+            }
+            onChange={(e) => setPwInput(e.target.value)}
+          />
+          <img
+            src={pwShow ? pw_show : pw_hide}
+            alt="비밀번호 보기"
+            onClick={() => setPwShow(!pwShow)}
+            className="password-eye"
+          />
+        </div>
         {pwError && <p className="modal-error">{pwError}</p>}
 
         <button
