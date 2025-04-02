@@ -24,6 +24,7 @@
   font-weight: 500;
   line-height: 150%; /* 24px */
   letter-spacing: -0.176px;
+  position: relative
 
   +size(100%)
   +border-radius(8px)
@@ -31,6 +32,23 @@
   +flex-box(start, center, 8px)
   +padding(8px)
   +box-sizing(border-box)
+
+  .modal-all-agree-checkbox
+    display: none;
+  .checkbox-label
+    background-image: url('/src/assets/imgs/icon/checkbox_border.svg')
+    background-size: contain
+    background-repeat: no-repeat
+    cursor: pointer
+    display: inline-block
+    -webkit-tap-highlight-color: transparent
+    user-select: none
+
+    +size(24px, 24px)
+
+  .modal-all-agree-checkbox:checked + .checkbox-label
+    background-image: url('/src/assets/imgs/icon/checkbox_pressed.svg') // 체크된 상태 SVG
+
 
 .modal-agree-list
   flex-direction: column
@@ -41,6 +59,9 @@
   +flex-box(center, start, 16px)
   
   .modal-agree-item
+    -webkit-tap-highlight-color: transparent
+    user-select: none
+
     +size(100%)
     +flex-box(space-between, center, 8px)
 
@@ -51,23 +72,36 @@
       font-weight: 500;
       line-height: 150%;
       letter-spacing: -0.154px;
+      cursor: pointer
 
       +flex-box(start, center, 8px)
-      +padding(8px)
-      cursor: pointer
+      
+      .modal-agree-checkbox
+        display: none;
+
+      .modal-agree-checkbox-label
+        background-image: url('/src/assets/imgs/icon/check_default.svg')
+        background-size: contain
+        background-repeat: no-repeat
+        cursor: pointer
+        
+        +size(16px, 16px)
+
+      .modal-agree-checkbox:checked + .modal-agree-checkbox-label
+        background-image: url('/src/assets/imgs/icon/check_pressed.svg') // 체크된 상태 SVG
       
 .modal-agree-button
-  +btn(100%, 48px, 8px)
-  +flex-box(center, center)
-  +padding(0 15px)
-  +box-sizing(border-box)
-  +margin(top 32px)
-
   background-color: $gray-900
   color: $white
   font-size: 16px;
   font-weight: 500;
   line-height: 150%;
+
+  +btn(100%, 48px, 8px)
+  +flex-box(center, center)
+  +padding(0 15px)
+  +box-sizing(border-box)
+  +margin(top 32px)
 
 .modal-agree-button-disable
   background-color: $gray-200

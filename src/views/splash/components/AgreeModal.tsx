@@ -57,10 +57,11 @@ const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
         <img src={arrow_back} alt="뒤로가기" onClick={onOpenSignup} />
         <p className="modal-title">이용악관 동의</p>
       </div>
-      <label className="modal-all-agree">
+      <div className="modal-all-agree">
         <input
           type="checkbox"
           className="modal-all-agree-checkbox"
+          id="modal-all-agree-checkbox"
           checked={agree1 && agree2 && agree3}
           onChange={() => {
             setAllAgree(!allAgree);
@@ -70,19 +71,25 @@ const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
             setAgreeError("");
           }}
         />
+        <label htmlFor="modal-all-agree-checkbox" className="checkbox-label" />
         <p>모두 동의합니다.</p>
-      </label>
+      </div>
       <div className="modal-agree-list">
         <div className="modal-agree-item">
           <div className="modal-agree-item-title">
             <input
               type="checkbox"
               className="modal-agree-checkbox"
+              id="modal-agree-checkbox-1"
               onChange={() => {
                 setAgree1(!agree1);
                 setAgreeError("");
               }}
               checked={agree1}
+            />
+            <label
+              htmlFor="modal-agree-checkbox-1"
+              className="modal-agree-checkbox-label"
             />
             <p className="modal-agree-sub">(필수) 만 14세 이상입니다</p>
           </div>
@@ -93,11 +100,16 @@ const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
             <input
               type="checkbox"
               className="modal-agree-checkbox"
+              id="modal-agree-checkbox-2"
               checked={agree2}
               onChange={() => {
                 setAgree2(!agree2);
                 setAgreeError("");
               }}
+            />
+            <label
+              htmlFor="modal-agree-checkbox-2"
+              className="modal-agree-checkbox-label"
             />
             <p className="modal-agree-sub">(필수) 모아바 이용약관 동의</p>
           </div>
@@ -108,11 +120,16 @@ const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
             <input
               type="checkbox"
               className="modal-agree-checkbox"
+              id="modal-agree-checkbox-3"
               checked={agree3}
               onChange={() => {
                 setAgree3(!agree3);
                 setAgreeError("");
               }}
+            />
+            <label
+              htmlFor="modal-agree-checkbox-3"
+              className="modal-agree-checkbox-label"
             />
             <p className="modal-agree-sub">(필수) 개인정보 이용약관 동의</p>
           </div>
