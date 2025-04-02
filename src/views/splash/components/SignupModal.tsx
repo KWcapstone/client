@@ -21,11 +21,13 @@ const SignupModal = ({
   const [emailValue, setEmailInput] = useState("");
   const [codeValue, setCodeInput] = useState("");
   const [pwValue, setPwInput] = useState("");
+  const [pwConfirmValue, setPwConfirmInput] = useState("");
 
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [codeError, setCodeError] = useState("");
   const [pwError, setPwError] = useState("");
+  const [pwConfirmError, setPwConfirmError] = useState("");
 
   const [nextBtnShake, setNextBtnShake] = useState(false);
   const [codeBtnShake, setCodeBtnShake] = useState(false);
@@ -35,9 +37,10 @@ const SignupModal = ({
       nameValue.length >= 1 &&
         emailValue.includes("@") &&
         codeValue.length >= 1 &&
-        pwValue.length >= 8
+        pwValue.length >= 8 &&
+        pwConfirmValue === pwValue
     );
-  }, [nameValue, emailValue, codeValue, pwValue]);
+  }, [nameValue, emailValue, codeValue, pwValue, pwConfirmValue]);
 
   useEffect(() => {
     setNameError("");
@@ -55,6 +58,10 @@ const SignupModal = ({
     setPwError("");
   }, [pwValue]);
 
+  useEffect(() => {
+    setPwConfirmError("");
+  }, [pwValue]);
+
   // 로그인 버튼 애니메이션
   const triggerShake = () => {
     setNextBtnShake(true);
@@ -65,6 +72,21 @@ const SignupModal = ({
   const triggerCodeShake = () => {
     setCodeBtnShake(true);
     setTimeout(() => setCodeBtnShake(false), 500);
+  };
+
+  // 비밀번호 유효성 검사
+  const isValidPassword = (pw: string) => {
+    const lengthValid = pw.length >= 8 && pw.length <= 15;
+
+    const hasLetter = /[a-zA-Z]/.test(pw);
+    const hasNumber = /[0-9]/.test(pw);
+    const hasSpecial = /[^a-zA-Z0-9]/.test(pw);
+
+    const conditionCount = [hasLetter, hasNumber, hasSpecial].filter(
+      Boolean
+    ).length;
+
+    return lengthValid && conditionCount >= 2;
   };
 
   const handleSignupClick = () => {
@@ -87,10 +109,19 @@ const SignupModal = ({
     if (!pwValue) {
       setPwError("비밀번호를 입력해주세요.");
       hasError = true;
-    } else if (pwValue.length < 8) {
-      setPwError("비밀번호는 8자 이상이어야 합니다.");
+    } else if (!isValidPassword(pwValue)) {
+      setPwError("비밀번호가 조건에 만족하지 않습니다.");
       hasError = true;
     }
+
+    if (!pwConfirmValue) {
+      setPwConfirmError("비밀번호를 다시 입력해주세요.");
+      hasError = true;
+    } else if (pwValue !== pwConfirmValue) {
+      setPwConfirmError("비밀번호가 일치하지 않습니다.");
+      hasError = true;
+    }
+
     if (hasError) {
       triggerShake();
       return;
@@ -145,6 +176,12 @@ const SignupModal = ({
       setPwError("");
     }
   };
+  const handlePwConfirmInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPwConfirmInput(e.target.value);
+    if (e.target.value === pwValue) {
+      setPwConfirmError("");
+    }
+  };
 
   return (
     <Modal onCloseModal={onCloseModal}>
@@ -152,66 +189,93 @@ const SignupModal = ({
         <img src={arrow_back} alt="뒤로가기" onClick={onOpenLogin} />
         <p className="modal-title">회원가입</p>
       </div>
-      <form>
-        <label htmlFor="name">이름</label>
-        <input
-          type="text"
-          id="name"
-          placeholder="이름을 입력해주세요"
-          className={
-            nameError ? "modal-input modal-input-error" : "modal-input"
-          }
-          onChange={handleNameInput}
-        />
-        {nameError && <p className="modal-error">{nameError}</p>}
-        <label htmlFor="email">이메일</label>
-        <div className="modal-email-wrap">
-          <div className="modal-email">
+      <form className="modal-form">
+        <div className="modal-input-wrap">
+          <div className="modal-inputs-wrap">
+            <label htmlFor="name" className="modal-input-label">
+              이름
+            </label>
             <input
-              type="email"
-              id="email"
-              placeholder="이메일을 입력해주세요"
+              type="text"
+              id="name"
+              placeholder="이름을 입력해주세요"
               className={
-                emailError ? "modal-input modal-input-error" : "modal-input"
+                nameError ? "modal-input modal-input-error" : "modal-input"
               }
-              onChange={handleEmailInput}
+              onChange={handleNameInput}
             />
-            <button
-              type="button"
-              className={
-                emailValue.length < 1
-                  ? `modal-code-btn ${codeBtnShake ? "shake" : ""}`
-                  : "modal-code-btn modal-code-btn-enable"
-              }
-              onClick={handleCodeClick}
-            >
-              인증코드 받기
-            </button>
+            {nameError && <p className="modal-error">{nameError}</p>}
           </div>
-          {emailError && <p className="modal-error">{emailError}</p>}
+          <div className="modal-inputs-wrap">
+            <label htmlFor="email" className="modal-input-label">
+              이메일
+            </label>
+            <div className="modal-email-wrap">
+              <div className="modal-email">
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="이메일을 입력해주세요"
+                  className={
+                    emailError ? "modal-input modal-input-error" : "modal-input"
+                  }
+                  onChange={handleEmailInput}
+                />
+                <button
+                  type="button"
+                  className={
+                    emailValue.length < 1
+                      ? `modal-code-btn ${codeBtnShake ? "shake" : ""}`
+                      : "modal-code-btn modal-code-btn-enable"
+                  }
+                  onClick={handleCodeClick}
+                >
+                  인증코드 받기
+                </button>
+              </div>
+              {emailError && <p className="modal-error">{emailError}</p>}
+            </div>
+            <input
+              type="text"
+              id="code"
+              placeholder="인증코드를 입력해주세요"
+              className={
+                codeError ? "modal-input modal-input-error" : "modal-input"
+              }
+              onChange={handleCodeInput}
+            />
+            {codeError && <p className="modal-error">{codeError}</p>}
+          </div>
+          <div className="modal-inputs-wrap">
+            <label htmlFor="password" className="modal-input-label">
+              비밀번호
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="비밀번호를 입력해주세요"
+              className={
+                pwError ? "modal-input modal-input-error" : "modal-input"
+              }
+              onChange={handlePwInput}
+            />
+            {pwError && <p className="modal-error">{pwError}</p>}
+            <p className="modal-pw-info">
+              영문/숫자/특수문자 중 2가지 이상 조합, 8자~15자리
+            </p>
+          </div>
+          <div className="modal-inputs-wrap">
+            <input
+              type="password"
+              placeholder="비밀번호를 다시 한번 입력해주세요"
+              className={
+                pwConfirmError ? "modal-input modal-input-error" : "modal-input"
+              }
+              onChange={handlePwConfirmInput}
+            />
+            {pwConfirmError && <p className="modal-error">{pwConfirmError}</p>}
+          </div>
         </div>
-        <input
-          type="text"
-          id="code"
-          placeholder="인증코드를 입력해주세요"
-          className={
-            codeError ? "modal-input modal-input-error" : "modal-input"
-          }
-          onChange={handleCodeInput}
-        />
-        {codeError && <p className="modal-error">{codeError}</p>}
-        <label htmlFor="password">비밀번호</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="비밀번호를 입력해주세요"
-          className={pwError ? "modal-input modal-input-error" : "modal-input"}
-          onChange={handlePwInput}
-        />
-        {pwError && <p className="modal-error">{pwError}</p>}
-        <p className="modal-pw-info">
-          영문/숫자/특수문자 중 2가지 이상 조합, 8자~15자리
-        </p>
         <button
           type="button"
           className={

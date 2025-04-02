@@ -17,50 +17,105 @@
 
     +margin(0)
 
-form
+.modal-form
   flex-direction: column
 
   +flex-box(center, center)
   +size(100%)
 
-  label
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%; 
-    align-self: flex-start;
-    color: $gray-800
+  .modal-input-wrap
+    flex-direction: column
+    overflow-y: auto
+    scrollbar-width: none
 
-    +margin(bottom 6px)
-    +margin(top 20px)
+    +flex-box(start, center)
+    +size(100%, 330px 330px)
 
-  .modal-input
-    align-self: stretch;
-    background-color: $gray-50
+    .modal-inputs-wrap
+      flex-direction: column
 
-    +flex-box(center, center)
-    +box-sizing(border-box)
-    +size(100%, 40px)
-    +padding(0 16px)
-    +border-radius(8px)
-    +border(none)
+      +flex-box(center, center)
+      +box-sizing(border-box)
+      +size(100%)
+      +margin(bottom 20px)
 
-    &::placeholder
-      color: $gray-400
-      
-  .modal-input-error
-    +border(1px solid $error)
+      .modal-input-label
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%; 
+        align-self: flex-start;
+        color: $gray-800
 
-  .modal-error
-    color: $error
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-    align-self: flex-start;
+        +margin(bottom 6px)
 
-    +margin(top 6px)
-    
+      .modal-input
+        align-self: stretch;
+        background-color: $gray-50
+
+        +flex-box(center, center)
+        +box-sizing(border-box)
+        +size(100%, 40px)
+        +padding(0 16px)
+        +border-radius(8px)
+        +border(none)
+
+        &::placeholder
+          color: $gray-400
+          
+      .modal-input-error
+        +border(1px solid $error)
+        
+      .modal-error
+        color: $error
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%;
+        align-self: flex-start;
+
+        +margin(top 6px)
+
+      .modal-email-wrap
+        flex-direction: column
+        
+        +flex-box(center, center)
+        +size(100%)
+        +margin(bottom 8px)
+
+        .modal-email
+          +flex-box(center, center, 8px)
+          +size(100%)
+
+          .modal-code-btn
+            color: $gray-400
+            background-color: $gray-200
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 150%;
+
+            +margin(0)
+            +size(180px, 40px)
+            +border(1px solid $gray-200)
+            
+          .modal-code-btn-enable
+            color: $gray-900
+            background-color: $white
+            
+
+      .modal-pw-info
+        color: $gray-500
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%;
+        align-self: flex-start;
+
+        +margin(top 6px)
+
+
+
   @keyframes shake
     0%
       transform: translateX(0)
@@ -75,44 +130,6 @@ form
 
   .shake
     animation: shake 0.2s ease
-
-  .modal-email-wrap
-    flex-direction: column
-
-    +flex-box(center, center)
-    +size(100%)
-    +margin(bottom 8px)
-
-    .modal-email
-      +flex-box(center, center, 8px)
-      +size(100%)
-
-      .modal-code-btn
-        color: $gray-400
-        background-color: $gray-200
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 150%;
-
-        +margin(0)
-        +size(180px, 40px)
-        +border(1px solid $gray-200)
-        
-      .modal-code-btn-enable
-        color: $gray-900
-        background-color: $white
-        
-
-  .modal-pw-info
-    color: $gray-500
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 150%;
-    align-self: flex-start;
-
-    +margin(top 6px)
 
   .modal-signup-btn
     font-size: 14px;

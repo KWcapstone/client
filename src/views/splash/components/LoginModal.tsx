@@ -73,8 +73,10 @@ const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
     <Modal onCloseModal={onCloseModal}>
       <p className="modal-title">로그인</p>
 
-      <form onSubmit={(e) => e.preventDefault()}>
-        <label htmlFor="id">이메일</label>
+      <form className="modal-form" onSubmit={(e) => e.preventDefault()}>
+        <label htmlFor="id" className="modal-label">
+          이메일
+        </label>
         <input
           id="id"
           type="text"
@@ -84,7 +86,9 @@ const LoginModal = ({ onCloseModal, onOpenSignup }: LoginModalProps) => {
         />
         {idError && <p className="modal-error">{idError}</p>}
 
-        <label htmlFor="password">비밀번호</label>
+        <label htmlFor="password" className="modal-label">
+          비밀번호
+        </label>
         <input
           id="password"
           type="password"
