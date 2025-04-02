@@ -1,0 +1,32 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_input.sass'
+@import '@/sass/uix/_button.sass'
+
+.modal-container
+  position: fixed
+  top: 0
+  left: 0
+  background-color: rgba(0, 0, 0, 0.5)
+  z-index: 1000
+  
+  +size(100vw, 100vh)
+  +flex-box(center, center)
+
+.modal-content
+  background-color: $white
+  flex-direction: column
+  position: relative
+
+  +size(30vw)
+  +flex-box(center, center)
+  +padding(24px)
+  +border-radius(16px)
+  +box-sizing(border-box)
+
+.modal-close-btn
+  cursor: pointer
+
+  +size(24px)
+  +flex-box(center, center)
+  +position(absolute, 12px, 12px)

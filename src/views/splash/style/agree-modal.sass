@@ -1,0 +1,134 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_input.sass'
+@import '@/sass/uix/_button.sass'
+
+.modal-header
+  +flex-box(start, center, 16px)
+  +size(100%)
+  +margin(bottom 16px)
+  
+  .modal-title
+    color: $gray-900
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+
+    +margin(0)
+
+.modal-all-agree
+  background-color: $gray-50
+  color: $gray-800
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.176px;
+  position: relative
+
+  +size(100%)
+  +border-radius(8px)
+  +margin(16px 0 16px 0)
+  +flex-box(start, center, 8px)
+  +padding(8px)
+  +box-sizing(border-box)
+
+  .modal-all-agree-checkbox
+    display: none;
+  .checkbox-label
+    background-image: url('/src/assets/imgs/icon/checkbox_border.svg')
+    background-size: contain
+    background-repeat: no-repeat
+    cursor: pointer
+    display: inline-block
+    -webkit-tap-highlight-color: transparent
+    user-select: none
+
+    +size(24px, 24px)
+
+  .modal-all-agree-checkbox:checked + .checkbox-label
+    background-image: url('/src/assets/imgs/icon/checkbox_pressed.svg') // 체크된 상태 SVG
+
+
+.modal-agree-list
+  flex-direction: column
+
+  +size(100%)
+  +box-sizing(border-box)
+  +padding(0 12px)
+  +flex-box(center, start, 16px)
+  
+  .modal-agree-item
+    -webkit-tap-highlight-color: transparent
+    user-select: none
+
+    +size(100%)
+    +flex-box(space-between, center, 8px)
+
+    .modal-agree-item-title
+      color: $gray-800
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 150%;
+      letter-spacing: -0.154px;
+      cursor: pointer
+
+      +flex-box(start, center, 8px)
+      
+      .modal-agree-checkbox
+        display: none;
+
+      .modal-agree-checkbox-label
+        background-image: url('/src/assets/imgs/icon/check_default.svg')
+        background-size: contain
+        background-repeat: no-repeat
+        cursor: pointer
+        
+        +size(16px, 16px)
+
+      .modal-agree-checkbox:checked + .modal-agree-checkbox-label
+        background-image: url('/src/assets/imgs/icon/check_pressed.svg') // 체크된 상태 SVG
+      
+.modal-agree-button
+  background-color: $gray-900
+  color: $white
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 150%;
+
+  +btn(100%, 48px, 8px)
+  +flex-box(center, center)
+  +padding(0 15px)
+  +box-sizing(border-box)
+  +margin(top 32px)
+
+.modal-agree-button-disable
+  background-color: $gray-200
+  color: $gray-400
+  font-weight: 600;
+
+.modal-error
+  color: $error
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  align-self: flex-start;
+
+  +margin(32px 0 0 0)
+  
+@keyframes shake
+  0%
+    transform: translateX(0)
+  25%
+    transform: translateX(-4px)
+  50%
+    transform: translateX(4px)
+  75%
+    transform: translateX(-4px)
+  100%
+    transform: translateX(0)
+
+.shake
+  animation: shake 0.2s ease

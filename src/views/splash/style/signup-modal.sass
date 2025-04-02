@@ -1,0 +1,189 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_input.sass'
+@import '@/sass/uix/_button.sass'
+
+.modal-header
+  +flex-box(start, center, 16px)
+  +size(100%)
+  +margin(bottom 16px)
+  
+  .modal-title
+    color: $gray-900
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+
+    +margin(0)
+
+.modal-form
+  flex-direction: column
+
+  +flex-box(center, center)
+  +size(100%)
+
+  .modal-input-wrap
+    flex-direction: column
+    overflow-y: auto
+    scrollbar-width: none
+
+    +flex-box(start, center)
+    +size(100%, 330px 330px)
+
+    .modal-inputs-wrap
+      flex-direction: column
+
+      +flex-box(center, center)
+      +box-sizing(border-box)
+      +size(100%)
+      +margin(bottom 20px)
+
+      .modal-input-label
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%; 
+        align-self: flex-start;
+        color: $gray-800
+
+        +margin(bottom 6px)
+
+      .modal-input
+        align-self: stretch;
+        background-color: $gray-50
+
+        +flex-box(center, center)
+        +box-sizing(border-box)
+        +size(100%, 40px)
+        +padding(0 16px)
+        +border-radius(8px)
+        +border(none)
+
+        &::placeholder
+          color: $gray-400
+      
+      .modal-input-pw-wrap
+        position: relative
+        +size(100%)
+
+        .password-eye
+          position: absolute
+          right: 15px
+          top: 50%
+          transform: translateY(-50%)
+          cursor: pointer
+
+          +size(20px)
+
+      
+          
+      .modal-input-error
+        +border(1px solid $error)
+        
+      .modal-error
+        color: $error
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%;
+        align-self: flex-start;
+
+        +margin(top 6px)
+
+      .modal-email-wrap
+        flex-direction: column
+        
+        +flex-box(center, center)
+        +size(100%)
+        +margin(bottom 8px)
+
+        .modal-email
+          +flex-box(center, center, 8px)
+          +size(100%)
+
+          .modal-code-btn
+            color: $gray-400
+            background-color: $gray-200
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 150%;
+
+            +margin(0)
+            +size(180px, 40px)
+            +border(1px solid $gray-200)
+            
+          .modal-code-btn-enable
+            color: $gray-900
+            background-color: $white
+            
+
+      .modal-pw-info
+        color: $gray-500
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%;
+        align-self: flex-start;
+
+        +margin(top 6px)
+
+
+
+  @keyframes shake
+    0%
+      transform: translateX(0)
+    25%
+      transform: translateX(-4px)
+    50%
+      transform: translateX(4px)
+    75%
+      transform: translateX(-4px)
+    100%
+      transform: translateX(0)
+
+  .shake
+    animation: shake 0.2s ease
+
+  .modal-signup-btn
+    font-size: 14px;
+
+    +flex-box(center, center)
+    +btn(100%, 48px, 8px)
+    +padding(0 15px)
+    +box-sizing(border-box)
+    +margin(bottom 12px)
+    +margin(top 32px)
+
+  .modal-login-btn-enable
+    background-color: $gray-900
+    color: $white
+    font-weight: 700;
+
+  .modal-login-btn-disable
+    background-color: $gray-200
+    color: $gray-400
+    font-weight: 600;
+
+.modal-already
+  +flex-box(center, center, 8px)
+  +size(100%)
+  p
+    color: $gray-500
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+  span
+    color: $gray-900
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    cursor: pointer
+
+
+
+
+
