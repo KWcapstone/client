@@ -11,10 +11,9 @@ import AgreeModal from "@/views/splash/components/AgreeModal";
 import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
 
 const SplashPage = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<
-    "login" | "signup" | "agree" | "resetPw" | null
-  >(null);
+  type ModalType = "login" | "signup" | "agree" | "resetPw" | null;
+  const [modalType, setModalType] = useState<ModalType>(null);
+
   const modalBackground = useRef<HTMLDivElement>(null);
 
   const openLoginModal = () => setModalType("login");
@@ -22,14 +21,9 @@ const SplashPage = () => {
   const openAgreeModal = () => setModalType("agree");
   const openResetPwModal = () => setModalType("resetPw");
 
-  const closeModal = () => {
-    setModalOpen(false);
-    setModalType(null);
-  };
-  const openModal = () => {
-    setModalOpen(true);
-    setModalType("login");
-  };
+  const closeModal = () => setModalType(null);
+
+  const openModal = () => setModalType("login");
 
   return (
     <>
