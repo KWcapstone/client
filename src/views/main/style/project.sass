@@ -17,7 +17,7 @@
         +padding(32px 32px)
         +flex-box(space-between, center)
 
-        h2
+        .title-wrap-h2
           font-size: 22px
           font-weight: bold
           line-height: 33px
@@ -25,7 +25,7 @@
         .search-wrap
           +flex-box(center, center, 12px)
 
-          input
+          .search-input
             +input(300px, 40px, 8px)
           
           a
@@ -45,10 +45,10 @@
         +flex-box(space-between, center)
 
         .tab-wrap
-          ul
+          .tab-ul
             +flex-box(center, center, 20px)
 
-            li
+            .tab-li
               font-size: 18px
               line-height: 27px
               cursor: pointer
@@ -59,7 +59,7 @@
         .order-wrap
           position: relative
 
-          button
+          .order-button
             +btn()
             +flex-box(center, center, 2px)
             +padding(4px 12px 4px 8px)
@@ -67,10 +67,10 @@
             line-height: 21px
             color: $gray-800
 
-            img
+            .order-img
               +size(16px, 16px)
           
-          ul
+          .order-ul
             +size(142px)
             +box-sizing(border-box)
             +padding(4px)
@@ -83,7 +83,7 @@
             box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.05)
             cursor: pointer
 
-            li
+            .order-li
               +padding(8px 12px)
 
     .card-wrap
@@ -96,7 +96,7 @@
         +box-sizing(border-box)
         cursor: pointer
 
-        img
+        .card-img
           +size(100%, 202px)
           border: 1px solid $gray-100
           border-radius: 8px
@@ -121,7 +121,7 @@
               +flex-box(center, normal, 4px)
               line-height: 22px
 
-              img
+              .owner-img
                 +size(20px, 20px)
                 +box-sizing(border-box)
                 border-radius: 20px
