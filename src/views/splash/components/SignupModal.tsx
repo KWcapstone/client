@@ -307,8 +307,12 @@ const SignupModal = ({
           type="button"
           className={
             active
-              ? `modal-login-btn-enable ${nextBtnShake ? "shake" : ""}`
-              : `modal-login-btn-disable ${nextBtnShake ? "shake" : ""}`
+              ? `modal-signup-btn modal-login-btn-enable ${
+                  nextBtnShake ? "shake" : ""
+                }`
+              : `modal-signup-btn modal-login-btn-disable ${
+                  nextBtnShake ? "shake" : ""
+                }`
           }
           onClick={handleSignupClick}
         >
@@ -316,11 +320,12 @@ const SignupModal = ({
         </button>
       </form>
       <div className="modal-already">
-        <p>이미 계정이 있으신가요?</p>
+        <p className="modal-already-p">이미 계정이 있으신가요?</p>
         <span
           onClick={() => {
             onOpenLogin();
           }}
+          className="modal-already-span"
         >
           로그인
         </span>

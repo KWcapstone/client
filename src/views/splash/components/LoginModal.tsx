@@ -120,8 +120,10 @@ const LoginModal = ({
           type="button"
           className={
             active
-              ? `modal-login-btn-enable ${shake ? "shake" : ""}`
-              : `modal-login-btn-disable ${shake ? "shake" : ""}`
+              ? `modal-login-btn modal-login-btn-enable ${shake ? "shake" : ""}`
+              : `modal-login-btn modal-login-btn-disable ${
+                  shake ? "shake" : ""
+                }`
           }
           onClick={handleLoginClick}
         >
@@ -149,15 +151,15 @@ const LoginModal = ({
       </div>
 
       <div className="modal-divider">
-        <hr />
+        <hr className="modal-divider-hr" />
         SNS 계정으로 로그인
-        <hr />
+        <hr className="modal-divider-hr" />
       </div>
 
       <div className="modal-sns-login">
-        <img src={kakao_login} alt="kakao" />
-        <img src={google_login} alt="google" />
-        <img src={naver_login} alt="naver" />
+        <img src={kakao_login} alt="kakao" className="modal-sns-login-img" />
+        <img src={google_login} alt="google" className="modal-sns-login-img" />
+        <img src={naver_login} alt="naver" className="modal-sns-login-img" />
       </div>
     </Modal>
   );

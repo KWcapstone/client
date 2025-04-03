@@ -128,8 +128,12 @@ const PasswordResetModal = ({
           <button
             className={
               loginActive
-                ? `modal-email-btn-enable ${loginBtnShake ? "shake" : ""}`
-                : `modal-email-btn-disable ${loginBtnShake ? "shake" : ""}`
+                ? `pwd-rst-button modal-email-btn-enable ${
+                    loginBtnShake ? "shake" : ""
+                  }`
+                : `pwd-rst-button modal-email-btn-disable ${
+                    loginBtnShake ? "shake" : ""
+                  }`
             }
             onClick={handleLoginClick}
           >
@@ -163,8 +167,12 @@ const PasswordResetModal = ({
           <button
             className={
               active
-                ? `modal-email-btn-enable ${emailBtnShake ? "shake" : ""}`
-                : `modal-email-btn-disable ${emailBtnShake ? "shake" : ""}`
+                ? `pwd-rst-button modal-email-btn-enable ${
+                    emailBtnShake ? "shake" : ""
+                  }`
+                : `pwd-rst-button modal-email-btn-disable ${
+                    emailBtnShake ? "shake" : ""
+                  }`
             }
             onClick={handleEmailClick}
           >
