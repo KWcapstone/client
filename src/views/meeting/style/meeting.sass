@@ -6,7 +6,7 @@
 .main
   display: flex
 
-  .record-wrap
+  .project-wrap
     +size(100%)
     +margin(left 240px)
     min-width: 1000px
@@ -86,58 +86,44 @@
             li
               +padding(8px 12px)
 
-    .table-wrap
-      +padding(0 32px)
-      
-      table
-        +size(100%)
+    .card-wrap
+      display: grid
+      grid-template-columns: 1fr 1fr 1fr
+      gap: 20px
+      +padding(25px 32px)
+
+      .card
+        +box-sizing(border-box)
+        cursor: pointer
+
+        img
+          +size(100%, 202px)
+          border: 1px solid $gray-100
+          border-radius: 8px
+          background-color: $gray-50
+        
+        .info-wrap
+          +flex-box(space-between, normal)
+          +padding(6px 4px 0)
+          font-weight: 500
+          line-height: 21px
+
+          .title-wrap
+            .title
+              color: $gray-900
+
+            .date
+              +margin(top 2px)
+              color: $gray-600
           
-        tr
-          &:not(:has(th))
-            cursor: pointer
+          .owner-wrap
+            .owner
+              +flex-box(center, normal, 4px)
+              line-height: 22px
 
-          &:not(:has(th)):hover
-            border-radius: 8px
-            background-color: $gray-100
+              img
+                +size(20px, 20px)
+                +box-sizing(border-box)
+                border-radius: 20px
+                border: 1px solid $white
 
-          input[type="checkbox"]
-            cursor: pointer
-
-          th
-            color: $gray-600
-
-            .craft-wrap
-              +flex-box(normal, center, 12px)
-
-              div
-                +size(100%)
-
-              button
-                height: 16.5px
-
-              .dwn
-                +btn()
-                +flex-box(center, center, 2px)
-
-                &:before
-                  +size(16px, 18px)
-                  content : url('@/assets/imgs/icon/dwn.svg')
-
-              .del
-                +btn()
-                +flex-box(center, center, 2px)  
-                color: #EC2526
-
-                &::before
-                  +size(16px, 18px)
-                  content : url('@/assets/imgs/icon/del.svg')
-
-              .cancel
-                +btn()
-
-          th, td
-            +padding(8px)
-            text-align: left
-
-            &:first-child
-              +size(20px)
