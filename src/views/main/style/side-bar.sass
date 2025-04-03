@@ -16,13 +16,10 @@
     .logo-wrap
       height: 32px
 
-    button
-      +size(32px, 32px)
-      +btn()
-      +background('@/assets/imgs/icon/new_notice.svg',no-repeat, center)
-      cursor: pointer
-    
     .new
+      cursor: pointer
+
+      +btn(32px, 32px, 8px)
       +background('@/assets/imgs/icon/new_notice.svg',no-repeat, center)
 
   .user-wrap
@@ -35,8 +32,7 @@
       background-color: $gray-100
       +background('@/assets/imgs/icon/arrow_down_gray.svg',no-repeat, 175px)
 
-
-      img
+      .user-profile-img
         +size(30px, 30px)
         background-color: $gray-300
         border-radius: 20px
@@ -56,7 +52,7 @@
   .list-wrap
     +padding(20px 16px)
 
-    li
+    .list-li
       +flex-box(normal, center, 8px)
       +padding(8px 12px)
       line-height: 21px
@@ -103,7 +99,7 @@
     bottom: 0
     border-top: 1px solid $gray-200
 
-    p
+    .time-wrap-p
       font-size: 12px
       font-weight: 500
       line-height: 18px
@@ -112,7 +108,7 @@
       line-height: 21px
       font-weight: 500
       
-      b
+      .time-b
         color: $purple-500
     
     .bar
