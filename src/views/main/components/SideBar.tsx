@@ -5,8 +5,7 @@ import test from "@/assets/imgs/common/test.png";
 
 // component
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import UserModal from "@/views/main/components/UserModal";
 

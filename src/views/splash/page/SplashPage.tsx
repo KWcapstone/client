@@ -4,7 +4,7 @@ import "@/views/splash/style/splash.sass";
 import "@/views/components/style/modal.sass";
 
 import { useState, useRef } from "react";
-
+import { Link } from "react-router-dom"
 import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
 import AgreeModal from "@/views/splash/components/AgreeModal";
@@ -30,7 +30,7 @@ const SplashPage = () => {
       <Navbar onOpenModal={openModal} />
       <div className="splash-wrap" ref={modalBackground}>
         <h1>Splash Page</h1>
-
+        <Link to="/project">Project page</Link>
         {modalType === "login" && (
           <div
             className="modal-container"
