@@ -9,12 +9,18 @@ import SideBar from "@/views/main/components/SideBar";
 
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import DwnModal from "@/views/main/components/DwnModal";
+import ShareModal from "@/views/main/components/ShareModal";
 
 const ProjectPage = () => {
   const [tab, setTab] = useState<string>("all");
   const [order, setOrder] = useState<boolean>(true);
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
+  type ModalType = "dwn" | "share" | null;
+  const [modalType, setModalType] = useState<ModalType>(null);
+  const closeModal = () => setModalType(null);
 
   const toggleMenu = (id: number) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
@@ -23,23 +29,25 @@ const ProjectPage = () => {
   const dummyCards: any[] = [
     { id: 1, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
     { id: 2, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
+    { id: 3, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
+    { id: 4, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
+    { id: 5, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
+    { id: 6, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
   ];
 
-  const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const menuRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      const isInside = Array.from(cardRefs.current.values()).some((ref) =>
-        ref.contains(e.target as Node)
-      );
-      if (!isInside) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenuId(null);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  
 
   return (
     <div className="main">
@@ -123,10 +131,10 @@ const ProjectPage = () => {
               >
               </button>
               {openMenuId === card.id && (
-                <ul className="menu-wrap">
+                <ul className="menu-wrap" ref={menuRef}>
                   <li className="edit">이름 변경하기</li>
-                  <li className="dwn">다운로드하기</li>
-                  <li className="share">공유하기</li>
+                  <li className="dwn" onClick={() => {setModalType('dwn'); setOpenMenuId(null);}}>다운로드하기</li>
+                  <li className="share" onClick={() => {setModalType('share'); setOpenMenuId(null);}}>공유하기</li>
                   <li className="del">삭제하기</li>
                 </ul>
               )}
@@ -146,6 +154,34 @@ const ProjectPage = () => {
           ))}
         </div>
       </div>
+      {modalType === "dwn" && (
+        <div
+          className="modal-container"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <DwnModal
+            onCloseModal={closeModal}
+          />
+        </div>
+      )}
+      {modalType === "share" && (
+        <div
+          className="modal-container"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <ShareModal
+            onCloseModal={closeModal}
+          />
+        </div>
+      )}
     </div>
   );
 };
