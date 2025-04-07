@@ -94,13 +94,71 @@
 
       .card
         +box-sizing(border-box)
-        cursor: pointer
+        position: relative
+
+        &:hover
+          .menu-btn
+            display: block
 
         .card-img
           +size(100%, 202px)
           border: 1px solid $gray-100
           border-radius: 8px
           background-color: $gray-50
+        
+        .menu-btn
+          +background('@/assets/imgs/icon/menu.svg',no-repeat, center)
+          +size(14px, 14px)
+          +padding(6px)
+          display: none
+          position: absolute
+          top: 12px
+          right: 12px
+          background-color: #F7F8FA
+          border: 1px solid #DADCE4
+          border-radius: 4px
+          cursor: pointer
+        
+        .open
+          display: block
+        
+        .menu-wrap
+          +size(142px, 156px)
+          +box-sizing(border-box)
+          +padding(4px)
+          position: absolute
+          top: 42px
+          right: -102px
+          border-radius: 8px
+          background: $white
+          box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05)
+          z-index: 10
+          
+          li
+            +flex-box(normal, center, 8px)
+            +padding(8.5px 12px)
+            font-weight: 500
+            line-height: 20px
+            cursor: pointer
+
+            &:before
+              display: block
+              +size(16px, 18px)
+
+          .edit::before
+            content : url('@/assets/imgs/icon/pencil.svg')
+
+          .dwn::before
+            content : url('@/assets/imgs/icon/dwn.svg')
+
+          .share::before
+            content : url('@/assets/imgs/icon/share.svg')
+
+          .del
+            color: #EC2526
+
+            &:before
+              content : url('@/assets/imgs/icon/del.svg')
 
         .info-wrap
           +flex-box(space-between, normal)
