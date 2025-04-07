@@ -52,7 +52,7 @@ const RecordPage = () => {
       <div className="record-wrap">
         <div className="nevigation-wrap">
           <div className="title-wrap">
-            <h2>음성</h2>
+            <h2>음성 ・ 스크립트</h2>
             <div className="search-wrap">
               <input type="text" placeholder="음성명 검색" />
               <Link to="/meeting">새로 만들기</Link>
