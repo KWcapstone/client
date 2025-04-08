@@ -1,7 +1,7 @@
-import "@/views/meeting/styles/header-bar.scss";
+import "@/views/meeting/style/header-bar.sass";
 import test from "@/assets/imgs/common/test.png";
-import home from "@/assets/imgs/icon/home.png";
-import plus from "@/assets/imgs/icon/plus.png";
+import home from "@/assets/imgs/icon/home.svg";
+import plus from "@/assets/imgs/icon/plus.svg";
 
 const HeaderBar = () => {
   return (
