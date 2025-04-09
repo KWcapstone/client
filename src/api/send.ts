@@ -1,9 +1,9 @@
 import axios from 'axios'
 // import {getCookie} from "utils/cookie";
 
-// if(getCookie('login_token')) {
-//   axios.defaults.headers.common['Authorization'] = `Bearer ${getCookie('login_token')}`;
-// }
+if(localStorage.getItem("accessToken")) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("accessToken")}`;
+}
 
 const instance = axios.create({
   headers: {

@@ -4,41 +4,55 @@ import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
 import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import test from "@/assets/imgs/common/test.png";
 
+// api
+import { getProject } from "@/api/main/project";
+
 // component
 import SideBar from "@/views/main/components/SideBar";
-
-import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
 import DwnModal from "@/views/main/components/DwnModal";
 import ShareModal from "@/views/main/components/ShareModal";
 
+// import
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+// type
+import { projectData } from "@/types/projectData"
+
 const ProjectPage = () => {
+  // value
   const [tab, setTab] = useState<string>("all");
-  const [order, setOrder] = useState<boolean>(true);
+  const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [projectList, setProjectList] = useState<Array<projectData>>();
+  const menuRef = useRef<HTMLUListElement | null>(null);
+  const orderRef = useRef<HTMLUListElement | null>(null);
 
+  // modal
   type ModalType = "dwn" | "share" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
   const closeModal = () => setModalType(null);
 
+  // function
   const toggleMenu = (id: number) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
-  const dummyCards: any[] = [
-    { id: 1, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
-    { id: 2, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
-    { id: 3, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
-    { id: 4, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
-    { id: 5, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
-    { id: 6, title: "모아바 회의", date: "2025/1/16", owner: "모아바", img: test },
-  ];
 
-  const menuRef = useRef<HTMLUListElement | null>(null);
-  const orderRef = useRef<HTMLUListElement | null>(null);
+  const getProjectList = () => {
+    let params = {
+      sort: order,
+      filterType: tab
+    }
+    getProject(params).then((res: any) => {
+      setProjectList(res.data.data)
+    })
+  }
 
   useEffect(() => {
+    getProjectList();
+
     const menuClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenuId(null);
@@ -56,7 +70,7 @@ const ProjectPage = () => {
 
     document.addEventListener("mousedown", orderClickOutside);
     () => document.removeEventListener("mousedown", orderClickOutside);
-  }, []);
+  }, [order, tab]);
 
 
   return (
@@ -85,14 +99,14 @@ const ProjectPage = () => {
                   전체
                 </li>
                 <li
-                  className={tab === "mine" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("mine")}
+                  className={tab === "my" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("my")}
                 >
                   내 회의
                 </li>
                 <li
-                  className={tab === "invite" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("invite")}
+                  className={tab === "invited" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("invited")}
                 >
                   초대된 회의
                 </li>
@@ -103,14 +117,14 @@ const ProjectPage = () => {
                 onClick={() => setShowOrder(!showOrder)}
                 className="order-button"
               >
-                {order ? "최신순" : "오래된 순"}
+                {order === "created" ? "최신순" : "오래된 순"}
                 <img src={showOrder ? arrowUp : arrowDown} className="order-img" />
               </button>
               {showOrder && (
                 <ul className="order-ul">
                   <li
                     onClick={() => {
-                      setOrder(true);
+                      setOrder("created");
                       setShowOrder(false);
                     }}
                     className="order-li"
@@ -119,7 +133,7 @@ const ProjectPage = () => {
                   </li>
                   <li
                     onClick={() => {
-                      setOrder(false);
+                      setOrder("latest");
                       setShowOrder(false);
                     }}
                     className="order-li"
@@ -132,15 +146,15 @@ const ProjectPage = () => {
           </div>
         </div>
         <div className="card-wrap">
-          {dummyCards.map((card) => (
-            <div className="card" key={card.id}>
-              <img src={card.img} alt="" className="card-img" />
+          {(projectList) && projectList.map((list: projectData, i: number) => (
+            <div className="card" key={i}>
+              <img src={list.imageUrl} alt="" className="card-img" />
               <button
-                className={`menu-btn ${openMenuId === card.id && "open"}`}
-                onClick={() => toggleMenu(card.id)}
+                className={`menu-btn ${openMenuId === i && "open"}`}
+                onClick={() => toggleMenu(i)}
               >
               </button>
-              {openMenuId === card.id && (
+              {openMenuId === i && (
                 <ul className="menu-wrap" ref={menuRef}>
                   <li className="edit">이름 변경하기</li>
                   <li className="dwn" onClick={() => {setModalType('dwn'); setOpenMenuId(null);}}>다운로드하기</li>
@@ -150,13 +164,13 @@ const ProjectPage = () => {
               )}
               <div className="info-wrap">
                 <div className="title-wrap">
-                  <div className="title">{card.title}</div>
-                  <div className="date">{card.date}</div>
+                  <div className="title">{list.projectName}</div>
+                  <div className="date">{new Date(list.updatedAt).toLocaleDateString()}</div>
                 </div>
                 <div className="owner-wrap">
                   <div className="owner">
-                    <img src={card.img} className="owner-img" />
-                    {card.owner}
+                    <img src={test} className="owner-img" />
+                    {list.creator}
                   </div>
                 </div>
               </div>
