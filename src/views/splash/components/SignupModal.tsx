@@ -6,6 +6,11 @@ import arrow_back from "@/assets/imgs/icon/arrow_back_outlined.svg";
 import pw_show from "@/assets/imgs/icon/pw_show.svg";
 import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
+import {
+  postEmailVerification,
+  postEmailduplication,
+} from "@/api/splash/signup";
+
 interface LoginModalProps {
   onCloseModal: () => void;
   onOpenLogin: () => void;
@@ -96,6 +101,25 @@ const SignupModal = ({
 
   const handleSignupClick = () => {
     let hasError = false;
+
+    postEmailVerification({
+      email: emailValue,
+      code: Number(codeValue),
+    })
+      .then((response) => {
+        console.log("인증코드 확인 성공", response);
+      })
+      .catch((error) => {
+        console.error("인증코드 확인 실패", error);
+        // 인증코드 확인 실패 처리
+        hasError = true;
+        if (error.response.status === 400) {
+          setCodeError(error.response.data.message);
+        } else if (error.response.status === 500) {
+          setCodeError("서버오류. 관리자에게 문의하세요.");
+        }
+      });
+
     if (!nameValue) {
       setNameError("이름을 입력해주세요.");
       hasError = true;
@@ -132,7 +156,11 @@ const SignupModal = ({
       return;
     }
     // 추후 회원가입 실패 시 에러 메시지 표시
-    // 성공
+    localStorage.setItem("name", nameValue);
+    localStorage.setItem("email", emailValue);
+    localStorage.setItem("password", pwValue);
+
+    // 회원가입 성공 시
     console.log("회원가입 성공!");
     onOpenAgree();
   };
@@ -151,10 +179,26 @@ const SignupModal = ({
       return;
     }
     // 인증코드 발송 로직
-    console.log("인증코드 발송 성공!");
+    setEmailError("");
+    postEmailduplication(emailValue)
+      .then((response) => {
+        console.log("이메일 중복 확인 성공", response);
+        setCodeInput("");
+      })
+      .catch((error) => {
+        console.error("이메일 중복 확인 실패", error);
+
+        if (error.response.status === 400) {
+          setEmailError(error.response.data.message);
+        } else if (error.response.status === 422) {
+          setEmailError("이메일 형식이 올바르지 않습니다.");
+        } else {
+          setEmailError("이메일 인증 오류 발생. 관리자에게 문의하세요.");
+        }
+      });
+
     // 인증코드 발송 성공 시
     // 인증코드 입력란 활성화
-    setCodeInput("");
   };
 
   const handleCodeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
