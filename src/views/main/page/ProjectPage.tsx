@@ -36,18 +36,28 @@ const ProjectPage = () => {
   ];
 
   const menuRef = useRef<HTMLUListElement | null>(null);
+  const orderRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const menuClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenuId(null);
       }
     };
-  
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    const orderClickOutside = (e: MouseEvent) => {
+      if (orderRef.current && !orderRef.current.contains(e.target as Node)) {
+        setShowOrder(false);
+      }
+    };
+
+    document.addEventListener("mousedown", menuClickOutside);
+    () => document.removeEventListener("mousedown", menuClickOutside);
+
+    document.addEventListener("mousedown", orderClickOutside);
+    () => document.removeEventListener("mousedown", orderClickOutside);
   }, []);
-  
+
 
   return (
     <div className="main">
@@ -88,7 +98,7 @@ const ProjectPage = () => {
                 </li>
               </ul>
             </div>
-            <div className="order-wrap">
+            <div className="order-wrap" ref={orderRef}>
               <button
                 onClick={() => setShowOrder(!showOrder)}
                 className="order-button"

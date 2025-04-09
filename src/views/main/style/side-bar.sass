@@ -24,7 +24,7 @@
 
   .user-wrap
     +padding(0 16px)
-    
+
     .user
       +padding(12px)
       +flex-box(normal, center, 8px)
@@ -62,32 +62,18 @@
       cursor: pointer
 
       &:before
-        display: block
         +size(18px, 18px)
+        content: ""
 
     .project::before
-      content : url('@/assets/imgs/icon/project.svg')
+      +background('@/assets/imgs/icon/project.svg', no-repeat, center)
 
-    .record
-      &:before
-        content : url('@/assets/imgs/icon/mic.svg')
-      
-      .flex
-        gap: 5px
-
-      .dot
-        +flex-box(center, center, 5px)
-
-        &:before
-          +size(2px, 2px)
-          display: block
-          content: ""
-          border-radius: 1px
-          background: $gray-600
+    .record::before
+      +background('@/assets/imgs/icon/mic.svg', no-repeat, center)
 
     .summary::before
-      content : url('@/assets/imgs/icon/note.svg')
-      
+      +background('@/assets/imgs/icon/note.svg', no-repeat, center)
+
     .active
       font-weight: bold
       background-color: $gray-100
@@ -108,24 +94,24 @@
     .time
       line-height: 21px
       font-weight: 500
-      
+
       .time-b
         color: $purple-500
-    
+
     .bar
       +size(100%, 8px)
       +margin(12px 0)
       border-radius: 50px
       background: $gray-200
-      
+
       .status
         +size(184px, 8px)
         background: $purple-400
         border-radius: 50px
-    
+
     .remainder
       font-size: 12px
       font-weight: 500
       line-height: 18px
       color: $gray-700
-          
+

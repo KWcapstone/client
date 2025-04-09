@@ -59,10 +59,7 @@ const SideBar = () => {
               className={`list-li record ${sort === "/record" ? "active" : ""}`}
               onClick={() => navigate("/record")}
             >
-              <span className="flex">
-                <span>음성</span>
-                <span className="dot">스크립트</span>
-              </span>
+              음성・스크립트
             </li>
             <li
               className={`list-li summary ${sort === "/summary" ? "active" : ""}`}

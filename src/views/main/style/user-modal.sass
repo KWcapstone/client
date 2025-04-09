@@ -3,3 +3,86 @@
 @import '@/sass/uix/_input.sass'
 @import '@/sass/uix/_button.sass'
 
+.modal-content
+  width: 300px !important
+  padding: 40px 24px 16px !important
+
+  .modal-wrap
+    +size(100%)
+
+    .info-wrap
+      +padding(bottom 32px)
+      +flex-box(center, center)
+      flex-direction: column
+
+      .user-img
+        position: relative
+        cursor: pointer
+
+        img
+          +size(80px, 80px)
+          border-radius: 50px
+          background: #B3C4DE
+
+        &:after
+          content: ""
+          +size(24px, 24px)
+          +box-sizing(border-box)
+          +background('@/assets/imgs/icon/pencil_gray.svg', no-repeat, center)
+          position: absolute
+          bottom: 0
+          right: 0
+          border-radius: 50px
+          background-color: $white
+          border: 1px solid $gray-200
+
+      .user-name
+        +margin(top 8px)
+        font-size: 18px
+        font-weight: bold
+        line-height: 27px
+
+      .user-email
+        +margin(top 3px)
+        font-size: 14px
+        font-weight: 500
+        line-height: 21px
+        color: $gray-500
+
+    .edit-wrap
+      li
+        +flex-box(noraml, center, 8px)
+        +padding(12px 8px)
+        border-bottom: 1px solid $gray-100
+        line-height: 21px
+        font-weight: 500
+        cursor: pointer
+
+        &:before
+          +size(24px, 24px)
+          content: ""
+
+
+        &:first-child
+          border-top: 1px solid $gray-100
+
+      .log-out::before
+        +background('@/assets/imgs/icon/exit.svg', no-repeat, center)
+
+      .pwd-edit::before
+        +background('@/assets/imgs/icon/setting.svg', no-repeat, center)
+
+    .remove
+      +btn()
+      +margin(16px auto 0)
+      font-size: 12px
+      font-weight: bold
+      line-height: 18px
+      color: #EC2526
+
+    p
+      font-size: 12px
+      font-weight: 500
+      line-height: 18px
+      text-align: center
+      color: $gray-500

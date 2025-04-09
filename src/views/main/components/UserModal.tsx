@@ -20,12 +20,12 @@ const UserModal = ({
           <div className="user-email">gusrns48@kw.ac.kr</div>
         </div>
         <ul className="edit-wrap">
-          <li className="mode-wrap"></li>
-          <li className="log-out"></li>
-          <li className="pwd-edit"></li>
+          {/* <li className="mode-wrap"></li> */}
+          <li className="log-out">로그아웃</li>
+          <li className="pwd-edit">비밀번호 변경</li>
         </ul>
         <button className="remove">계정 삭제</button>
-        <p>개인 정보 처리 방침 ・ 이용약관</p>
+        <p>개인 정보 처리 방침・이용약관</p>
       </div>
     </Modal>
   );

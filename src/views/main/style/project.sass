@@ -82,6 +82,7 @@
             background: $white
             box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.05)
             cursor: pointer
+            z-index: 10
 
             .order-li
               +padding(8px 12px)
@@ -105,7 +106,7 @@
           border: 1px solid $gray-100
           border-radius: 8px
           background-color: $gray-50
-        
+
         .menu-btn
           +background('@/assets/imgs/icon/menu.svg',no-repeat, center)
           +size(14px, 14px)
@@ -118,10 +119,10 @@
           border: 1px solid #DADCE4
           border-radius: 4px
           cursor: pointer
-        
+
         .open
           display: block
-        
+
         .menu-wrap
           +size(142px, 156px)
           +box-sizing(border-box)
@@ -133,7 +134,7 @@
           background: $white
           box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05)
           z-index: 10
-          
+
           li
             +flex-box(normal, center, 8px)
             +padding(8.5px 12px)

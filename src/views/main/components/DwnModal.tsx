@@ -25,7 +25,7 @@ const DwnModal = ({
             </div>
             <div className="summary-wrap">
               <div className="img-wrap"></div>
-              <p>음성 ・ 스크립트</p>
+              <p>음성・스크립트</p>
             </div>
           </div>
         </div>
