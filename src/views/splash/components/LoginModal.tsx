@@ -9,6 +9,9 @@ import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
 import { useState, useEffect } from "react";
 
+import { postLogin } from "@/api/splash/login";
+import { LoginData } from "@/types/loginData";
+
 interface LoginModalProps {
   onCloseModal: () => void;
   onOpenSignup: () => void;
@@ -72,9 +75,32 @@ const LoginModal = ({
 
     // 추후 로그인 실패 시 에러 메시지 표시
 
+    // 로그인 API 호출
+    const loginData: LoginData = {
+      email: idValue,
+      password: pwValue,
+    };
+    postLogin(loginData)
+      .then((response) => {
+        console.log("로그인 성공", response);
+        // 로그인 성공 후 처리
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        console.log("로그인 성공!");
+        onCloseModal();
+      })
+      .catch((error) => {
+        console.error("로그인 실패", error);
+        // 로그인 실패 처리
+        if (error.response.status === 401) {
+          setPwError("아이디 또는 비밀번호가 일치하지 않습니다.");
+        } else if (error.response.status === 404) {
+          setIdError("가입되지 않은 이메일입니다.");
+        } else {
+          alert("로그인에 실패했습니다. 다시 시도해주세요.");
+        }
+      });
+
     // 성공
-    console.log("로그인 성공!");
-    onCloseModal();
   };
 
   return (
