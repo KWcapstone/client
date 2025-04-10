@@ -8,6 +8,7 @@ import pw_show from "@/assets/imgs/icon/pw_show.svg";
 import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { postLogin } from "@/api/splash/login";
 import { LoginData } from "@/types/loginData";
@@ -23,6 +24,8 @@ const LoginModal = ({
   onOpenSignup,
   onOpenResetPw,
 }: LoginModalProps) => {
+  const navigate = useNavigate();
+
   const [active, setActive] = useState(false);
   const [idValue, setIdInput] = useState("");
   const [pwValue, setPwInput] = useState("");
@@ -58,6 +61,7 @@ const LoginModal = ({
     if (!idValue) {
       setIdError("이메일을 입력해주세요.");
       hasError = true;
+    } else if (idValue === "test") {
     } else if (!idValue.includes("@")) {
       setIdError("올바른 이메일 형식이 아닙니다.");
       hasError = true;
@@ -73,8 +77,6 @@ const LoginModal = ({
       return;
     }
 
-    // 추후 로그인 실패 시 에러 메시지 표시
-
     // 로그인 API 호출
     const loginData: LoginData = {
       email: idValue,
@@ -87,16 +89,20 @@ const LoginModal = ({
         localStorage.setItem("accessToken", response.data.data.accessToken);
         console.log("로그인 성공!");
         onCloseModal();
+        navigate("/project");
       })
       .catch((error) => {
         console.error("로그인 실패", error);
         // 로그인 실패 처리
         if (error.response.status === 401) {
           setPwError("아이디 또는 비밀번호가 일치하지 않습니다.");
+          setIdError(" ");
         } else if (error.response.status === 404) {
-          setIdError("가입되지 않은 이메일입니다.");
+          setPwError("아이디 또는 비밀번호가 일치하지 않습니다.");
+          setIdError(" ");
         } else {
-          alert("로그인에 실패했습니다. 다시 시도해주세요.");
+          setPwError("로그인에 실패했습니다. 다시 시도해주세요.");
+          setIdError(" ");
         }
       });
 
