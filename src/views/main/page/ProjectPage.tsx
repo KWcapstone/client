@@ -17,7 +17,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // type
-import { projectData } from "@/types/projectData"
+import { projectData } from "@/types/projectData";
 
 const ProjectPage = () => {
   // value
@@ -27,7 +27,7 @@ const ProjectPage = () => {
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [projectList, setProjectList] = useState<Array<projectData>>();
   const menuRef = useRef<HTMLUListElement | null>(null);
-  const orderRef = useRef<HTMLUListElement | null>(null);
+  const orderRef = useRef<HTMLDivElement | null>(null);
 
   // modal
   type ModalType = "dwn" | "share" | null;
@@ -39,16 +39,15 @@ const ProjectPage = () => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
-
   const getProjectList = () => {
     let params = {
       sort: order,
-      filterType: tab
-    }
+      filterType: tab,
+    };
     getProject(params).then((res: any) => {
-      setProjectList(res.data.data)
-    })
-  }
+      setProjectList(res.data.data);
+    });
+  };
 
   useEffect(() => {
     getProjectList();
@@ -71,7 +70,6 @@ const ProjectPage = () => {
     document.addEventListener("mousedown", orderClickOutside);
     () => document.removeEventListener("mousedown", orderClickOutside);
   }, [order, tab]);
-
 
   return (
     <div className="main">
@@ -118,7 +116,10 @@ const ProjectPage = () => {
                 className="order-button"
               >
                 {order === "created" ? "최신순" : "오래된 순"}
-                <img src={showOrder ? arrowUp : arrowDown} className="order-img" />
+                <img
+                  src={showOrder ? arrowUp : arrowDown}
+                  className="order-img"
+                />
               </button>
               {showOrder && (
                 <ul className="order-ul">
@@ -146,36 +147,54 @@ const ProjectPage = () => {
           </div>
         </div>
         <div className="card-wrap">
-          {(projectList) && projectList.map((list: projectData, i: number) => (
-            <div className="card" key={i}>
-              <img src={list.imageUrl} alt="" className="card-img" />
-              <button
-                className={`menu-btn ${openMenuId === i && "open"}`}
-                onClick={() => toggleMenu(i)}
-              >
-              </button>
-              {openMenuId === i && (
-                <ul className="menu-wrap" ref={menuRef}>
-                  <li className="edit">이름 변경하기</li>
-                  <li className="dwn" onClick={() => {setModalType('dwn'); setOpenMenuId(null);}}>다운로드하기</li>
-                  <li className="share" onClick={() => {setModalType('share'); setOpenMenuId(null);}}>공유하기</li>
-                  <li className="del">삭제하기</li>
-                </ul>
-              )}
-              <div className="info-wrap">
-                <div className="title-wrap">
-                  <div className="title">{list.projectName}</div>
-                  <div className="date">{new Date(list.updatedAt).toLocaleDateString()}</div>
-                </div>
-                <div className="owner-wrap">
-                  <div className="owner">
-                    <img src={test} className="owner-img" />
-                    {list.creator}
+          {projectList &&
+            projectList.map((list: projectData, i: number) => (
+              <div className="card" key={i}>
+                <img src={list.imageUrl} alt="" className="card-img" />
+                <button
+                  className={`menu-btn ${openMenuId === i && "open"}`}
+                  onClick={() => toggleMenu(i)}
+                ></button>
+                {openMenuId === i && (
+                  <ul className="menu-wrap" ref={menuRef}>
+                    <li className="edit">이름 변경하기</li>
+                    <li
+                      className="dwn"
+                      onClick={() => {
+                        setModalType("dwn");
+                        setOpenMenuId(null);
+                      }}
+                    >
+                      다운로드하기
+                    </li>
+                    <li
+                      className="share"
+                      onClick={() => {
+                        setModalType("share");
+                        setOpenMenuId(null);
+                      }}
+                    >
+                      공유하기
+                    </li>
+                    <li className="del">삭제하기</li>
+                  </ul>
+                )}
+                <div className="info-wrap">
+                  <div className="title-wrap">
+                    <div className="title">{list.projectName}</div>
+                    <div className="date">
+                      {new Date(list.updatedAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div className="owner-wrap">
+                    <div className="owner">
+                      <img src={test} className="owner-img" />
+                      {list.creator}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
       {modalType === "dwn" && (
@@ -187,9 +206,7 @@ const ProjectPage = () => {
             }
           }}
         >
-          <DwnModal
-            onCloseModal={closeModal}
-          />
+          <DwnModal onCloseModal={closeModal} />
         </div>
       )}
       {modalType === "share" && (
@@ -201,9 +218,7 @@ const ProjectPage = () => {
             }
           }}
         >
-          <ShareModal
-            onCloseModal={closeModal}
-          />
+          <ShareModal onCloseModal={closeModal} />
         </div>
       )}
     </div>
