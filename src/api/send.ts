@@ -8,6 +8,7 @@ if(localStorage.getItem("accessToken")) {
 const instance = axios.create({
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
+    'Access-Control-Allow-Origin': '*'
   },
   withCredentials: true,
 })
