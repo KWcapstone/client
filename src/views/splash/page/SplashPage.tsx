@@ -27,7 +27,7 @@ const SplashPage = () => {
   const openModal = () => setModalType("login");
 
   useEffect(() => {
-    getTest().then((res: any) => {
+    getTest().then(() => {
     });
   }, []);
 
