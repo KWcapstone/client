@@ -6,8 +6,8 @@ if(localStorage.getItem("accessToken")) {
 }
 
 const instance = axios.create({
+  baseURL: 'http://3.39.11.168:8080/',
   headers: {
-    baseURL: 'http://3.39.11.168:8080/',
     'X-Requested-With': 'XMLHttpRequest',
     'Access-Control-Allow-Origin': '*'
   },
