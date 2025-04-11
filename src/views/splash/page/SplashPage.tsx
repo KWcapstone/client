@@ -3,12 +3,13 @@ import Navbar from "@/views/splash/components/Navbar";
 import "@/views/splash/style/splash.sass";
 import "@/views/components/style/modal.sass";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom"
 import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
 import AgreeModal from "@/views/splash/components/AgreeModal";
 import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
+import { getTest } from "@/api/main/project";
 
 const SplashPage = () => {
   type ModalType = "login" | "signup" | "agree" | "resetPw" | null;
@@ -24,6 +25,11 @@ const SplashPage = () => {
   const closeModal = () => setModalType(null);
 
   const openModal = () => setModalType("login");
+
+  useEffect(() => {
+    getTest().then((res: any) => {
+    });
+  }, []);
 
   return (
     <>
