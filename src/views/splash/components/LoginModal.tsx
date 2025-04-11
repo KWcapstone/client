@@ -7,8 +7,10 @@ import naver_login from "@/assets/imgs/common/naver_login.svg";
 import pw_show from "@/assets/imgs/icon/pw_show.svg";
 import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { AccessTokenContext } from "@/context/accessToken";
 
 import { postLogin } from "@/api/splash/login";
 import { LoginData } from "@/types/loginData";
@@ -25,6 +27,8 @@ const LoginModal = ({
   onOpenResetPw,
 }: LoginModalProps) => {
   const navigate = useNavigate();
+
+  const { setIsLogin } = useContext(AccessTokenContext);
 
   const [active, setActive] = useState(false);
   const [idValue, setIdInput] = useState("");
@@ -88,6 +92,7 @@ const LoginModal = ({
         // 로그인 성공 후 처리
         localStorage.setItem("accessToken", response.data.data.accessToken);
         console.log("로그인 성공!");
+        setIsLogin(true);
         onCloseModal();
         navigate("/project");
       })
