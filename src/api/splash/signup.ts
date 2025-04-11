@@ -5,7 +5,7 @@ import { EmailVerification } from "@/types/emailVerification";
 export const postSignUp = (userData: UserData) => {
   return Send({
     method: "post",
-    url: "/api/auth/sign_up",
+    url: "auth/sign_up",
     data: userData,
   });
 };
@@ -13,7 +13,7 @@ export const postSignUp = (userData: UserData) => {
 export const postEmailduplication = (email: string) => {
   return Send({
     method: "post",
-    url: "/api/auth/email_duplication",
+    url: "auth/email_duplication",
     data: { email },
   });
 };
@@ -21,7 +21,7 @@ export const postEmailduplication = (email: string) => {
 export const postEmailVerification = (emailVerification: EmailVerification) => {
   return Send({
     method: "post",
-    url: "/api/auth/email_verification",
+    url: "auth/email_verification",
     data: emailVerification,
   });
 };
