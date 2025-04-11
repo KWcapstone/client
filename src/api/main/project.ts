@@ -4,7 +4,7 @@ import { selectParams } from "@/types/selectParams";
 export const getTest = () => {
   return Send({
     method: "get",
-    url: "/main/apiTest",
+    url: "/api/main/apiTest",
   });
 };
 
