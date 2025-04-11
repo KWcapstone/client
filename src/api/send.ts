@@ -1,36 +1,36 @@
-import axios from 'axios'
+import axios from "axios";
 // import {getCookie} from "utils/cookie";
 
-if(localStorage.getItem("accessToken")) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("accessToken")}`;
+if (localStorage.getItem("accessToken")) {
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${localStorage.getItem("accessToken")}`;
 }
 
 const instance = axios.create({
-  baseURL: 'http://3.39.11.168:8080/',
+  baseURL: import.meta.env.VITE_API_SERVER_URL,
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-    'Access-Control-Allow-Origin': '*'
+    "Content-Type": "application/json",
   },
-  withCredentials: true,
-})
+});
 
-instance.interceptors.request.use(
-  (config) => {
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  },
-)
+export default instance;
 
-instance.interceptors.response.use(
-  (response) => {
-    return response
-  },
+// instance.interceptors.request.use(
+//   (config) => {
+//     return config
+//   },
+//   (error) => {
+//     return Promise.reject(error)
+//   },
+// )
 
-  (error) => {
-    return Promise.reject(error)
-  },
-)
+// instance.interceptors.response.use(
+//   (response) => {
+//     return response
+//   },
 
-export default instance
+//   (error) => {
+//     return Promise.reject(error)
+//   },
+// )
