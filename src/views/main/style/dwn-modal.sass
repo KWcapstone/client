@@ -4,8 +4,82 @@
 @import '@/sass/uix/_button.sass'
 
 .modal-content
-  // width: 400px !important
+  +size(400px)
 
   .modal-wrap
     .file-wrap
-      +padding(8px 24px 0)
+      +padding(8px 0)
+
+      h3
+        line-height: 21px
+        font-weight: 500
+
+      .radio-container
+        +flex-box(space-between, center, 8px)
+        +padding(top 8px)
+
+        .radio-wrap
+          +size(100%)
+          position: relative
+
+          .img
+            +box-sizing(border-box)
+            +size(100%, 128px)
+            background-size: 70px
+            background-position: center
+            background-repeat: no-repeat
+            border-radius: 8px
+            border: 1px solid #E5E5E7
+
+            &:hover
+              border: 1px solid #7C55F4
+              background-color: #EEE8FD
+
+          input[type="radio"]
+            +box-sizing(border-box)
+            +size(16px, 16px)
+            position: absolute
+            top: 8px
+            right: 8px
+            border-radius: 50%
+            border: 1px solid #CBCCCF
+
+            &:checked
+              border: 5px solid #5E35F0
+
+          .radio-title
+            +margin(top 8px)
+            font-weight: 500
+            line-height: 21px
+            text-align: center
+
+        .mind-map
+          .img
+            background-image: url('/src/assets/imgs/icon/mind_map.svg')
+
+            &:hover, .active
+              background-image: url('/src/assets/imgs/icon/mind_map_purple.svg')
+
+        .record
+          .img
+            background-image: url('/src/assets/imgs/icon/record.svg')
+
+            &:hover, .active
+              background-image: url('/src/assets/imgs/icon/record_purple.svg')
+
+        .summary
+          .img
+            background-image: url('/src/assets/imgs/icon/file.svg')
+
+            &:hover, .active
+              background-image: url('/src/assets/imgs/icon/file_purple.svg')
+
+    .type-wrap
+      +padding(top 24px)
+
+      h3
+        line-height: 21px
+        font-weight: 500
+
+      .select-wrap
+        +padding(top 8px)

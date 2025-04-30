@@ -82,7 +82,7 @@ const SideBar = () => {
       </div>
       {modalType === "user" && (
         <div
-          className="modal-container"
+          className="modal-container short"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               closeModal();
