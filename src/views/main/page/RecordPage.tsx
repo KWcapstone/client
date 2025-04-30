@@ -1,49 +1,87 @@
 // style
 import "@/views/main/style/record.sass";
-import arrow from "@/assets/imgs/icon/arrow_down_black.svg";
+import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
+import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
+
+// api
+import { getRecord } from "@/api/main/record";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
 
-import { useState, useEffect } from "react";
+// import
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// type
+import { recordData } from "@/types/recordData";
+
 const RecordPage = () => {
+  // value
   const [tab, setTab] = useState<string>("all");
-  const [order, setOrder] = useState<boolean>(true);
+  const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [checkCount, setCheckCount] = useState<number>(0);
-
-  const [data, setData] = useState([
-    { id: 1, name: "test1", date: "", user: "", time: "", size: "", selected: false },
-    { id: 2, name: "test2", date: "", user: "", time: "", size: "", selected: false },
-    { id: 3, name: "test3", date: "", user: "", time: "", size: "", selected: false },
-    { id: 4, name: "test4", date: "", user: "", time: "", size: "", selected: false },
-  ]);
+  const [record, setRecod] = useState<Array<recordData>>([]);
+  const orderRef = useRef<HTMLDivElement | null>(null);
 
   // 전체 선택 여부 체크
-  const isAllSelected = data.every((row) => row.selected);
+  const isAllSelected = record.every((row) => row.selected);
 
   // 전체 선택 / 해제
   const handleSelectAll = () => {
-    const newData = data.map((row) => ({ ...row, selected: !isAllSelected }));
-    setData(newData);
+    const newData = record.map((row) => ({ ...row, selected: !isAllSelected }));
+    setRecod(newData);
   };
 
   // 개별 선택 / 해제
   const handleSelectRow = (id: Number) => {
-    const newData = data.map((row) =>
+    const newData = record.map((row) =>
       row.id === id ? { ...row, selected: !row.selected } : row
     );
-    setData(newData);
+    setRecod(newData);
+  };
+
+  const getRecordList = () => {
+    let params = {
+      sort: order,
+      filterType: tab,
+    };
+    getRecord(params).then((res: any) => {
+      const dataWithSelection = res.data.data.map((item: any, i: number) => ({
+        ...item,
+        selected: false,
+        id: i,
+      }));
+      setRecod(dataWithSelection);
+    });
+    console.log(record)
   };
 
   useEffect(() => {
-    setIsCheck(data.some(row => row.selected));
-    const count = data.filter(row => row.selected).length;
-    setCheckCount(count);
-  }, [data]);
+    getRecordList();
+  }, [order, tab]);
+
+  useEffect(() => {
+    if (!record) return;
+    setIsCheck(record.some((row) => row.selected));
+    setCheckCount(record.filter((row) => row.selected).length);
+  }, [record]);
+
+  useEffect(() => {
+    const orderClickOutside = (e: MouseEvent) => {
+      if (orderRef.current && !orderRef.current.contains(e.target as Node)) {
+        setShowOrder(false);
+      }
+    };
+
+    document.addEventListener("mousedown", orderClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", orderClickOutside);
+    };
+  }, []);
+
 
 
   return (
@@ -60,21 +98,60 @@ const RecordPage = () => {
           </div>
           <div className="sort-wrap">
             <div className="tab-wrap">
-              <ul>
-                <li className={tab === "all" ? "active" : ""} onClick={() => setTab("all")}>전체</li>
-                <li className={tab === "mine" ? "active" : ""} onClick={() => setTab("mine")}>내 음성</li>
-                <li className={tab === "invite" ? "active" : ""} onClick={() => setTab("invite")}>초대된 음성</li>
+              <ul className="tab-ul">
+                <li
+                  className={tab === "all" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("all")}
+                >
+                  전체
+                </li>
+                <li
+                  className={tab === "my" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("my")}
+                >
+                  내 음성
+                </li>
+                <li
+                  className={tab === "invited" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("invited")}
+                >
+                  초대된 음성
+                </li>
               </ul>
             </div>
-            <div className="order-wrap">
-              <button onClick={() => setShowOrder(!showOrder)}>{ order ? "최신순" : "오래된 순" }<img src={arrow}/></button>
-              {
-                showOrder &&
-                <ul>
-                  <li onClick={() => {setOrder(true); setShowOrder(false)}}>최신순</li>
-                  <li onClick={() => {setOrder(false); setShowOrder(false)}}>오래된 순</li>
+            <div className="order-wrap" ref={orderRef}>
+              <button
+                onClick={() => setShowOrder(!showOrder)}
+                className="order-button"
+              >
+                {order === "created" ? "최신순" : "오래된 순"}
+                <img
+                  src={showOrder ? arrowUp : arrowDown}
+                  className="order-img"
+                />
+              </button>
+              {showOrder && (
+                <ul className="order-ul">
+                  <li
+                    onClick={() => {
+                      setOrder("created");
+                      setShowOrder(false);
+                    }}
+                    className="order-li"
+                  >
+                    최신순
+                  </li>
+                  <li
+                    onClick={() => {
+                      setOrder("latest");
+                      setShowOrder(false);
+                    }}
+                    className="order-li"
+                  >
+                    오래된 순
+                  </li>
                 </ul>
-              }
+              )}
             </div>
           </div>
         </div>
@@ -92,7 +169,7 @@ const RecordPage = () => {
                         <div>{ checkCount }개 선택됨</div>
                         <button className="dwn">다운로드 하기</button>
                         <button className="del">삭제하기</button>
-                        <button className="cancel" onClick={() => setData(data.map(row => ({ ...row, selected: false })))}>취소</button>
+                        <button className="cancel" onClick={() => setRecod(record.map(row => ({ ...row, selected: false })))}>취소</button>
                       </div>
                     </th>
                   ) : (
@@ -106,19 +183,19 @@ const RecordPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((row) => (
-                <tr key={row.id} onClick={() => handleSelectRow(row.id)}>
+              {record.map((list) => (
+                <tr key={list.id} onClick={() => handleSelectRow(list.id)}>
                   <td>
                     <input
                       type="checkbox"
-                      checked={row.selected}
+                      checked={list.selected}
                     />
                   </td>
-                  <td>{row.name}</td>
-                  <td>{row.date}</td>
-                  <td>{row.user}</td>
-                  <td>{row.time}</td>
-                  <td>{row.size}</td>
+                  <td>{list.name}</td>
+                  <td>{new Date(list.updatedAt).toLocaleDateString()}</td>
+                  <td>{list.creator}</td>
+                  <td>{list.length}</td>
+                  <td>{list.sizeInBytes}</td>
                 </tr>
               ))}
             </tbody>

@@ -25,7 +25,7 @@ const ProjectPage = () => {
   const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
-  const [projectList, setProjectList] = useState<Array<projectData>>();
+  const [projectList, setProjectList] = useState<Array<projectData>>([]);
   const menuRef = useRef<HTMLUListElement | null>(null);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,7 +51,9 @@ const ProjectPage = () => {
 
   useEffect(() => {
     getProjectList();
+  }, [order, tab]);
 
+  useEffect(() => {
     const menuClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenuId(null);
@@ -65,11 +67,13 @@ const ProjectPage = () => {
     };
 
     document.addEventListener("mousedown", menuClickOutside);
-    () => document.removeEventListener("mousedown", menuClickOutside);
-
     document.addEventListener("mousedown", orderClickOutside);
-    () => document.removeEventListener("mousedown", orderClickOutside);
-  }, [order, tab]);
+
+    return () => {
+      document.removeEventListener("mousedown", menuClickOutside);
+      document.removeEventListener("mousedown", orderClickOutside);
+    };
+  }, []);
 
   return (
     <div className="main">
@@ -149,18 +153,24 @@ const ProjectPage = () => {
         <div className="card-wrap">
           {projectList &&
             projectList.map((list: projectData, i: number) => (
-              <div className="card" key={i}>
+              <Link to={`${list.projectId}`} className="card" key={i}>
                 <img src={list.imageUrl} alt="" className="card-img" />
                 <button
                   className={`menu-btn ${openMenuId === i && "open"}`}
-                  onClick={() => toggleMenu(i)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMenu(i);
+                  }}
                 ></button>
                 {openMenuId === i && (
                   <ul className="menu-wrap" ref={menuRef}>
                     <li className="edit">이름 변경하기</li>
                     <li
                       className="dwn"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setModalType("dwn");
                         setOpenMenuId(null);
                       }}
@@ -169,7 +179,9 @@ const ProjectPage = () => {
                     </li>
                     <li
                       className="share"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         setModalType("share");
                         setOpenMenuId(null);
                       }}
@@ -193,7 +205,7 @@ const ProjectPage = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
         </div>
       </div>
