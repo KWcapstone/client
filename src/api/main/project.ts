@@ -5,6 +5,7 @@ export const getTest = () => {
   return Send({
     method: "get",
     url: "main/apiTest",
+    withCredentials: true,
   });
 };
 
@@ -13,5 +14,6 @@ export const getProject = (params: selectParams) => {
     method: "get",
     url: "main",
     params: params,
+    withCredentials: true,
   });
 };

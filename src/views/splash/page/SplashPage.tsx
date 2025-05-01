@@ -4,12 +4,16 @@ import "@/views/splash/style/splash.sass";
 import "@/views/components/style/modal.sass";
 
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom"
+
 import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
 import AgreeModal from "@/views/splash/components/AgreeModal";
 import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
 import { getTest } from "@/api/main/project";
+
+import splashIcon from "@/assets/imgs/common/splashIcon.svg";
+import mainImage from "@/assets/imgs/common/mainImage.svg";
+import solarSystem from "@/assets/imgs/common/solarSystem.svg";
 
 const SplashPage = () => {
   type ModalType = "login" | "signup" | "agree" | "resetPw" | null;
@@ -27,16 +31,13 @@ const SplashPage = () => {
   const openModal = () => setModalType("login");
 
   useEffect(() => {
-    getTest().then(() => {
-    });
+    getTest().then(() => {});
   }, []);
 
   return (
     <>
       <Navbar onOpenModal={openModal} />
       <div className="splash-wrap" ref={modalBackground}>
-        <h1>Splash Page</h1>
-        <Link to="/project">Project page</Link>
         {modalType === "login" && (
           <div
             className="modal-container"
@@ -53,7 +54,6 @@ const SplashPage = () => {
             />
           </div>
         )}
-
         {modalType === "signup" && (
           <div
             className="modal-container"
@@ -70,7 +70,6 @@ const SplashPage = () => {
             />
           </div>
         )}
-
         {modalType === "agree" && (
           <div
             className="modal-container"
@@ -101,6 +100,43 @@ const SplashPage = () => {
             />
           </div>
         )}
+        <div className="splash-container">
+          <div className="hero-container">
+            <div className="intro-container">
+              <div className="intro-headline">
+                음성에서 마인드맵까지,
+                <br /> 아이디어를 더 스마트하게
+              </div>
+              <div className="intro-subheadline">
+                아이디어는 자유롭게, 정리는 자동으로.
+                <br /> 브레인스토밍이 가벼워지는 순간을 경험해보세요.
+              </div>
+              <div className="intro-btn">바로 무료 시작하기</div>
+            </div>
+            <div className="hero-logo">
+              <img src={splashIcon} alt="logo" className="hero-logo-img" />
+            </div>
+          </div>
+          <div className="main-image">
+            <img src={mainImage} alt="main" className="main-image-img" />
+          </div>
+          <div className="spacial-container">
+            <div className="spacial-headline">
+              흩어진 아이디어를 한눈에 정리해요
+            </div>
+            <div className="spacial-subheadline">
+              녹음을 통한 실시간 음성을 텍스트로 변환하고, 대화 키워드를
+              <br /> 마인드맵으로 시각화하여 아이디어 정리를 돕습니다.
+            </div>
+            <div className="spacial-img">
+              <img
+                src={solarSystem}
+                alt="solarSystem"
+                className="spacial-img-img"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

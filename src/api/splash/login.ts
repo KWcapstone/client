@@ -6,5 +6,6 @@ export const postLogin = (loginData: LoginData) => {
     method: "post",
     url: "auth/login",
     data: loginData,
+    withCredentials: true,
   });
 };
