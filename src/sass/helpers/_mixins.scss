@@ -2,8 +2,8 @@
   $width_attr: width, max, min;
   $height_attr: height, max, min;
 
-  @if type-of($width) == 'list' {
-    @if type-of(nth($width, 1)) == 'string' {
+  @if type-of($width) == "list" {
+    @if type-of(nth($width, 1)) == "string" {
       @each $attr in $width_attr {
         $i: index($width, $attr);
         @if $i {
@@ -27,8 +27,8 @@
     width: $width;
   }
 
-  @if type-of($height) == 'list' {
-    @if type-of(nth($height, 1)) == 'string' {
+  @if type-of($height) == "list" {
+    @if type-of(nth($height, 1)) == "string" {
       @each $attr in $height_attr {
         $i: index($height, $attr);
         @if $i {
@@ -68,11 +68,17 @@
   }
 
   @if ($gap-vertical != null or $gap-width != null) {
-    gap: $gap-vertical $gap-width
+    gap: $gap-vertical $gap-width;
   }
 }
 
-@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+@mixin position(
+  $position,
+  $top: null,
+  $right: null,
+  $bottom: null,
+  $left: null
+) {
   position: $position;
   top: $top;
   right: $right;
@@ -83,8 +89,8 @@
 @mixin margin($args: 0) {
   $null-check: false;
 
-  @if type-of($args) == 'list' {
-    @if type-of(nth($args, 1)) == 'string' {
+  @if type-of($args) == "list" {
+    @if type-of(nth($args, 1)) == "string" {
       @each $attr in top, right, bottom, left {
         $i: index($args, $attr);
         @if $i {
@@ -101,8 +107,7 @@
       @if $null-check {
         @if $args-length == 2 {
           margin: nth($args, 1) nth($args, 2);
-        } @else
-        if $args-length == 3 {
+        } @else if $args-length == 3 {
           margin: nth($args, 1) nth($args, 2) nth($args, 3);
         } @else {
           margin: nth($args, 1) nth($args, 2) nth($args, 3) nth($args, 4);
@@ -112,8 +117,7 @@
           $m-t-b: nth($args, 1);
           $m-r-l: nth($args, 2);
           margin: $m-t-b $m-r-l;
-        } @else
-        if $args-length == 3 {
+        } @else if $args-length == 3 {
           $m-t: nth($args, 1);
           $m-r-l: nth($args, 2);
           $m-b: nth($args, 3);
@@ -135,8 +139,8 @@
 @mixin padding($args: 0) {
   $null-check: false;
 
-  @if type-of($args) == 'list' {
-    @if type-of(nth($args, 1)) == 'string' {
+  @if type-of($args) == "list" {
+    @if type-of(nth($args, 1)) == "string" {
       @each $attr in top, right, bottom, left {
         $i: index($args, $attr);
         @if $i {
@@ -153,8 +157,7 @@
       @if $null-check {
         @if $args-length == 2 {
           padding: nth($args, 1) nth($args, 2);
-        } @else
-        if $args-length == 3 {
+        } @else if $args-length == 3 {
           padding: nth($args, 1) nth($args, 2) nth($args, 3);
         } @else {
           padding: nth($args, 1) nth($args, 2) nth($args, 3) nth($args, 4);
@@ -164,8 +167,7 @@
           $m-t-b: nth($args, 1);
           $m-r-l: nth($args, 2);
           padding: $m-t-b $m-r-l;
-        } @else
-        if $args-length == 3 {
+        } @else if $args-length == 3 {
           $m-t: nth($args, 1);
           $m-r-l: nth($args, 2);
           $m-b: nth($args, 3);
@@ -184,7 +186,7 @@
   }
 }
 
-@mixin border($value: null, $prop: null){
+@mixin border($value: null, $prop: null) {
   @if $value != null {
     @if $prop == null {
       border: $value;
@@ -207,8 +209,23 @@
   border-radius: $radius;
 }
 
-@mixin background($image: null, $repeat: null, $position: null null, $color: null) {
-  @if $color != null and $image != null and $repeat != null and nth($position, 1) != null and nth($position, 2) != null {
+@mixin background(
+  $image: null,
+  $repeat: null,
+  $position: null null,
+  $color: null
+) {
+  @if $color !=
+    null and
+    $image !=
+    null and
+    $repeat !=
+    null and
+    nth($position, 1) !=
+    null and
+    nth($position, 2) !=
+    null
+  {
     background: $color url($image) $repeat $position;
   } @else {
     @if $color != null {
@@ -260,7 +277,7 @@
 @mixin prefix($prop, $value, $vendors: webkit moz ms o) {
   @if $vendors {
     @each $vendor in $vendors {
-      -#{$vendor}-#{$prop}: #{$value}
+      -#{$vendor}-#{$prop}: #{$value};
     }
   }
   #{$prop}: #{$value};
@@ -274,18 +291,28 @@
   }
 }
 
-@mixin pseudo($display: block, $pos: absolute, $content: ''){
+@mixin pseudo($display: block, $pos: absolute, $content: "") {
   content: $content;
   display: $display;
   position: $pos;
 }
 
 @mixin input-placeholder {
-  &.placeholder { @content; }
-  &:-moz-placeholder { @content; }
-  &::-moz-placeholder { @content; }
-  &:-ms-input-placeholder { @content; }
-  &::-webkit-input-placeholder { @content; }
+  &.placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+  &::-webkit-input-placeholder {
+    @content;
+  }
 }
 
 @mixin mobile {

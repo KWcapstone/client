@@ -7,6 +7,7 @@ export const postSignUp = (userData: UserData) => {
     method: "post",
     url: "auth/sign_up",
     data: userData,
+    withCredentials: true,
   });
 };
 
@@ -15,6 +16,7 @@ export const postEmailduplication = (email: string) => {
     method: "post",
     url: "auth/email_duplication",
     data: { email },
+    withCredentials: true,
   });
 };
 
@@ -23,5 +25,6 @@ export const postEmailVerification = (emailVerification: EmailVerification) => {
     method: "post",
     url: "auth/email_verification",
     data: emailVerification,
+    withCredentials: true,
   });
 };
