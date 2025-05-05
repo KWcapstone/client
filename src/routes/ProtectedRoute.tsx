@@ -1,8 +1,16 @@
+// src/routes/ProtectedRoute.tsx
 import { Navigate } from "react-router-dom";
+import { isLoggedIn } from "@/utils/auth";
 
-const ProtectedRoute = () => {
-  alert("로그인 후 이용해주세요.");
-  return <Navigate to="/" replace={true} />;
+interface Props {
+  children: JSX.Element;
+}
+
+const ProtectedRoute = ({ children }: Props) => {
+  if (!isLoggedIn()) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
 };
 
 export default ProtectedRoute;
