@@ -25,7 +25,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     // accessToken 만료 (예: 401)
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 503 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}/auth/refresh`, {
