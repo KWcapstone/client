@@ -8,6 +8,11 @@ import pw_show from "@/assets/imgs/icon/pw_show.svg";
 import pw_hide from "@/assets/imgs/icon/pw_hide.svg";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { postLogin } from "@/api/splash/login";
+import { LoginData } from "@/types/loginData";
+import { setTokens } from "@/utils/auth";
 
 interface LoginModalProps {
   onCloseModal: () => void;
@@ -20,6 +25,8 @@ const LoginModal = ({
   onOpenSignup,
   onOpenResetPw,
 }: LoginModalProps) => {
+  const navigate = useNavigate();
+
   const [active, setActive] = useState(false);
   const [idValue, setIdInput] = useState("");
   const [pwValue, setPwInput] = useState("");
@@ -55,6 +62,7 @@ const LoginModal = ({
     if (!idValue) {
       setIdError("이메일을 입력해주세요.");
       hasError = true;
+    } else if (idValue === "test") {
     } else if (!idValue.includes("@")) {
       setIdError("올바른 이메일 형식이 아닙니다.");
       hasError = true;
@@ -70,11 +78,50 @@ const LoginModal = ({
       return;
     }
 
-    // 추후 로그인 실패 시 에러 메시지 표시
+    // 로그인 API 호출
+    const loginData: LoginData = {
+      email: idValue,
+      password: pwValue,
+    };
+    postLogin(loginData)
+      .then((response) => {
+        setTokens(
+          response.data.data.accessToken,
+          response.data.data.refreshToken
+        );
+        onCloseModal();
+        navigate("/project");
+      })
+      .catch((error) => {
+        console.error("로그인 실패", error);
+        // 로그인 실패 처리
+        if (error.response.status === 401) {
+          setPwError("아이디 또는 비밀번호가 일치하지 않습니다.");
+          setIdError(" ");
+        } else if (error.response.status === 404) {
+          setPwError("아이디 또는 비밀번호가 일치하지 않습니다.");
+          setIdError(" ");
+        } else {
+          setPwError("로그인에 실패했습니다. 다시 시도해주세요.");
+          setIdError(" ");
+        }
+      });
 
     // 성공
-    console.log("로그인 성공!");
-    onCloseModal();
+  };
+
+  const handleKakaoLoginClick = () => {
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+      import.meta.env.VITE_API_KAKAO_REST_API_KEY
+    }&redirect_uri=${import.meta.env.VITE_API_KAKAO_REDIRECT_URI}`;
+  };
+  const handleGoogleLoginClick = () => {};
+  const handleNaverLoginClick = () => {
+    window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${
+      import.meta.env.VITE_API_NAVER_CLIENT_ID
+    }&state=${import.meta.env.VITE_API_NAVER_STATE}&redirect_uri=${
+      import.meta.env.VITE_API_NAVER_REDIRECT_URI
+    } `;
   };
 
   return (
@@ -157,9 +204,24 @@ const LoginModal = ({
       </div>
 
       <div className="modal-sns-login">
-        <img src={kakao_login} alt="kakao" className="modal-sns-login-img" />
-        <img src={google_login} alt="google" className="modal-sns-login-img" />
-        <img src={naver_login} alt="naver" className="modal-sns-login-img" />
+        <img
+          src={kakao_login}
+          alt="kakao"
+          className="modal-sns-login-img"
+          onClick={handleKakaoLoginClick}
+        />
+        <img
+          src={google_login}
+          alt="google"
+          className="modal-sns-login-img"
+          onClick={handleGoogleLoginClick}
+        />
+        <img
+          src={naver_login}
+          alt="naver"
+          className="modal-sns-login-img"
+          onClick={handleNaverLoginClick}
+        />
       </div>
     </Modal>
   );

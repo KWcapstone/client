@@ -1,0 +1,140 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_input.sass'
+@import '@/sass/uix/_button.sass'
+
+.main
+  display: flex
+
+  .summary-wrap
+    +size(100%)
+    +margin(left 240px)
+    min-width: 1000px
+
+    .nevigation-wrap
+
+      .title-wrap
+        +padding(32px 32px)
+        +flex-box(space-between, center)
+
+        h2
+          font-size: 22px
+          font-weight: bold
+          line-height: 33px
+
+        .search-wrap
+          +flex-box(center, center, 12px)
+
+          input
+            +input(300px, 40px, 8px)
+
+          a
+            +flex-box(normal, center, 4px)
+
+            &:before
+              +size(20px, 20px)
+              content : url('@/assets/imgs/icon/plus.svg')
+
+            +btn(118px, 40px, 8px)
+            +padding(left 12px)
+            background-color: $gray-900
+            color: $white
+
+      .sort-wrap
+        +padding(0 32px 20px)
+        +flex-box(space-between, center)
+
+        .tab-wrap
+          ul
+            +flex-box(center, center, 20px)
+
+            li
+              font-size: 18px
+              line-height: 27px
+              cursor: pointer
+
+            .active
+              font-weight: bold
+
+        .order-wrap
+          position: relative
+
+          button
+            +btn()
+            +flex-box(center, center, 2px)
+            +padding(4px 12px 4px 8px)
+            font-weight: 500
+            line-height: 21px
+            color: $gray-800
+
+            img
+              +size(16px, 16px)
+
+          ul
+            +size(142px)
+            +box-sizing(border-box)
+            +padding(4px)
+            position: absolute
+            top: 30px
+            right: 0
+            border: 1px solid $gray-100
+            border-radius: 8px
+            background: $white
+            box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.05)
+            cursor: pointer
+
+            li
+              +padding(8px 12px)
+
+    .table-wrap
+      +padding(0 32px)
+
+      table
+        +size(100%)
+
+        tr
+          &:not(:has(th))
+            cursor: pointer
+
+          &:not(:has(th)):hover
+            border-radius: 8px
+            background-color: $gray-100
+
+          input[type="checkbox"]
+            cursor: pointer
+
+          th
+            color: $gray-600
+
+            .craft-wrap
+              +flex-box(normal, center, 12px)
+
+              button
+                height: 16.5px
+
+              .dwn
+                +btn()
+                +flex-box(center, center, 2px)
+
+                &:before
+                  +size(16px, 18px)
+                  content : url('@/assets/imgs/icon/dwn.svg')
+
+              .del
+                +btn()
+                +flex-box(center, center, 2px)
+                color: #EC2526
+
+                &::before
+                  +size(16px, 18px)
+                  content : url('@/assets/imgs/icon/del.svg')
+
+              .cancel
+                +btn()
+
+          th, td
+            +padding(8px)
+            text-align: left
+
+            &:first-child
+              +size(20px)

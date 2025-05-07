@@ -6,6 +6,9 @@ import { useState, useEffect } from "react";
 import arrow_back from "@/assets/imgs/icon/arrow_back_outlined.svg";
 import arrow_right from "@/assets/imgs/icon/arrow_right.svg";
 
+import { UserData } from "@/types/userData";
+import { postSignUp } from "@/api/splash/signup";
+
 interface AgreeModalProps {
   onCloseModal: () => void;
   onOpenSignup: () => void;
@@ -48,7 +51,27 @@ const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
     }
     // 가입하기 버튼 클릭 시 동작
     console.log("가입하기 버튼 클릭");
-    // 여기서 가입하기 로직을 추가하세요
+
+    const userData: UserData = {
+      name: localStorage.getItem("name") || "",
+      email: localStorage.getItem("email") || "",
+      password: localStorage.getItem("password") || "",
+      agreement: true,
+    };
+
+    postSignUp(userData)
+      .then((response) => {
+        console.log("가입 성공", response);
+        // 가입 성공 후 처리
+        localStorage.removeItem("name");
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
+        onCloseModal();
+      })
+      .catch((error) => {
+        console.error("가입 실패", error);
+        // 가입 실패 처리
+      });
   };
 
   return (

@@ -1,18 +1,79 @@
 // style
 import "@/views/main/style/project.sass";
-import arrow from "@/assets/imgs/icon/arrow_down_black.svg";
+import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
+import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import test from "@/assets/imgs/common/test.png";
+
+// api
+import { getProject } from "@/api/main/project";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
+import DwnModal from "@/views/main/components/DwnModal";
+import ShareModal from "@/views/main/components/ShareModal";
 
-import { useState } from "react";
+// import
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+// type
+import { projectData } from "@/types/projectData";
+
 const ProjectPage = () => {
+  // value
   const [tab, setTab] = useState<string>("all");
-  const [order, setOrder] = useState<boolean>(true);
+  const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [projectList, setProjectList] = useState<Array<projectData>>([]);
+  const menuRef = useRef<HTMLUListElement | null>(null);
+  const orderRef = useRef<HTMLDivElement | null>(null);
+
+  // modal
+  type ModalType = "dwn" | "share" | null;
+  const [modalType, setModalType] = useState<ModalType>(null);
+  const closeModal = () => setModalType(null);
+
+  // function
+  const toggleMenu = (id: number) => {
+    setOpenMenuId((prev) => (prev === id ? null : id));
+  };
+
+  const getProjectList = () => {
+    let params = {
+      sort: order,
+      filterType: tab,
+    };
+    getProject(params).then((res: any) => {
+      setProjectList(res.data.data);
+    });
+  };
+
+  useEffect(() => {
+    getProjectList();
+  }, [order, tab]);
+
+  useEffect(() => {
+    const menuClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenuId(null);
+      }
+    };
+
+    const orderClickOutside = (e: MouseEvent) => {
+      if (orderRef.current && !orderRef.current.contains(e.target as Node)) {
+        setShowOrder(false);
+      }
+    };
+
+    document.addEventListener("mousedown", menuClickOutside);
+    document.addEventListener("mousedown", orderClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", menuClickOutside);
+      document.removeEventListener("mousedown", orderClickOutside);
+    };
+  }, []);
 
   return (
     <div className="main">
@@ -40,32 +101,35 @@ const ProjectPage = () => {
                   전체
                 </li>
                 <li
-                  className={tab === "mine" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("mine")}
+                  className={tab === "my" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("my")}
                 >
                   내 회의
                 </li>
                 <li
-                  className={tab === "invite" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("invite")}
+                  className={tab === "invited" ? "tab-li active" : "tab-li"}
+                  onClick={() => setTab("invited")}
                 >
                   초대된 회의
                 </li>
               </ul>
             </div>
-            <div className="order-wrap">
+            <div className="order-wrap" ref={orderRef}>
               <button
                 onClick={() => setShowOrder(!showOrder)}
                 className="order-button"
               >
-                {order ? "최신순" : "오래된 순"}
-                <img src={arrow} className="order-img" />
+                {order === "created" ? "최신순" : "오래된 순"}
+                <img
+                  src={showOrder ? arrowUp : arrowDown}
+                  className="order-img"
+                />
               </button>
               {showOrder && (
                 <ul className="order-ul">
                   <li
                     onClick={() => {
-                      setOrder(true);
+                      setOrder("created");
                       setShowOrder(false);
                     }}
                     className="order-li"
@@ -74,7 +138,7 @@ const ProjectPage = () => {
                   </li>
                   <li
                     onClick={() => {
-                      setOrder(false);
+                      setOrder("latest");
                       setShowOrder(false);
                     }}
                     className="order-li"
@@ -87,128 +151,88 @@ const ProjectPage = () => {
           </div>
         </div>
         <div className="card-wrap">
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
+          {projectList &&
+            projectList.map((list: projectData, i: number) => (
+              <Link to={`${list.projectId}`} className="card" key={i}>
+                <img src={list.imageUrl} alt="" className="card-img" />
+                <button
+                  className={`menu-btn ${openMenuId === i && "open"}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMenu(i);
+                  }}
+                ></button>
+                {openMenuId === i && (
+                  <ul className="menu-wrap" ref={menuRef}>
+                    <li className="edit">이름 변경하기</li>
+                    <li
+                      className="dwn"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setModalType("dwn");
+                        setOpenMenuId(null);
+                      }}
+                    >
+                      다운로드하기
+                    </li>
+                    <li
+                      className="share"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setModalType("share");
+                        setOpenMenuId(null);
+                      }}
+                    >
+                      공유하기
+                    </li>
+                    <li className="del">삭제하기</li>
+                  </ul>
+                )}
+                <div className="info-wrap">
+                  <div className="title-wrap">
+                    <div className="title">{list.projectName}</div>
+                    <div className="date">
+                      {new Date(list.updatedAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div className="owner-wrap">
+                    <div className="owner">
+                      <img src={test} className="owner-img" />
+                      {list.creator}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" className="card-img" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner">
-                  <img src={test} className="owner-img" />
-                  모아바
-                </div>
-              </div>
-            </div>
-          </div>
+              </Link>
+            ))}
         </div>
       </div>
+      {modalType === "dwn" && (
+        <div
+          className="modal-container"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <DwnModal onCloseModal={closeModal} />
+        </div>
+      )}
+      {modalType === "share" && (
+        <div
+          className="modal-container"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <ShareModal onCloseModal={closeModal} />
+        </div>
+      )}
     </div>
   );
 };
