@@ -85,7 +85,10 @@ const LoginModal = ({
     };
     postLogin(loginData)
       .then((response) => {
-        setTokens(response.data.data.accessToken, response.data.data.refreshToken);
+        setTokens(
+          response.data.data.accessToken,
+          response.data.data.refreshToken
+        );
         onCloseModal();
         navigate("/project");
       })
@@ -105,6 +108,20 @@ const LoginModal = ({
       });
 
     // 성공
+  };
+
+  const handleKakaoLoginClick = () => {
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${
+      import.meta.env.VITE_API_KAKAO_REST_API_KEY
+    }&redirect_uri=${import.meta.env.VITE_API_KAKAO_REDIRECT_URI}`;
+  };
+  const handleGoogleLoginClick = () => {};
+  const handleNaverLoginClick = () => {
+    window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${
+      import.meta.env.VITE_API_NAVER_CLIENT_ID
+    }&state=${import.meta.env.VITE_API_NAVER_STATE}&redirect_uri=${
+      import.meta.env.VITE_API_NAVER_REDIRECT_URI
+    } `;
   };
 
   return (
@@ -187,9 +204,24 @@ const LoginModal = ({
       </div>
 
       <div className="modal-sns-login">
-        <img src={kakao_login} alt="kakao" className="modal-sns-login-img" />
-        <img src={google_login} alt="google" className="modal-sns-login-img" />
-        <img src={naver_login} alt="naver" className="modal-sns-login-img" />
+        <img
+          src={kakao_login}
+          alt="kakao"
+          className="modal-sns-login-img"
+          onClick={handleKakaoLoginClick}
+        />
+        <img
+          src={google_login}
+          alt="google"
+          className="modal-sns-login-img"
+          onClick={handleGoogleLoginClick}
+        />
+        <img
+          src={naver_login}
+          alt="naver"
+          className="modal-sns-login-img"
+          onClick={handleNaverLoginClick}
+        />
       </div>
     </Modal>
   );
