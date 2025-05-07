@@ -4,6 +4,7 @@ import ProjectPage from "@/views/main/page/ProjectPage";
 import SplashPage from "@/views/splash/page/SplashPage";
 import RecordPage from "@/views/main/page/RecordPage";
 import SummaryPage from "@/views/main/page/SummaryPage";
+import MeetingPage from "@/views/meeting/page/MeetingPage";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
@@ -32,6 +33,14 @@ const Router = () => {
           element={
             <ProtectedRoute>
               <SummaryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meeting"
+          element={
+            <ProtectedRoute>
+              <MeetingPage />
             </ProtectedRoute>
           }
         />
