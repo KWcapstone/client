@@ -12,9 +12,14 @@ import { postSignUp } from "@/api/splash/signup";
 interface AgreeModalProps {
   onCloseModal: () => void;
   onOpenSignup: () => void;
+  onOpenLogin: () => void;
 }
 
-const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
+const AgreeModal = ({
+  onCloseModal,
+  onOpenSignup,
+  onOpenLogin,
+}: AgreeModalProps) => {
   const [active, setActive] = useState(false);
   const [allAgree, setAllAgree] = useState(false);
   const [agree1, setAgree1] = useState(false);
@@ -66,7 +71,7 @@ const AgreeModal = ({ onCloseModal, onOpenSignup }: AgreeModalProps) => {
         localStorage.removeItem("name");
         localStorage.removeItem("email");
         localStorage.removeItem("password");
-        onCloseModal();
+        onOpenLogin();
       })
       .catch((error) => {
         console.error("가입 실패", error);

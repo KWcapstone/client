@@ -82,6 +82,7 @@ const SplashPage = () => {
             <AgreeModal
               onCloseModal={closeModal}
               onOpenSignup={openSignupModal}
+              onOpenLogin={openLoginModal}
             />
           </div>
         )}
