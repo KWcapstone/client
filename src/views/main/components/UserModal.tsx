@@ -12,6 +12,9 @@ import { useState, useEffect } from "react";
 // type
 import { profileData } from "@/types/profileData";
 
+//util
+import { clearTokens } from "@/utils/auth";
+
 interface UserModalProps {
   onCloseModal: () => void;
 }
@@ -23,7 +26,8 @@ const UserModal = ({
   const [profile, setProfile] = useState<profileData>();
 
   const clickLogout = () => {
-    logout().then((res: any) => {});
+    logout();
+    clearTokens();
   }
 
   useEffect(() => {
