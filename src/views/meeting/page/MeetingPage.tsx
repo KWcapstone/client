@@ -1,7 +1,7 @@
 // style
 import "@/views/main/style/project.sass";
 import arrow from "@/assets/imgs/icon/arrow_down_black.svg";
-import test from "@/assets/imgs/common/test.png";
+import test from "@/assets/imgs/common/user.svg";
 
 // component
 import SideBar from "@/views/main/components/SideBar";

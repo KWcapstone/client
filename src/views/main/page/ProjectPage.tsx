@@ -2,7 +2,7 @@
 import "@/views/main/style/project.sass";
 import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
 import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
-import test from "@/assets/imgs/common/test.png";
+import test from "@/assets/imgs/common/user.svg";
 
 // api
 import { getProject } from "@/api/main/project";

@@ -9,3 +9,19 @@ export const postLogin = (loginData: LoginData) => {
     withCredentials: true,
   });
 };
+
+export const refresh = (data:any) => {
+  return Send({
+    method: "post",
+    url: "auth/refresh",
+    data: data,
+    withCredentials: true,
+  });
+};
+
+export const logout = () => {
+  return Send({
+    method: "delete",
+    url: "auth/logout"
+  });
+};

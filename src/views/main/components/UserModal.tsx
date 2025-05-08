@@ -1,6 +1,16 @@
 import "@/views/main/style/user-modal.sass";
 import Modal from "@/views/components/modal";
-import test from "@/assets/imgs/common/test.png";
+import test from "@/assets/imgs/common/user.svg";
+
+// api
+import { getProfile } from "@/api/main/profile";
+import { logout } from "@/api/splash/login";
+
+// import
+import { useState, useEffect } from "react";
+
+// type
+import { profileData } from "@/types/profileData";
 
 interface UserModalProps {
   onCloseModal: () => void;
@@ -9,19 +19,32 @@ interface UserModalProps {
 const UserModal = ({
   onCloseModal,
 }: UserModalProps) => {
+
+  const [profile, setProfile] = useState<profileData>();
+
+  const clickLogout = () => {
+    logout().then((res: any) => {});
+  }
+
+  useEffect(() => {
+    getProfile().then((res: any) => {
+      setProfile(res.data.data);
+    });
+  },[]);
+
   return (
     <Modal onCloseModal={onCloseModal}>
       <div className="modal-wrap">
         <div className="info-wrap">
           <div className="user-img">
-            <img src={test} alt="" />
+            <img src={profile?.imageUrl ?? test} alt="" />
           </div>
-          <div className="user-name">모아바</div>
-          <div className="user-email">gusrns48@kw.ac.kr</div>
+          <div className="user-name">{profile?.name}</div>
+          <div className="user-email">{profile?.email}</div>
         </div>
         <ul className="edit-wrap">
           {/* <li className="mode-wrap"></li> */}
-          <li className="log-out">로그아웃</li>
+          <li className="log-out" onClick={clickLogout}>로그아웃</li>
           <li className="pwd-edit">비밀번호 변경</li>
         </ul>
         <button className="remove">계정 삭제</button>
