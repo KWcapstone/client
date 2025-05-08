@@ -182,6 +182,7 @@ const SignupModal = ({
     setEmailError("");
     postEmailduplication(emailValue)
       .then((response) => {
+        alert("인증코드가 발송되었습니다.");
         console.log("이메일 중복 확인 성공", response);
         setCodeInput("");
       })
