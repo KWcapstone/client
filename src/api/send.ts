@@ -1,8 +1,6 @@
 // src/api/send.ts
 import axios from "axios";
 import { getAccessToken, getRefreshToken, setTokens, clearTokens } from "@/utils/auth";
-import { refresh } from "@/api/splash/login";
-
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_SERVER_URL,
@@ -27,30 +25,24 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     // accessToken 만료 (예: 401)
-    if (error.response?.status === 401 && error.response?.data.message === 'AUTH_002 : 토큰이 만료되었습니다.' && !originalRequest._retry) {
+    if (error.response?.status === 401 && error.response?.data.message === 'AUTH_002' && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      let data = {
-        accessToken: getAccessToken(),
+      try {
+        const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}auth/refresh`, {
+          refreshToken: getRefreshToken(),
+        });
+        const { accessToken, refreshToken } = res.data.data;
+        setTokens(accessToken, refreshToken);
+        console.log(res.data.data, accessToken, refreshToken)
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return instance(originalRequest);
+      } catch (e) {
+        console.log("로그인이 만료되었습니다.")
+        clearTokens();
+        window.location.href = "/";
+        return Promise.reject(e);
       }
-      refresh(data).then((res: any) => {
-
-      }).catch(()=>{
-
-      })
-      // try {
-      //   const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}auth/refresh`, {
-      //     accessToken: getAccessToken(),
-      //   });
-      //   const { accessToken, refreshToken } = res.data.data;
-      //   setTokens(accessToken, refreshToken);
-      //   originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-      //   return instance(originalRequest);
-      // } catch (e) {
-      //   clearTokens();
-      //   window.location.href = "/";
-      //   return Promise.reject(e);
-      // }
     }
 
     return Promise.reject(error);
