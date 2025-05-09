@@ -34,11 +34,10 @@ instance.interceptors.response.use(
         });
         const { accessToken, refreshToken } = res.data.data;
         setTokens(accessToken, refreshToken);
-        console.log(res.data.data, accessToken, refreshToken)
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return instance(originalRequest);
       } catch (e) {
-        console.log("로그인이 만료되었습니다.")
+        alert('로그인이 만료되었습니다.')
         clearTokens();
         window.location.href = "/";
         return Promise.reject(e);
