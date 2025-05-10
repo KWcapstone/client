@@ -26,8 +26,11 @@ const UserModal = ({
   const [profile, setProfile] = useState<profileData>();
 
   const clickLogout = () => {
-    logout();
-    clearTokens();
+    logout().then((res: any)=>{
+      alert('로그아웃 되었습니다.')
+      clearTokens();
+      window.location.href = '/'
+    });
   }
 
   useEffect(() => {
