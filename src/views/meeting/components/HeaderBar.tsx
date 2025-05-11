@@ -1,7 +1,7 @@
 import "@/views/meeting/style/header-bar.sass";
 import test from "@/assets/imgs/common/test.png";
 import home from "@/assets/imgs/icon/home.svg";
-import plus from "@/assets/imgs/icon/plus.svg";
+import dwn from "@/assets/imgs/icon/dwn_white.svg";
 
 const HeaderBar = () => {
   return (
@@ -25,9 +25,10 @@ const HeaderBar = () => {
           <div className="user-profile">
             <img src={test} alt="profile" />
           </div>
+          <div className="user-profile more">+3</div>
           <hr className="divider" />
           <button className="add-user">
-            <img src={plus} alt="add" className="add-icon" />
+            <img src={dwn} alt="add" className="add-icon" />
             <span className="add-text">다운받기</span>
           </button>
         </div>
