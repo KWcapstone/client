@@ -11,40 +11,11 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SplashPage />} />
-        <Route
-          path="/project"
-          element={
-            <ProtectedRoute>
-              <ProjectPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/record"
-          element={
-            <ProtectedRoute>
-              <RecordPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/summary"
-          element={
-            <ProtectedRoute>
-              <SummaryPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/meeting"
-          element={
-            <ProtectedRoute>
-              <MeetingPage />
-            </ProtectedRoute>
-          }
-        />
-
+        <Route path="/" element={<SplashRedirect />} />
+        <Route path="/project" element={<ProtectedRoute><ProjectPage /></ProtectedRoute>} />
+        <Route path="/record" element={<ProtectedRoute><RecordPage /></ProtectedRoute>} />
+        <Route path="/summary" element={<ProtectedRoute><SummaryPage /></ProtectedRoute>} />
+        <Route path="/meeting" element={<ProtectedRoute><MeetingPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

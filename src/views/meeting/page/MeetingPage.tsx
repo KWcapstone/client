@@ -1,7 +1,5 @@
 // style
 import "@/views/meeting/style/meeting.sass";
-import arrow from "@/assets/imgs/icon/arrow_down_black.svg";
-import test from "@/assets/imgs/common/test.png";
 import HeaderBar from "../components/HeaderBar";
 import SideBar from "../components/SideBar";
 
