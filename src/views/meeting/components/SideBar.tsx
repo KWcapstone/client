@@ -1,6 +1,6 @@
 import "@/views/meeting/style/side-bar.sass";
 import sidePanel from "@/assets/imgs/icon/side_panel.svg";
-import test from "@/assets/imgs/common/test.png";
+import test from "@/assets/imgs/common/user.svg";
 
 const SideBar = () => {
   return (

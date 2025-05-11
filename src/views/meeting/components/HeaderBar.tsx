@@ -1,5 +1,5 @@
 import "@/views/meeting/style/header-bar.sass";
-import test from "@/assets/imgs/common/test.png";
+import test from "@/assets/imgs/common/user.svg";
 import home from "@/assets/imgs/icon/home.svg";
 import dwn from "@/assets/imgs/icon/dwn_white.svg";
 
