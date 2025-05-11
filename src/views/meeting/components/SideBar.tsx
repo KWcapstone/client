@@ -3,12 +3,23 @@ import sidePanel from "@/assets/imgs/icon/side_panel.svg";
 import test from "@/assets/imgs/common/user.svg";
 import { useState } from "react";
 
-const SideBar = () => {
+interface SideBarProps {
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
-  return (
+
+  return isSidebarOpen ? (
     <div className="side-bar">
       <div className="side-bar-wrap">
-        <img src={sidePanel} alt="side-panel" className="side-panel-icon" />
+        <img
+          src={sidePanel}
+          alt="side-panel"
+          className="side-panel-icon"
+          onClick={() => setIsSidebarOpen(false)}
+        />
         <div className="side-bar-title-wrap">
           <div className="side-bar-title">새 회의</div>
           <div className="side-bar-details">
@@ -43,7 +54,7 @@ const SideBar = () => {
         </div>
         <div className="content-des">
           {isScript ? (
-            <>
+            <div>
               <div className="des-wrap">
                 <div className="des-timestamp">21:03</div>
                 <div className="des-item">
@@ -163,7 +174,7 @@ const SideBar = () => {
                   실적을 공유하고 이번 주 목표를 설정해보죠.
                 </div>
               </div>
-            </>
+            </div>
           ) : (
             <>
               <div className="des-wrap">
@@ -273,6 +284,15 @@ const SideBar = () => {
           )}
         </div>
       </div>
+    </div>
+  ) : (
+    <div className="mini-side-bar">
+      <img
+        src={sidePanel}
+        alt="side-panel"
+        className="side-panel-icon"
+        onClick={() => setIsSidebarOpen(true)}
+      />
     </div>
   );
 };
