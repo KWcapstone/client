@@ -3,7 +3,7 @@ import Modal from "@/views/components/modal";
 import test from "@/assets/imgs/common/user.svg";
 
 // api
-import { getProfile } from "@/api/main/profile";
+import { getProfile, Withdraw } from "@/api/main/profile";
 import { logout } from "@/api/splash/login";
 
 // import
@@ -33,6 +33,16 @@ const UserModal = ({
     });
   }
 
+  const clickWithdraw = () => {
+    if(confirm("정말 계정을 삭제하시겠습니까?")) {
+      Withdraw().then(() => {
+        alert('계정이 정상적으로 삭제되었습니다.')
+        clearTokens();
+        window.location.href = '/'
+      })
+    }
+  }
+
   useEffect(() => {
     getProfile().then((res: any) => {
       setProfile(res.data.data);
@@ -54,7 +64,7 @@ const UserModal = ({
           <li className="log-out" onClick={clickLogout}>로그아웃</li>
           <li className="pwd-edit">비밀번호 변경</li>
         </ul>
-        <button className="remove">계정 삭제</button>
+        <button className="remove" onClick={clickWithdraw}>계정 삭제</button>
         <p>개인 정보 처리 방침・이용약관</p>
       </div>
     </Modal>

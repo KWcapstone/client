@@ -21,7 +21,7 @@ const SummaryPage = () => {
   // value
   const [keyword, setKeyword] = useState<string>("");
   const [tap, setTap] = useState<string>("all");
-  const [order, setOrder] = useState<string>("created");
+  const [order, setOrder] = useState<string>("latest");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [checkCount, setCheckCount] = useState<number>(0);
@@ -160,7 +160,7 @@ const SummaryPage = () => {
                 onClick={() => setShowOrder(!showOrder)}
                 className="order-button"
               >
-                {order === "created" ? "최신순" : "오래된 순"}
+                {order === "latest" ? "최신순" : "오래된 순"}
                 <img
                   src={showOrder ? arrowUp : arrowDown}
                   className="order-img"
@@ -170,7 +170,7 @@ const SummaryPage = () => {
                 <ul className="order-ul">
                   <li
                     onClick={() => {
-                      setOrder("created");
+                      setOrder("latest");
                       setShowOrder(false);
                     }}
                     className="order-li"
@@ -179,7 +179,7 @@ const SummaryPage = () => {
                   </li>
                   <li
                     onClick={() => {
-                      setOrder("latest");
+                      setOrder("created");
                       setShowOrder(false);
                     }}
                     className="order-li"

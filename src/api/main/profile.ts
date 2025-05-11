@@ -6,3 +6,10 @@ export const getProfile = () => {
     url: "main/profile",
   });
 };
+
+export const Withdraw = () => {
+  return Send({
+    method: "delete",
+    url: "auth/withdraw",
+  });
+};

@@ -24,7 +24,7 @@ const ProjectPage = () => {
   // value
   const [keyword, setKeyword] = useState<string>("");
   const [tap, setTap] = useState<string>("all");
-  const [order, setOrder] = useState<string>("created");
+  const [order, setOrder] = useState<string>("latest");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [projectList, setProjectList] = useState<Array<projectData>>([]);
@@ -140,7 +140,7 @@ const ProjectPage = () => {
                 onClick={() => setShowOrder(!showOrder)}
                 className="order-button"
               >
-                {order === "created" ? "최신순" : "오래된 순"}
+                {order === "latest" ? "최신순" : "오래된 순"}
                 <img
                   src={showOrder ? arrowUp : arrowDown}
                   className="order-img"
@@ -150,7 +150,7 @@ const ProjectPage = () => {
                 <ul className="order-ul">
                   <li
                     onClick={() => {
-                      setOrder("created");
+                      setOrder("latest");
                       setShowOrder(false);
                     }}
                     className="order-li"
@@ -159,7 +159,7 @@ const ProjectPage = () => {
                   </li>
                   <li
                     onClick={() => {
-                      setOrder("latest");
+                      setOrder("created");
                       setShowOrder(false);
                     }}
                     className="order-li"
