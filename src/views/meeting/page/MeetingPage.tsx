@@ -1,140 +1,23 @@
 // style
-import "@/views/main/style/project.sass";
+import "@/views/meeting/style/meeting.sass";
 import arrow from "@/assets/imgs/icon/arrow_down_black.svg";
-import test from "@/assets/imgs/common/user.svg";
+import test from "@/assets/imgs/common/test.png";
+import HeaderBar from "../components/HeaderBar";
+import SideBar from "../components/SideBar";
 
-// component
-import SideBar from "@/views/main/components/SideBar";
-
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
-const ProjectPage = () => {
-  const [tap, setTap] = useState<string>("all");
-  const [order, setOrder] = useState<boolean>(true);
-  const [showOrder, setShowOrder] = useState<boolean>(false);
+const MeetingPage = () => {
 
   return (
-    <div className="main">
+    <>
+      <HeaderBar />
       <SideBar />
-      <div className="project-wrap">
-        <div className="nevigation-wrap">
-          <div className="title-wrap">
-            <h2>전체 회의</h2>
-            <div className="search-wrap">
-              <input type="text" placeholder="회의명 검색" />
-              <Link to="/meeting">새로 만들기</Link>
-            </div>
-          </div>
-          <div className="sort-wrap">
-            <div className="tap-wrap">
-              <ul>
-                <li className={tap === "all" ? "active" : ""} onClick={() => setTap("all")}>전체</li>
-                <li className={tap === "mine" ? "active" : ""} onClick={() => setTap("mine")}>내 회의</li>
-                <li className={tap === "invite" ? "active" : ""} onClick={() => setTap("invite")}>초대된 회의</li>
-              </ul>
-            </div>
-            <div className="order-wrap">
-              <button onClick={() => setShowOrder(!showOrder)}>{ order ? "최신순" : "오래된 순" }<img src={arrow}/></button>
-              {
-                showOrder &&
-                <ul>
-                  <li onClick={() => {setOrder(true); setShowOrder(false)}}>최신순</li>
-                  <li onClick={() => {setOrder(false); setShowOrder(false)}}>오래된 순</li>
-                </ul>
-              }
-            </div>
-          </div>
-        </div>
-        <div className="card-wrap">
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <img src={test} alt="" />
-            <div className="info-wrap">
-              <div className="title-wrap">
-                <div className="title">모아바 회의</div>
-                <div className="date">2025/1/16</div>
-              </div>
-              <div className="owner-wrap">
-                <div className="owner"><img src={test}/>모아바</div>
-              </div>
-            </div>
-          </div>
-        </div>
+
+      <div className="project-content">
+        <h1>회의 페이지</h1>
+
       </div>
-    </div>
+    </>
   );
 };
 
-export default ProjectPage;
+export default MeetingPage;
