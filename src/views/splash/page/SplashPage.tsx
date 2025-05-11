@@ -9,7 +9,7 @@ import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
 import AgreeModal from "@/views/splash/components/AgreeModal";
 import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
-import { getTest } from "@/api/main/project";
+import { getTest } from "@/api/common/common";
 
 import splashIcon from "@/assets/imgs/common/splashIcon.svg";
 import mainImage from "@/assets/imgs/common/mainImage.svg";

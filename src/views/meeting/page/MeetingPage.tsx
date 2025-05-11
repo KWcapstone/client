@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectPage = () => {
-  const [tab, setTab] = useState<string>("all");
+  const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<boolean>(true);
   const [showOrder, setShowOrder] = useState<boolean>(false);
 
@@ -27,11 +27,11 @@ const ProjectPage = () => {
             </div>
           </div>
           <div className="sort-wrap">
-            <div className="tab-wrap">
+            <div className="tap-wrap">
               <ul>
-                <li className={tab === "all" ? "active" : ""} onClick={() => setTab("all")}>전체</li>
-                <li className={tab === "mine" ? "active" : ""} onClick={() => setTab("mine")}>내 회의</li>
-                <li className={tab === "invite" ? "active" : ""} onClick={() => setTab("invite")}>초대된 회의</li>
+                <li className={tap === "all" ? "active" : ""} onClick={() => setTap("all")}>전체</li>
+                <li className={tap === "mine" ? "active" : ""} onClick={() => setTap("mine")}>내 회의</li>
+                <li className={tap === "invite" ? "active" : ""} onClick={() => setTap("invite")}>초대된 회의</li>
               </ul>
             </div>
             <div className="order-wrap">

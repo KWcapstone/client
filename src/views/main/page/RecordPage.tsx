@@ -4,6 +4,7 @@ import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
 import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 
 // api
+import { getSearch } from "@/api/common/common";
 import { getRecord } from "@/api/main/record";
 
 // component
@@ -18,12 +19,13 @@ import { recordData } from "@/types/recordData";
 
 const RecordPage = () => {
   // value
-  const [tab, setTab] = useState<string>("all");
+  const [keyword, setKeyword] = useState<string>("");
+  const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [checkCount, setCheckCount] = useState<number>(0);
-  const [record, setRecod] = useState<Array<recordData>>([]);
+  const [record, setRecord] = useState<Array<recordData>>([]);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
   // 전체 선택 여부 체크
@@ -32,7 +34,7 @@ const RecordPage = () => {
   // 전체 선택 / 해제
   const handleSelectAll = () => {
     const newData = record.map((row) => ({ ...row, selected: !isAllSelected }));
-    setRecod(newData);
+    setRecord(newData);
   };
 
   // 개별 선택 / 해제
@@ -40,13 +42,51 @@ const RecordPage = () => {
     const newData = record.map((row) =>
       row.id === id ? { ...row, selected: !row.selected } : row
     );
-    setRecod(newData);
+    setRecord(newData);
+  };
+
+  const getSearchList = () => {
+    setTap("all")
+    setOrder("created")
+    let params = {
+      tap: 'record',
+      keyword: keyword,
+    };
+    getSearch(params).then((res: any) => {
+      const mappedData: recordData[] = res.data.data.map((item: any, index: number) => {
+        const result = item.result[0] || {};
+        return {
+          creator: item.creator,
+          recordId: [], // 해당 구조에는 recordId가 없으므로 빈 배열 처리
+          name: item.projectName,
+          sizeInBytes: result.sizeInBytes?.toString() || "0",
+          length: result.length || 0,
+          updatedAt: item.updatedAt,
+          selected: false,
+          id: index, // 인덱스를 고유 ID로 사용
+        };
+      });
+      setRecord(mappedData);
+    });
+  };
+
+  const formatDuration = (seconds: number): string => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+  
+    const parts = [];
+    if (hrs > 0) parts.push(`${hrs}시간`);
+    if (mins > 0) parts.push(`${mins}분`);
+    if (secs > 0 || parts.length === 0) parts.push(`${secs}초`);
+  
+    return parts.join(" ");
   };
 
   const getRecordList = () => {
     let params = {
       sort: order,
-      filterType: tab,
+      filterType: tap,
     };
     getRecord(params).then((res: any) => {
       const dataWithSelection = res.data.data.map((item: any, i: number) => ({
@@ -54,14 +94,14 @@ const RecordPage = () => {
         selected: false,
         id: i,
       }));
-      setRecod(dataWithSelection);
+      setRecord(dataWithSelection);
     });
     console.log(record)
   };
 
   useEffect(() => {
     getRecordList();
-  }, [order, tab]);
+  }, [order, tap]);
 
   useEffect(() => {
     if (!record) return;
@@ -82,8 +122,6 @@ const RecordPage = () => {
     };
   }, []);
 
-
-
   return (
     <div className="main">
       <SideBar />
@@ -92,28 +130,38 @@ const RecordPage = () => {
           <div className="title-wrap">
             <h2>음성・스크립트</h2>
             <div className="search-wrap">
-              <input type="text" placeholder="음성명 검색" />
+              <input 
+                type="text"
+                placeholder="음성명 검색"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getSearchList();
+                  }
+                }}  
+              />
               <Link to="/meeting">새로 만들기</Link>
             </div>
           </div>
           <div className="sort-wrap">
-            <div className="tab-wrap">
-              <ul className="tab-ul">
+            <div className="tap-wrap">
+              <ul className="tap-ul">
                 <li
-                  className={tab === "all" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("all")}
+                  className={tap === "all" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("all")}
                 >
                   전체
                 </li>
                 <li
-                  className={tab === "my" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("my")}
+                  className={tap === "my" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("my")}
                 >
                   내 음성
                 </li>
                 <li
-                  className={tab === "invited" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("invited")}
+                  className={tap === "invited" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("invited")}
                 >
                   초대된 음성
                 </li>
@@ -169,7 +217,7 @@ const RecordPage = () => {
                         <div>{ checkCount }개 선택됨</div>
                         <button className="dwn">다운로드 하기</button>
                         <button className="del">삭제하기</button>
-                        <button className="cancel" onClick={() => setRecod(record.map(row => ({ ...row, selected: false })))}>취소</button>
+                        <button className="cancel" onClick={() => setRecord(record.map(row => ({ ...row, selected: false })))}>취소</button>
                       </div>
                     </th>
                   ) : (
@@ -179,7 +227,7 @@ const RecordPage = () => {
                 <th>생성일</th>
                 <th>생성자</th>
                 <th>음성 길이</th>
-                <th>문서크기</th>
+                <th>문서크기(KB)</th>
               </tr>
             </thead>
             <tbody>
@@ -194,7 +242,7 @@ const RecordPage = () => {
                   <td>{list.name}</td>
                   <td>{new Date(list.updatedAt).toLocaleDateString()}</td>
                   <td>{list.creator}</td>
-                  <td>{list.length}</td>
+                  <td>{formatDuration(list.length)}</td>
                   <td>{list.sizeInBytes}</td>
                 </tr>
               ))}

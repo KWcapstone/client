@@ -5,6 +5,7 @@ import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import test from "@/assets/imgs/common/user.svg";
 
 // api
+import { getSearch } from "@/api/common/common";
 import { getProject } from "@/api/main/project";
 
 // component
@@ -21,7 +22,8 @@ import { projectData } from "@/types/projectData";
 
 const ProjectPage = () => {
   // value
-  const [tab, setTab] = useState<string>("all");
+  const [keyword, setKeyword] = useState<string>("");
+  const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
@@ -39,10 +41,22 @@ const ProjectPage = () => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
+  const getSearchList = () => {
+    setTap("all")
+    setOrder("created")
+    let params = {
+      tap: 'entire',
+      keyword: keyword,
+    };
+    getSearch(params).then((res: any) => {
+      setProjectList(res.data.data);
+    });
+  };
+
   const getProjectList = () => {
     let params = {
       sort: order,
-      filterType: tab,
+      filterType: tap,
     };
     getProject(params).then((res: any) => {
       setProjectList(res.data.data);
@@ -51,7 +65,7 @@ const ProjectPage = () => {
 
   useEffect(() => {
     getProjectList();
-  }, [order, tab]);
+  }, [order, tap]);
 
   useEffect(() => {
     const menuClickOutside = (e: MouseEvent) => {
@@ -87,28 +101,35 @@ const ProjectPage = () => {
                 type="text"
                 placeholder="회의명 검색"
                 className="search-input"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getSearchList();
+                  }
+                }}
               />
               <Link to="/meeting">새로 만들기</Link>
             </div>
           </div>
           <div className="sort-wrap">
-            <div className="tab-wrap">
-              <ul className="tab-ul">
+            <div className="tap-wrap">
+              <ul className="tap-ul">
                 <li
-                  className={tab === "all" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("all")}
+                  className={tap === "all" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("all")}
                 >
                   전체
                 </li>
                 <li
-                  className={tab === "my" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("my")}
+                  className={tap === "my" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("my")}
                 >
                   내 회의
                 </li>
                 <li
-                  className={tab === "invited" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("invited")}
+                  className={tap === "invited" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("invited")}
                 >
                   초대된 회의
                 </li>

@@ -3,8 +3,8 @@ export interface recordData {
   recordId: Array<string>;
   name: string;
   sizeInBytes: string;
-  length: string;
+  length: number;
   updatedAt: string;
   selected: boolean;
-  id: number
+  id: number;
 }

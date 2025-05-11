@@ -26,7 +26,7 @@ const UserModal = ({
   const [profile, setProfile] = useState<profileData>();
 
   const clickLogout = () => {
-    logout().then((res: any)=>{
+    logout().then(()=>{
       alert('로그아웃 되었습니다.')
       clearTokens();
       window.location.href = '/'

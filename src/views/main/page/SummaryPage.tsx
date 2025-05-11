@@ -4,6 +4,7 @@ import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
 import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 
 // api
+import { getSearch } from "@/api/common/common";
 import { getSummary } from "@/api/main/summary";
 
 // component
@@ -18,12 +19,13 @@ import { summaryData } from "@/types/summaryData";
 
 const SummaryPage = () => {
   // value
-  const [tab, setTab] = useState<string>("all");
+  const [keyword, setKeyword] = useState<string>("");
+  const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("created");
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [checkCount, setCheckCount] = useState<number>(0);
-  const [summary, setRecod] = useState<Array<summaryData>>([]);
+  const [summary, setSummary] = useState<Array<summaryData>>([]);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
   // 전체 선택 여부 체크
@@ -32,7 +34,7 @@ const SummaryPage = () => {
   // 전체 선택 / 해제
   const handleSelectAll = () => {
     const newData = summary.map((row) => ({ ...row, selected: !isAllSelected }));
-    setRecod(newData);
+    setSummary(newData);
   };
 
   // 개별 선택 / 해제
@@ -40,13 +42,25 @@ const SummaryPage = () => {
     const newData = summary.map((row) =>
       row.id === id ? { ...row, selected: !row.selected } : row
     );
-    setRecod(newData);
+    setSummary(newData);
+  };
+
+  const getSearchList = () => {
+    setTap("all")
+    setOrder("created")
+    let params = {
+      tap: 'summary',
+      keyword: keyword,
+    };
+    getSearch(params).then((res: any) => {
+      setSummary(res.data.data);
+    });
   };
 
   const getSummaryList = () => {
     let params = {
       sort: order,
-      filterType: tab,
+      filterType: tap,
     };
     getSummary(params).then((res: any) => {
       const dataWithSelection = res.data.data.map((item: any, i: number) => ({
@@ -54,14 +68,14 @@ const SummaryPage = () => {
         selected: false,
         id: i,
       }));
-      setRecod(dataWithSelection);
+      setSummary(dataWithSelection);
     });
     console.log(summary)
   };
 
   useEffect(() => {
     getSummaryList();
-  }, [order, tab]);
+  }, [order, tap]);
 
   useEffect(() => {
     if (!summary) return;
@@ -82,8 +96,6 @@ const SummaryPage = () => {
     };
   }, []);
 
-
-
   return (
     <div className="main">
       <SideBar />
@@ -92,28 +104,38 @@ const SummaryPage = () => {
           <div className="title-wrap">
             <h2>요약본</h2>
             <div className="search-wrap">
-              <input type="text" placeholder="요약본명 검색" />
+              <input 
+                type="text"
+                placeholder="요약본명 검색"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    getSearchList();
+                  }
+                }}
+              />
               <Link to="/meeting">새로 만들기</Link>
             </div>
           </div>
           <div className="sort-wrap">
-            <div className="tab-wrap">
-              <ul className="tab-ul">
+            <div className="tap-wrap">
+              <ul className="tap-ul">
                 <li
-                  className={tab === "all" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("all")}
+                  className={tap === "all" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("all")}
                 >
                   전체
                 </li>
                 <li
-                  className={tab === "my" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("my")}
+                  className={tap === "my" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("my")}
                 >
                   내 요약본
                 </li>
                 <li
-                  className={tab === "invited" ? "tab-li active" : "tab-li"}
-                  onClick={() => setTab("invited")}
+                  className={tap === "invited" ? "tap-li active" : "tap-li"}
+                  onClick={() => setTap("invited")}
                 >
                   초대된 요약본
                 </li>
@@ -169,7 +191,7 @@ const SummaryPage = () => {
                         <div>{ checkCount }개 선택됨</div>
                         <button className="dwn">다운로드 하기</button>
                         <button className="del">삭제하기</button>
-                        <button className="cancel" onClick={() => setRecod(summary.map(row => ({ ...row, selected: false })))}>취소</button>
+                        <button className="cancel" onClick={() => setSummary(summary.map(row => ({ ...row, selected: false })))}>취소</button>
                       </div>
                     </th>
                   ) : (
