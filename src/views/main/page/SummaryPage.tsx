@@ -53,7 +53,21 @@ const SummaryPage = () => {
       keyword: keyword,
     };
     getSearch(params).then((res: any) => {
-      setSummary(res.data.data);
+      const mappedSummary = res.data.data.map((item: any, index: number) => {
+        const result = item.result[0] || {};
+  
+        return {
+          id: index,
+          creator: item.creator,
+          projectId: item.projectId,
+          projectName: item.projectName,
+          sizeInBytes: result.sizeInBytes?.toString() || "0",
+          updatedAt: item.updatedAt,
+          selected: false,
+        };
+      });
+
+      setSummary(mappedSummary);
     });
   };
 
@@ -200,7 +214,7 @@ const SummaryPage = () => {
                 }
                 <th>생성일</th>
                 <th>생성자</th>
-                <th>문서크기</th>
+                <th>문서크기(KB)</th>
               </tr>
             </thead>
             <tbody>

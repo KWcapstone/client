@@ -56,14 +56,14 @@ const RecordPage = () => {
       const mappedData: recordData[] = res.data.data.map((item: any, index: number) => {
         const result = item.result[0] || {};
         return {
+          id: index,
           creator: item.creator,
-          recordId: [], // 해당 구조에는 recordId가 없으므로 빈 배열 처리
+          recordId: item.projectId, // 해당 구조에는 recordId가 없으므로 빈 배열 처리
           name: item.projectName,
           sizeInBytes: result.sizeInBytes?.toString() || "0",
           length: result.length || 0,
           updatedAt: item.updatedAt,
           selected: false,
-          id: index, // 인덱스를 고유 ID로 사용
         };
       });
       setRecord(mappedData);
