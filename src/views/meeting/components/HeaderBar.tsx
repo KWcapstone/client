@@ -2,11 +2,21 @@ import "@/views/meeting/style/header-bar.sass";
 import test from "@/assets/imgs/common/user.svg";
 import home from "@/assets/imgs/icon/home.svg";
 import dwn from "@/assets/imgs/icon/dwn_white.svg";
+import { useNavigate } from "react-router-dom";
 
 const HeaderBar = () => {
+  const navigate = useNavigate();
+  const handleHomeClick = () => {
+    navigate("/project");
+  };
   return (
     <div className="header-bar">
-      <img src={home} alt="home" className="home-icon" />
+      <img
+        src={home}
+        alt="home"
+        className="home-icon"
+        onClick={handleHomeClick}
+      />
       <div className="right-section">
         <div className="share">공유하기</div>
         <div className="user-pofiles">
