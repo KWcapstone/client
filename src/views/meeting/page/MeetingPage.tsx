@@ -6,6 +6,7 @@ import HeaderBar from "../components/HeaderBar";
 import SideBar from "../components/SideBar";
 
 const MeetingPage = () => {
+
   return (
     <>
       <HeaderBar />
@@ -13,6 +14,7 @@ const MeetingPage = () => {
 
       <div className="project-content">
         <h1>회의 페이지</h1>
+
       </div>
     </>
   );

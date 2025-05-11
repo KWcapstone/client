@@ -25,17 +25,19 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     // accessToken 만료 (예: 401)
-    if (error.response?.status === 503 && !originalRequest._retry) {
+    if (error.response?.status === 401 && error.response?.data.message === 'AUTH_002' && !originalRequest._retry) {
       originalRequest._retry = true;
+
       try {
-        const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}/auth/refresh`, {
+        const res = await axios.post(`${import.meta.env.VITE_API_SERVER_URL}auth/refresh`, {
           refreshToken: getRefreshToken(),
         });
-        const { accessToken, refreshToken } = res.data;
+        const { accessToken, refreshToken } = res.data.data;
         setTokens(accessToken, refreshToken);
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return instance(originalRequest);
       } catch (e) {
+        alert('로그인이 만료되었습니다.')
         clearTokens();
         window.location.href = "/";
         return Promise.reject(e);

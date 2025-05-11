@@ -1,7 +1,13 @@
 // style
 import "@/views/main/style/side-bar.sass";
 import logo from "@/assets/imgs/common/logo.svg";
-import test from "@/assets/imgs/common/test.png";
+import test from "@/assets/imgs/common/user.svg";
+
+// api
+import { getProfile } from "@/api/main/profile";
+
+// type
+import { profileData } from "@/types/profileData";
 
 // component
 import { useState, useEffect } from "react";
@@ -18,6 +24,14 @@ const SideBar = () => {
   type ModalType = "user" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
   const closeModal = () => setModalType(null);
+
+  const [profile, setProfile] = useState<profileData>();
+
+  useEffect(() => {
+    getProfile().then((res: any) => {
+      setProfile(res.data.data);
+    });
+  },[]);
 
   useEffect(() => {
     if (pathname === "/" || pathname === "/project") {
@@ -40,10 +54,10 @@ const SideBar = () => {
         </div>
         <div className="user-wrap">
           <div className="user" onClick={() => setModalType('user')}>
-            <img src={test} className="user-profile-img" alt="" />
+            <img src={profile?.imageUrl ? profile?.imageUrl : test} className="user-profile-img" alt="" />
             <div className="info-wrap">
-              <div className="name">모아바</div>
-              <div className="email">baek789@naver.com</div>
+              <div className="name">{profile?.name}</div>
+              <div className="email">{profile?.email}</div>
             </div>
           </div>
         </div>
@@ -72,12 +86,12 @@ const SideBar = () => {
         <div className="time-wrap">
           <p className="time-wrap-p">남은 시간</p>
           <div className="time">
-            <b className="time-b">520분 남음</b> / 600분
+            <b className="time-b">{profile?.time ?? 0}분 남음</b> / 600분
           </div>
           <div className="bar">
             <div className="status"></div>
           </div>
-          <div className="remainder">다음 충전일까지 25일 남음</div>
+          <div className="remainder">다음 충전일까지 {profile?.date ?? 0}일 남음</div>
         </div>
       </div>
       {modalType === "user" && (

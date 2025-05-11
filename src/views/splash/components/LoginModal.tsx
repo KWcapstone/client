@@ -153,6 +153,11 @@ const LoginModal = ({
               pwError ? "modal-input modal-input-error" : "modal-input"
             }
             onChange={(e) => setPwInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleLoginClick();
+              }
+            }}
           />
           <img
             src={pwShow ? pw_show : pw_hide}
