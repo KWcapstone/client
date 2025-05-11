@@ -2,17 +2,16 @@
 import "@/views/meeting/style/meeting.sass";
 import HeaderBar from "../components/HeaderBar";
 import SideBar from "../components/SideBar";
+import MyVoiceComponent from "@/views/main/components/SttTest";
 
 const MeetingPage = () => {
-
   return (
     <>
       <HeaderBar />
       <SideBar />
 
       <div className="project-content">
-        <h1>회의 페이지</h1>
-
+        <MyVoiceComponent />
       </div>
     </>
   );
