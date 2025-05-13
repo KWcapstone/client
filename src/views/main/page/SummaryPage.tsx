@@ -209,7 +209,7 @@ const SummaryPage = () => {
                       </div>
                     </th>
                   ) : (
-                    <th>회의 이름</th>
+                    <th>요약본 이름</th>
                   )
                 }
                 <th>생성일</th>

@@ -221,7 +221,7 @@ const RecordPage = () => {
                       </div>
                     </th>
                   ) : (
-                    <th>회의 이름</th>
+                    <th>음성 이름</th>
                   )
                 }
                 <th>생성일</th>

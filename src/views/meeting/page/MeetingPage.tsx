@@ -2,7 +2,7 @@
 import "@/views/meeting/style/meeting.sass";
 import HeaderBar from "../components/HeaderBar";
 import SideBar from "../components/SideBar";
-import MyVoiceComponent from "@/views/main/components/SttTest";
+import MyVoiceComponent from "@/views/meeting/components/SttTest";
 
 import { useState } from "react";
 
@@ -24,6 +24,7 @@ const MeetingPage = () => {
         }}
       >
         <MyVoiceComponent />
+        
       </div>
     </>
   );
