@@ -3,7 +3,6 @@ import "@/views/meeting/style/meeting.sass";
 import HeaderBar from "../components/HeaderBar";
 import SideBar from "../components/SideBar";
 import MyVoiceComponent from "@/views/meeting/components/SttTest";
-import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 
 import { useState } from "react";
 
@@ -25,7 +24,7 @@ const MeetingPage = () => {
         }}
       >
         <MyVoiceComponent />
-        <MindMapComponent />
+        
       </div>
     </>
   );
