@@ -3,6 +3,7 @@ import "@/views/meeting/style/meeting.sass";
 import HeaderBar from "../components/HeaderBar";
 import SideBar from "../components/SideBar";
 import MyVoiceComponent from "@/views/meeting/components/SttTest";
+import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 
 import { useState } from "react";
 
@@ -18,15 +19,13 @@ const MeetingPage = () => {
       />
 
       <div
-        className={`meeting-page ${
-          isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-        }`}
+        className="project-content"
         style={{
           paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
         }}
       >
         <MyVoiceComponent />
-        
+        <MindMapComponent />
       </div>
     </>
   );
