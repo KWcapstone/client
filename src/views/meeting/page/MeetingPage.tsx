@@ -18,7 +18,9 @@ const MeetingPage = () => {
       />
 
       <div
-        className="project-content"
+        className={`meeting-page ${
+          isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+        }`}
         style={{
           paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
         }}
