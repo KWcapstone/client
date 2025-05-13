@@ -4,7 +4,11 @@ import home from "@/assets/imgs/icon/home.svg";
 import dwn from "@/assets/imgs/icon/dwn_white.svg";
 import { useNavigate } from "react-router-dom";
 
-const HeaderBar = () => {
+interface HeaderBarProps {
+  onOpenModal: () => void;
+}
+
+const HeaderBar = ({ onOpenModal }: HeaderBarProps) => {
   const navigate = useNavigate();
   const handleHomeClick = () => {
     navigate("/project");
@@ -18,7 +22,9 @@ const HeaderBar = () => {
         onClick={handleHomeClick}
       />
       <div className="right-section">
-        <div className="share">공유하기</div>
+        <div className="share" onClick={onOpenModal}>
+          공유하기
+        </div>
         <div className="user-pofiles">
           <div className="user-profile">
             <img src={test} alt="profile" />
