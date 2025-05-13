@@ -47,7 +47,7 @@ const SummaryPage = () => {
 
   const getSearchList = () => {
     setTap("all")
-    setOrder("created")
+    setOrder("latest")
     let params = {
       tap: 'summary',
       keyword: keyword,
@@ -68,6 +68,8 @@ const SummaryPage = () => {
       });
 
       setSummary(mappedSummary);
+    }).catch(()=>{
+      setSummary([])
     });
   };
 

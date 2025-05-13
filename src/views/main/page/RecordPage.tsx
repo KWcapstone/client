@@ -47,7 +47,7 @@ const RecordPage = () => {
 
   const getSearchList = () => {
     setTap("all")
-    setOrder("created")
+    setOrder("latest")
     let params = {
       tap: 'record',
       keyword: keyword,
@@ -67,6 +67,8 @@ const RecordPage = () => {
         };
       });
       setRecord(mappedData);
+    }).catch(()=>{
+      setRecord([])
     });
   };
 
