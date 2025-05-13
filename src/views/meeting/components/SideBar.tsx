@@ -10,6 +10,7 @@ interface SideBarProps {
 
 const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
+  const [isSummary, setIsSummary] = useState(true);
 
   return isSidebarOpen ? (
     <div className="side-bar">
@@ -40,14 +41,20 @@ const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
       <div className="content-wrap">
         <div className="content-titles">
           <div
-            className={`content-title ${isScript ? "" : "active"}`}
-            onClick={() => setIsScript(!isScript)}
+            className={`content-title ${isSummary ? "active" : ""}`}
+            onClick={() => {
+              setIsScript(false);
+              setIsSummary(true);
+            }}
           >
             실시간 요약
           </div>
           <div
             className={`content-title ${isScript ? "active" : ""}`}
-            onClick={() => setIsScript(!isScript)}
+            onClick={() => {
+              setIsScript(true);
+              setIsSummary(false);
+            }}
           >
             스크립트
           </div>

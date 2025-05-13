@@ -4,7 +4,13 @@
 @import '@/sass/uix/_button.sass'
 
 
-.project-content
-  +size(calc(100vw - 340px), calc(100vh - 60px))
+.meeting-page
   background-color: $gray-50
-  
+
+.sidebar-open
+  +size(calc(100vw - 340px), calc(100vh - 60px))
+  +padding(60px 0 0 340px)
+
+.sidebar-closed
+  +size(calc(100vw - 56px), calc(100vh - 60px))
+  +padding(60px 0 0 56px)
