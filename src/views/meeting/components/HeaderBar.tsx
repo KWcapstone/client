@@ -18,11 +18,11 @@ const HeaderBar = ({ onOpenModal }: HeaderBarProps) => {
       <img
         src={home}
         alt="home"
-        className="home-icon"
+        className="cursor-pointer"
         onClick={handleHomeClick}
       />
       <div className="right-section">
-        <div className="share" onClick={onOpenModal}>
+        <div className="share cursor-pointer" onClick={onOpenModal}>
           공유하기
         </div>
         <div className="user-pofiles">
@@ -43,7 +43,7 @@ const HeaderBar = ({ onOpenModal }: HeaderBarProps) => {
           </div>
           <div className="user-profile more">+3</div>
           <hr className="divider" />
-          <button className="add-user">
+          <button className="add-user cursor-pointer">
             <img src={dwn} alt="add" className="add-icon" />
             <span className="add-text">다운받기</span>
           </button>
