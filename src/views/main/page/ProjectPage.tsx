@@ -11,7 +11,7 @@ import { getProject } from "@/api/main/project";
 // component
 import SideBar from "@/views/main/components/SideBar";
 import DwnModal from "@/views/main/components/DwnModal";
-import ShareModal from "@/views/main/components/ShareModal";
+import ShareModal from "@/views/components/ShareModal";
 
 // import
 import { useState, useRef, useEffect } from "react";
@@ -42,10 +42,10 @@ const ProjectPage = () => {
   };
 
   const getSearchList = () => {
-    setTap("all")
-    setOrder("created")
+    setTap("all");
+    setOrder("created");
     let params = {
-      tap: 'entire',
+      tap: "entire",
       keyword: keyword,
     };
     getSearch(params).then((res: any) => {
