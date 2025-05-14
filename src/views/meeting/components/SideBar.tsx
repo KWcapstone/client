@@ -18,7 +18,7 @@ const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
         <img
           src={sidePanel}
           alt="side-panel"
-          className="side-panel-icon"
+          className="cursor-pointer"
           onClick={() => setIsSidebarOpen(false)}
         />
         <div className="side-bar-title-wrap">
@@ -41,7 +41,9 @@ const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
       <div className="content-wrap">
         <div className="content-titles">
           <div
-            className={`content-title ${isSummary ? "active" : ""}`}
+            className={`content-title cursor-pointer ${
+              isSummary ? "active" : ""
+            }`}
             onClick={() => {
               setIsScript(false);
               setIsSummary(true);
@@ -50,7 +52,9 @@ const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
             실시간 요약
           </div>
           <div
-            className={`content-title ${isScript ? "active" : ""}`}
+            className={`content-title cursor-pointer ${
+              isScript ? "active" : ""
+            }`}
             onClick={() => {
               setIsScript(true);
               setIsSummary(false);
@@ -297,7 +301,7 @@ const SideBar = ({ isSidebarOpen, setIsSidebarOpen }: SideBarProps) => {
       <img
         src={sidePanel}
         alt="side-panel"
-        className="side-panel-icon"
+        className="cursor-pointer"
         onClick={() => setIsSidebarOpen(true)}
       />
     </div>
