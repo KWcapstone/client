@@ -42,14 +42,18 @@ const ProjectPage = () => {
   };
 
   const getSearchList = () => {
-    setTap("all");
-    setOrder("created");
+
+    setTap("all")
+    setOrder("latest")
+
     let params = {
       tap: "entire",
       keyword: keyword,
     };
     getSearch(params).then((res: any) => {
       setProjectList(res.data.data);
+    }).catch(()=>{
+      setProjectList([])
     });
   };
 
