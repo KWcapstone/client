@@ -1,0 +1,172 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_input.sass'
+@import '@/sass/uix/_button.sass'
+
+.modal-title
+  +font-face(pretendard, pretendard, 600)
+  +margin(bottom 16px)
+
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  align-self: flex-start;
+  color: $gray-900
+
+.modal-wrap
+  +flex-box(center, start, 20px)
+
+  flex-direction: column
+
+  .email
+    +flex-box(center, start, 4px)
+    +size(100%, null)
+    +padding(top 8px)
+    +box-sizing(border-box)
+
+    flex-direction: column
+
+    .email-title
+      color: $gray-800;
+      font-family: Pretendard;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 150%;
+
+    .email-input-wrap
+      +size(100%, 40px)
+      +flex-box(center, center, 8px)
+
+      .email-input
+        +border-radius(8px)
+        +border(none)
+        +size(auto, 40px)
+        +padding(0 16px)
+        +box-sizing(border-box)
+        
+        background-color: $gray-50
+        flex: 1
+
+        &::placeholder
+          color: $gray-400
+          font-family: Pretendard;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 150%;
+      
+      .email-btn
+        +size(81px, 40px)
+        +border-radius(8px)
+        +border(1px solid $gray-200)
+        +padding(0 15px)
+        +box-sizing(border-box)
+
+        background-color: $white
+        color: $gray-900
+        font-family: Pretendard;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%;
+  
+  .link
+    +flex-box(center, start, 4px)
+    +size(100%, null)
+
+    flex-direction: column
+
+    .link-title
+      color: $gray-800;
+      font-family: Pretendard;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 150%;
+
+    .link-copy-wrap
+      +size(100%, 40px)
+      +flex-box(space-between, center, 8px)
+      +padding(0 15px)
+      +box-sizing(border-box)
+      +border-radius(8px)
+
+      background-color: $gray-50
+      align-self: stretch;
+
+      .link-copy
+        color: $gray-700;
+        font-family: Pretendard;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%; /* 24px */
+
+      .link-copy-btn-wrap
+        +flex-box(center, center, 4px)
+
+        .link-copy-btn-text
+          color: $blue-500;
+          font-family: Pretendard;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 150%; /* 21px */
+          letter-spacing: -0.154px;
+    
+  .member
+    +flex-box(center, start, 8px)
+    +size(100%, null)
+
+    flex-direction: column
+
+    .member-title
+      color: $gray-800;
+      font-family: Pretendard;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 150%;
+
+    .member-list
+      +flex-box(start, start, 4px)
+      +size(100%, null)
+
+      flex-direction: column
+
+      .member-item
+        +flex-box(space-between, center, 4px)
+        +size(100%, null)
+        +padding(4px 0)
+        +box-sizing(border-box)
+
+        .member-info-wrap
+          +flex-box(center, center, 8px)
+
+          .member-img
+            +size(18px, 18px)
+
+          .member-name
+            color: $gray-900;
+            font-family: Pretendard;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 150%; /* 21px */
+        
+        .member-role
+          color: $gray-700;
+          font-family: Pretendard;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 150%; /* 21px */
+
+
+
+
+
+.cursor-pointer
+  cursor: pointer;
