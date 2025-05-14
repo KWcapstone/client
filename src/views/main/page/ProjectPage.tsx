@@ -28,6 +28,8 @@ const ProjectPage = () => {
   const [showOrder, setShowOrder] = useState<boolean>(false);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [projectList, setProjectList] = useState<Array<projectData>>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editedTitle, setEditedTitle] = useState<string>("");
   const menuRef = useRef<HTMLUListElement | null>(null);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
@@ -42,19 +44,20 @@ const ProjectPage = () => {
   };
 
   const getSearchList = () => {
-
-    setTap("all")
-    setOrder("latest")
+    setTap("all");
+    setOrder("latest");
 
     let params = {
       tap: "entire",
       keyword: keyword,
     };
-    getSearch(params).then((res: any) => {
-      setProjectList(res.data.data);
-    }).catch(()=>{
-      setProjectList([])
-    });
+    getSearch(params)
+      .then((res: any) => {
+        setProjectList(res.data.data);
+      })
+      .catch(() => {
+        setProjectList([]);
+      });
   };
 
   const getProjectList = () => {
@@ -190,7 +193,17 @@ const ProjectPage = () => {
                 ></button>
                 {openMenuId === i && (
                   <ul className="menu-wrap" ref={menuRef}>
-                    <li className="edit">이름 변경하기</li>
+                    <li
+                      className="edit"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setEditingIndex(i);
+                        setEditedTitle(list.projectName); // 현재 이름으로 초기화
+                      }}
+                    >
+                      이름 변경하기
+                    </li>
                     <li
                       className="dwn"
                       onClick={(e) => {
@@ -218,7 +231,27 @@ const ProjectPage = () => {
                 )}
                 <div className="info-wrap">
                   <div className="title-wrap">
-                    <div className="title">{list.projectName}</div>
+                    {editingIndex === i ? (
+                      <input
+                        type="text"
+                        value={editedTitle}
+                        className="title-rename-input"
+                        onChange={(e) => setEditedTitle(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            const newList = [...projectList];
+                            newList[i].projectName = editedTitle;
+                            setProjectList(newList);
+                            setEditingIndex(null);
+
+                            // 여기서 API 호출도 함께 하면 좋음
+                            // await updateProjectName(list.projectId, editedTitle);
+                          }
+                        }}
+                      />
+                    ) : (
+                      <div className="title">{list.projectName}</div>
+                    )}
                     <div className="date">
                       {new Date(list.updatedAt).toLocaleDateString()}
                     </div>
