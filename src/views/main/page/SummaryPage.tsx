@@ -60,7 +60,7 @@ const SummaryPage = () => {
           id: index,
           creator: item.creator,
           projectId: item.projectId,
-          projectName: item.projectName,
+          projectName: result.fileName,
           sizeInBytes: result.sizeInBytes?.toString() || "0",
           updatedAt: item.updatedAt,
           selected: false,

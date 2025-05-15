@@ -9,7 +9,8 @@
 
   .modal-wrap
     +size(100%)
-
+    display: block
+    
     .info-wrap
       +padding(bottom 32px)
       +flex-box(center, center)
@@ -61,7 +62,6 @@
         &:before
           +size(24px, 24px)
           content: ""
-
 
         &:first-child
           border-top: 1px solid $gray-100

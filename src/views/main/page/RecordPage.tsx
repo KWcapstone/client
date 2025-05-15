@@ -59,7 +59,7 @@ const RecordPage = () => {
           id: index,
           creator: item.creator,
           recordId: item.projectId, // 해당 구조에는 recordId가 없으므로 빈 배열 처리
-          name: item.projectName,
+          name: result.fileName,
           sizeInBytes: result.sizeInBytes?.toString() || "0",
           length: result.length || 0,
           updatedAt: item.updatedAt,
