@@ -17,12 +17,23 @@
     bottom: 117px
     border-radius: 16px
     background-color: $gray-50
-    left: 50%;
+    left: 50%
     transform: translate(-50%, -50%)
 
     .record-length-wrap
-      +flex-box(center, center, 4.86px)
+      +flex-box(center, center, 10px)
 
-      .box
-        +size(5.5px, 13px)
-        background-color: $gray-300
+      .box-wrap
+        +flex-box(center, center, 4.86px)
+
+        .box
+          +size(5.5px, 13px)
+          background-color: $gray-300
+
+        .red
+          background-color: #F05B56
+
+      .box-time
+        color: #505457
+        font-weight: 500
+        line-height: 21px

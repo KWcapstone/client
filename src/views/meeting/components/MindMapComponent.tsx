@@ -44,22 +44,13 @@ const MindMapComponent = () => {
             13:28
           </div>
           <div>
-            <button onClick={toggleListening}>{isRecording ? "정지" : "시작"}</button>
             {isRecording && !isPaused && (
-              <button onClick={pauseRecording}>⏸️ 일시정지</button>
+              <button onClick={pauseRecording}>⏸️</button>
             )}
             {isRecording && isPaused && (
               <button onClick={resumeRecording}>▶️ 재개</button>
             )}
-
-            <p>인식된 텍스트: {transcript}</p>
-
-            {audioUrl && (
-              <>
-                <p>✅ 녹음 완료됨</p>
-                <audio src={audioUrl} controls />
-              </>
-            )}
+            <button onClick={toggleListening}>{isRecording ? "정지" : "시작"}</button>
           </div>
         </div>
       </div>
