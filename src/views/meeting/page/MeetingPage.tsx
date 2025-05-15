@@ -47,7 +47,7 @@ const MeetingPage = () => {
           paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
         }}
       >
-        <MyVoiceComponent />
+        {/* <MyVoiceComponent /> */}
         <MindMapComponent />
       </div>
     </>

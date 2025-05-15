@@ -1,0 +1,28 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_input.sass'
+@import '@/sass/uix/_button.sass'
+
+
+.mind-map-container
+  position: relative
+
+  .mind-map-wrap
+    +size(100vw, 100vh)
+
+  .middle-bar
+    +size(435px, 64px)
+    +flex-box(center, center)
+    position: absolute
+    bottom: 117px
+    border-radius: 16px
+    background-color: $gray-50
+    left: 50%;
+    transform: translate(-50%, -50%)
+
+    .record-length-wrap
+      +flex-box(center, center, 4.86px)
+
+      .box
+        +size(5.5px, 13px)
+        background-color: $gray-300
