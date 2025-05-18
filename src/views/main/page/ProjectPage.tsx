@@ -237,6 +237,10 @@ const ProjectPage = () => {
                         value={editedTitle}
                         className="title-rename-input"
                         onChange={(e) => setEditedTitle(e.target.value)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             const newList = [...projectList];
