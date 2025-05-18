@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 
 // types
 import { ShareModalData } from "@/types/shareModalData";
-
 interface ShareModalProps {
   onCloseModal: () => void;
   projectId: string[];
@@ -34,6 +33,11 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
   useEffect(() => {
     getModalData();
   }, []);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(modalData?.inviteUrl || "");
+    alert("링크가 복사되었습니다.");
+  };
 
   return (
     <Modal onCloseModal={onCloseModal}>
@@ -54,7 +58,10 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
           <span className="link-title">초대 링크</span>
           <div className="link-copy-wrap">
             <div className="link-copy">{modalData?.inviteUrl}</div>
-            <div className="link-copy-btn-wrap cursor-pointer">
+            <div
+              className="link-copy-btn-wrap cursor-pointer"
+              onClick={handleCopyLink}
+            >
               <img
                 src={linkImg}
                 className="link-copy-btn-icon"
