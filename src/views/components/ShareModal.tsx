@@ -1,13 +1,40 @@
+// style
 import "@/views/components/style/share-modal.sass";
+
+// components
 import Modal from "@/views/components/modal";
+
+// assets
 import linkImg from "@/assets/imgs/icon/line-md_link.svg";
 import user from "@/assets/imgs/common/user.svg";
 
+// apis
+import { openShereModal } from "@/api/common/shareProject";
+
+//import
+import { useEffect, useState } from "react";
+
+// types
+import { ShareModalData } from "@/types/shareModalData";
+
 interface ShareModalProps {
   onCloseModal: () => void;
+  projectId: string[];
 }
 
-const ShareModal = ({ onCloseModal }: ShareModalProps) => {
+const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
+  const [modalData, setModalData] = useState<ShareModalData>();
+
+  const getModalData = () => {
+    openShereModal(projectId).then((res: any) => {
+      setModalData(res.data.data);
+    });
+  };
+
+  useEffect(() => {
+    getModalData();
+  }, []);
+
   return (
     <Modal onCloseModal={onCloseModal}>
       <p className="modal-title">공유하기</p>
@@ -26,7 +53,7 @@ const ShareModal = ({ onCloseModal }: ShareModalProps) => {
         <div className="link">
           <span className="link-title">초대 링크</span>
           <div className="link-copy-wrap">
-            <div className="link-copy">moaba.com/cjy-zvq-qqux</div>
+            <div className="link-copy">{modalData?.inviteUrl}</div>
             <div className="link-copy-btn-wrap cursor-pointer">
               <img
                 src={linkImg}
@@ -40,20 +67,15 @@ const ShareModal = ({ onCloseModal }: ShareModalProps) => {
         <div className="member">
           <span className="member-title">공유된 멤버</span>
           <div className="member-list">
-            <div className="member-item">
-              <div className="member-info-wrap">
-                <img src={user} alt="user" className="member-img" />
-                <span className="member-name">이름</span>
+            {modalData?.sharedMembers.map((member, index) => (
+              <div className="member-item" key={index}>
+                <div className="member-info-wrap">
+                  <img src={user} alt="user" className="member-img" />
+                  <span className="member-name">{member.nickname}</span>
+                </div>
+                <div className="member-role">{member.role}</div>
               </div>
-              <div className="member-role">회의 생성자</div>
-            </div>
-            <div className="member-item">
-              <div className="member-info-wrap">
-                <img src={user} alt="user" className="member-img" />
-                <span className="member-name">이름</span>
-              </div>
-              <div className="member-role">참석자</div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

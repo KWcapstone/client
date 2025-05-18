@@ -36,6 +36,7 @@ const ProjectPage = () => {
   // modal
   type ModalType = "dwn" | "share" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
+  const [projectId, setProjectId] = useState<string[]>([]);
   const closeModal = () => setModalType(null);
 
   // function
@@ -211,6 +212,7 @@ const ProjectPage = () => {
                         e.stopPropagation();
                         setModalType("dwn");
                         setOpenMenuId(null);
+                        setProjectId(list.projectId);
                       }}
                     >
                       다운로드하기
@@ -222,6 +224,7 @@ const ProjectPage = () => {
                         e.stopPropagation();
                         setModalType("share");
                         setOpenMenuId(null);
+                        setProjectId(list.projectId);
                       }}
                     >
                       공유하기
@@ -300,7 +303,7 @@ const ProjectPage = () => {
             }
           }}
         >
-          <ShareModal onCloseModal={closeModal} />
+          <ShareModal onCloseModal={closeModal} projectId={projectId} />
         </div>
       )}
     </div>
