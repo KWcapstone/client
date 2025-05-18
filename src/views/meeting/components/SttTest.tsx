@@ -1,5 +1,5 @@
 // // component
-import UseSpeechToText from "@/views/main/components/useSpeechToText";
+import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 
 // import { useEffect } from "react";
 

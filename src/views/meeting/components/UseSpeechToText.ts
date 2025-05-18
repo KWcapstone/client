@@ -17,13 +17,19 @@ const UseSpeechToText = () => {
     if (isRecording) {
       // 정지
       SpeechRecognition.stopListening();
-      if (mediaRecorderRef.current?.state === "recording") {
-        mediaRecorderRef.current.stop();
-      }
+      SpeechRecognition.abortListening();
+
+      mediaRecorderRef.current?.stream?.getTracks().forEach((track) => {
+        track.stop();
+      });
+
       setIsRecording(false);
     } else {
       // 시작
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
       audioChunks.current = [];
