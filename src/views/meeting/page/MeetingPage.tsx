@@ -23,6 +23,8 @@ const MeetingPage = () => {
   const closeModal = () => setModalType(null);
   const openModal = () => setModalType("share");
 
+  const projectId: string[] = ["67e7aedf96cc842290b68950"]; //임시방편
+
   return (
     <>
       <HeaderBar onOpenModal={openModal} />
@@ -36,7 +38,7 @@ const MeetingPage = () => {
               }
             }}
           >
-            <ShareModal onCloseModal={closeModal} />
+            <ShareModal onCloseModal={closeModal} projectId={projectId} />
           </div>
         )}
       </div>
