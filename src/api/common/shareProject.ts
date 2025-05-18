@@ -6,3 +6,13 @@ export const openShereModal = (projectId: string[]) => {
     url: `/main/project/${projectId}`,
   });
 };
+
+export const postEmail = (email: string, projectId: string[]) => {
+  return Send({
+    method: "post",
+    url: `/main/project/${projectId}/add_by_email`,
+    data: {
+      email: email,
+    },
+  });
+};

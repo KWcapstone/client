@@ -9,13 +9,13 @@ import linkImg from "@/assets/imgs/icon/line-md_link.svg";
 import user from "@/assets/imgs/common/user.svg";
 
 // apis
-import { openShereModal } from "@/api/common/shareProject";
+import { openShereModal, postEmail } from "@/api/common/shareProject";
 
 //import
 import { useEffect, useState } from "react";
 
 // types
-import { ShareModalData } from "@/types/shareModalData";
+import { ShareModalData, InviteUserByEmail } from "@/types/shareModalData";
 interface ShareModalProps {
   onCloseModal: () => void;
   projectId: string[];
@@ -23,6 +23,11 @@ interface ShareModalProps {
 
 const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
   const [modalData, setModalData] = useState<ShareModalData>();
+  const [inviteInfo, setInviteInfo] = useState<InviteUserByEmail>();
+
+  const [emailBtnActive, setEmailBtnActive] = useState(false);
+  const [emailValue, setEmailInput] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const getModalData = () => {
     openShereModal(projectId).then((res: any) => {
@@ -33,6 +38,40 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
   useEffect(() => {
     getModalData();
   }, []);
+
+  useEffect(() => {
+    setEmailBtnActive(emailValue.includes("@") && emailValue.includes("."));
+  }, [emailValue]);
+
+  useEffect(() => {
+    setEmailError("");
+  }, [emailValue]);
+
+  const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailInput(e.target.value);
+  };
+
+  const handleEmailBtn = () => {
+    if (
+      emailValue.includes("@") &&
+      emailValue.includes(".") &&
+      emailBtnActive
+    ) {
+      setEmailError("");
+      postEmail(emailValue, projectId).then((res: any) => {
+        if (res.data.code === 200) {
+          setInviteInfo(res.data.data);
+          setEmailError("");
+          console.log(inviteInfo);
+        } else {
+          setEmailError("이메일 초대에 실패했습니다.");
+        }
+      });
+      alert("이메일 초대가 완료되었습니다.");
+    } else {
+      setEmailError("이메일 형식이 올바르지 않습니다.");
+    }
+  };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(modalData?.inviteUrl || "");
@@ -48,11 +87,21 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
           <div className="email-input-wrap">
             <input
               type="text"
-              className="email-input"
+              className={
+                emailError ? "email-input email-input-error" : "email-input"
+              }
               placeholder="이메일을 입력해주세요"
+              onChange={handleEmailInput}
+              value={emailValue}
             />
-            <button className="email-btn cursor-pointer">초대하기</button>
+            <button
+              className="email-btn cursor-pointer"
+              onClick={handleEmailBtn}
+            >
+              초대하기
+            </button>
           </div>
+          {emailError && <p className="email-error">{emailError}</p>}
         </div>
         <div className="link">
           <span className="link-title">초대 링크</span>

@@ -56,7 +56,9 @@
           font-style: normal
           font-weight: 500
           line-height: 150%
-      
+      .email-input-error
+        +border(1px solid $error)
+
       .email-btn
         +size(81px, 40px)
         +border-radius(8px)
@@ -71,7 +73,15 @@
         font-style: normal
         font-weight: 500
         line-height: 150%
-  
+    .email-error
+      color: $error
+      font-size: 14px
+      font-style: normal
+      font-weight: 500
+      line-height: 150%
+      align-self: flex-start
+
+      +margin(top 6px)
   .link
     +flex-box(center, start, 4px)
     +size(100%, null)

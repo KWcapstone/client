@@ -5,3 +5,9 @@ export interface ShareModalData {
     role: string;
   }[];
 }
+
+export interface InviteUserByEmail {
+  projectId: Array<string>;
+  inviteMember: string;
+  code: string;
+}
