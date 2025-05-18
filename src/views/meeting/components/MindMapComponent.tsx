@@ -1,14 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 import {
   ReactFlow,
-  Background,
+  // Background,
   useNodesState,
   useEdgesState,
   addEdge,
   getIncomers,
   getOutgoers,
   getConnectedEdges,
-} from '@xyflow/react';
+} from "@xyflow/react";
 
 // style
 import "@xyflow/react/dist/style.css";
@@ -69,40 +69,44 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const initialNodes = [
     {
-      id: '1',
-      type: 'input',
-      data: { label: 'Start here...' },
+      id: "1",
+      type: "input",
+      data: { label: "Start here..." },
       position: { x: -150, y: 0 },
     },
     {
-      id: '2',
-      type: 'input',
-      data: { label: '...or here!' },
+      id: "2",
+      type: "input",
+      data: { label: "...or here!" },
       position: { x: 150, y: 0 },
     },
-    { id: '3', data: { label: 'Delete me.' }, position: { x: 0, y: 100 } },
-    { id: '4', data: { label: 'Then me!' }, position: { x: 0, y: 200 } },
+    { id: "3", data: { label: "Delete me." }, position: { x: 0, y: 100 } },
+    { id: "4", data: { label: "Then me!" }, position: { x: 0, y: 200 } },
     {
-      id: '5',
-      type: 'output',
-      data: { label: 'End here!' },
+      id: "5",
+      type: "output",
+      data: { label: "End here!" },
       position: { x: 0, y: 300 },
     },
   ];
 
   const initialEdges = [
-    { id: '1->3', source: '1', target: '3' },
-    { id: '2->3', source: '2', target: '3' },
-    { id: '3->4', source: '3', target: '4' },
-    { id: '4->5', source: '4', target: '5' },
+    { id: "1->3", source: "1", target: "3" },
+    { id: "2->3", source: "2", target: "3" },
+    { id: "3->4", source: "3", target: "4" },
+    { id: "4->5", source: "4", target: "5" },
   ];
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+  useEffect(() => {
+    setNodes(initialNodes);
+  }, []); // 임시방편으로 만듦
+
   const onConnect = useCallback(
     (params: any) => setEdges(addEdge(params, edges)),
-    [edges],
+    [edges]
   );
 
   const onNodesDelete = useCallback(
@@ -112,24 +116,25 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           const incomers = getIncomers(node, nodes, edges);
           const outgoers = getOutgoers(node, nodes, edges);
           const connectedEdges = getConnectedEdges([node], edges);
- 
+
           const remainingEdges = acc.filter(
-            (edge: { id: string; source: string; target: string; }) => !connectedEdges.includes(edge),
+            (edge: { id: string; source: string; target: string }) =>
+              !connectedEdges.includes(edge)
           );
- 
+
           const createdEdges = incomers.flatMap(({ id: source }) =>
             outgoers.map(({ id: target }) => ({
               id: `${source}->${target}`,
               source,
               target,
-            })),
+            }))
           );
- 
+
           return [...remainingEdges, ...createdEdges];
-        }, edges),
+        }, edges)
       );
     },
-    [nodes, edges],
+    [nodes, edges]
   );
 
   return (
@@ -160,8 +165,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
               onConnect={onConnect}
               fitView
               attributionPosition="top-right"
-            >
-            </ReactFlow>
+            ></ReactFlow>
           </div>
           <div className="middle-bar">
             <div className="record-length-wrap">
