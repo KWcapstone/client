@@ -14,12 +14,14 @@ import { useEffect, useState } from "react";
 
 const MindMapComponent = () => {
   const {
-    transcript,
+    // transcript,
     isRecording,
     isPaused,
     toggleListening,
     pauseRecording,
     resumeRecording,
+    finalTranscript,
+    resetTranscript,
     // audioUrl,
   } = UseSpeechToText();
   const { formattedTime, resetTimer } = useRecordingTimer(
@@ -28,10 +30,10 @@ const MindMapComponent = () => {
   );
 
   useEffect(() => {
-    if (transcript) {
-      console.log("🎙️ 인식된 텍스트:", transcript);
-    }
-  }, [transcript]);
+    console.log("🎙️ 인식된 텍스트:", finalTranscript);
+    // 여기서 백엔드한테 보내기
+    resetTranscript();
+  }, [finalTranscript]);
 
   const stopClick = () => {
     toggleListening();
