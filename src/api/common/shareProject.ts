@@ -16,3 +16,10 @@ export const postEmail = (email: string, projectId: string[]) => {
     },
   });
 };
+
+export const getInvite = (projectId: string, code: string) => {
+  return Send({
+    method: "get",
+    url: `/main/project/${projectId}/accept?code=${code}`,
+  });
+};
