@@ -51,23 +51,23 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
     setEmailInput(e.target.value);
   };
 
-  const handleEmailBtn = () => {
+  const handleEmailBtn = async () => {
     if (
       emailValue.includes("@") &&
       emailValue.includes(".") &&
       emailBtnActive
     ) {
       setEmailError("");
-      postEmail(emailValue, projectId).then((res: any) => {
+      await postEmail(emailValue, projectId).then((res: any) => {
+        alert("이메일 초대가 완료되었습니다.");
         if (res.data.code === 200) {
           setInviteInfo(res.data.data);
           setEmailError("");
           console.log(inviteInfo);
-        } else {
+        } else if (res.data.code === 400) {
           setEmailError("이메일 초대에 실패했습니다.");
         }
       });
-      alert("이메일 초대가 완료되었습니다.");
     } else {
       setEmailError("이메일 형식이 올바르지 않습니다.");
     }
