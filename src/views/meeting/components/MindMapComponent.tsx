@@ -30,7 +30,9 @@ const MindMapComponent = () => {
   );
 
   useEffect(() => {
+    console.log("🎙️ 시간", formattedTime);
     console.log("🎙️ 인식된 텍스트:", finalTranscript);
+
     // 여기서 백엔드한테 보내기
     resetTranscript();
   }, [finalTranscript]);

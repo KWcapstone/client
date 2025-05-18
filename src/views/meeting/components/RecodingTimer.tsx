@@ -38,10 +38,15 @@ const useRecordingTimer = (isRecording: boolean, isPaused: boolean) => {
     return `${mins}:${secs}`;
   };
 
+  const timeStamp = (seconds: number) => {
+    return formatTime(seconds);
+  };
+
   return {
     elapsedTime,
     formattedTime: formatTime(elapsedTime),
     resetTimer,
+    timeStamp,
   };
 };
 
