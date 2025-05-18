@@ -60,11 +60,11 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
       setEmailError("");
       await postEmail(emailValue, projectId).then((res: any) => {
         alert("이메일 초대가 완료되었습니다.");
-        if (res.data.code === 200) {
+        if (res.data.status === 200) {
           setInviteInfo(res.data.data);
           setEmailError("");
           console.log(inviteInfo);
-        } else if (res.data.code === 400) {
+        } else if (res.data.status === 400) {
           setEmailError("이메일 초대에 실패했습니다.");
         }
       });
