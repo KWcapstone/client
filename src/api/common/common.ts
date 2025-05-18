@@ -15,3 +15,11 @@ export const getSearch = (params: searchParams) => {
     params: params,
   });
 };
+
+export const patchProjectName = (projectId: string[], name: string) => {
+  return Send({
+    method: "patch",
+    url: `/main/project/${projectId}/edit`,
+    data: name,
+  });
+};

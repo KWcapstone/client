@@ -5,7 +5,7 @@ import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import test from "@/assets/imgs/common/user.svg";
 
 // api
-import { getSearch } from "@/api/common/common";
+import { getSearch, patchProjectName } from "@/api/common/common";
 import { getProject } from "@/api/main/project";
 
 // component
@@ -247,6 +247,14 @@ const ProjectPage = () => {
                             newList[i].projectName = editedTitle;
                             setProjectList(newList);
                             setEditingIndex(null);
+
+                            patchProjectName(list.projectId, editedTitle)
+                              .then(() => {
+                                console.log("이름 변경 성공");
+                              })
+                              .catch(() => {
+                                console.log("이름 변경 실패");
+                              });
 
                             // 여기서 API 호출도 함께 하면 좋음
                             // await updateProjectName(list.projectId, editedTitle);
