@@ -56,7 +56,9 @@
           font-style: normal
           font-weight: 500
           line-height: 150%
-      
+      .email-input-error
+        +border(1px solid $error)
+
       .email-btn
         +size(81px, 40px)
         +border-radius(8px)
@@ -71,7 +73,15 @@
         font-style: normal
         font-weight: 500
         line-height: 150%
-  
+    .email-error
+      color: $error
+      font-size: 14px
+      font-style: normal
+      font-weight: 500
+      line-height: 150%
+      align-self: flex-start
+
+      +margin(top 6px)
   .link
     +flex-box(center, start, 4px)
     +size(100%, null)
@@ -103,9 +113,14 @@
         font-style: normal
         font-weight: 500
         line-height: 150% /* 24px */
+        overflow-x: auto
+        white-space: nowrap
+        max-width: 75%
+        scrollbar-width: none
 
       .link-copy-btn-wrap
         +flex-box(center, center, 4px)
+        +size(70px, null)
 
         .link-copy-btn-text
           color: $blue-500

@@ -5,7 +5,7 @@ import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import test from "@/assets/imgs/common/user.svg";
 
 // api
-import { getSearch } from "@/api/common/common";
+import { getSearch, patchProjectName } from "@/api/common/common";
 import { getProject } from "@/api/main/project";
 
 // component
@@ -36,6 +36,7 @@ const ProjectPage = () => {
   // modal
   type ModalType = "dwn" | "share" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
+  const [projectId, setProjectId] = useState<string[]>([]);
   const closeModal = () => setModalType(null);
 
   // function
@@ -211,6 +212,7 @@ const ProjectPage = () => {
                         e.stopPropagation();
                         setModalType("dwn");
                         setOpenMenuId(null);
+                        setProjectId(list.projectId);
                       }}
                     >
                       다운로드하기
@@ -222,6 +224,7 @@ const ProjectPage = () => {
                         e.stopPropagation();
                         setModalType("share");
                         setOpenMenuId(null);
+                        setProjectId(list.projectId);
                       }}
                     >
                       공유하기
@@ -237,12 +240,24 @@ const ProjectPage = () => {
                         value={editedTitle}
                         className="title-rename-input"
                         onChange={(e) => setEditedTitle(e.target.value)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             const newList = [...projectList];
                             newList[i].projectName = editedTitle;
                             setProjectList(newList);
                             setEditingIndex(null);
+
+                            patchProjectName(list.projectId, editedTitle)
+                              .then(() => {
+                                console.log("이름 변경 성공");
+                              })
+                              .catch(() => {
+                                console.log("이름 변경 실패");
+                              });
 
                             // 여기서 API 호출도 함께 하면 좋음
                             // await updateProjectName(list.projectId, editedTitle);
@@ -288,7 +303,7 @@ const ProjectPage = () => {
             }
           }}
         >
-          <ShareModal onCloseModal={closeModal} />
+          <ShareModal onCloseModal={closeModal} projectId={projectId} />
         </div>
       )}
     </div>
