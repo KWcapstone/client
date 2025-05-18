@@ -24,14 +24,6 @@ const useRecordingTimer = (isRecording: boolean, isPaused: boolean) => {
     };
   }, [isRecording, isPaused]);
 
-  const resetTimer = () => {
-    setElapsedTime(0);
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
   const formatTime = (seconds: number) => {
     const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
     const secs = String(seconds % 60).padStart(2, "0");
@@ -45,7 +37,6 @@ const useRecordingTimer = (isRecording: boolean, isPaused: boolean) => {
   return {
     elapsedTime,
     formattedTime: formatTime(elapsedTime),
-    resetTimer,
     timeStamp,
   };
 };

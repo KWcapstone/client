@@ -32,10 +32,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
     resetTranscript,
     // audioUrl,
   } = UseSpeechToText();
-  const { formattedTime, resetTimer } = useRecordingTimer(
-    isRecording,
-    isPaused
-  );
+  const { formattedTime } = useRecordingTimer(isRecording, isPaused);
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -56,7 +53,6 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const stopClick = () => {
     toggleListening();
-    resetTimer();
   };
 
   const [mode, setMode] = useState<string>("none");
