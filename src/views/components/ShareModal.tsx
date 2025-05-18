@@ -11,7 +11,7 @@ const ShareModal = ({ onCloseModal }: ShareModalProps) => {
   return (
     <Modal onCloseModal={onCloseModal}>
       <p className="modal-title">공유하기</p>
-      <div className="modal-wrap">
+      <div className="share-modal-wrap">
         <div className="email">
           <span className="email-title">이메일 초대</span>
           <div className="email-input-wrap">
