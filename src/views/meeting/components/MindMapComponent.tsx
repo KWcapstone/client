@@ -9,33 +9,50 @@ import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
-
 import { useEffect, useState } from "react";
 
-const MindMapComponent = () => {
+interface scriptData {
+  time: string;
+  script: string;
+}
+
+interface MindMapComponentProps {
+  setScripts: React.Dispatch<React.SetStateAction<scriptData[]>>;
+}
+
+const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
   const {
-    transcript,
+    // transcript,
     isRecording,
     isPaused,
     toggleListening,
     pauseRecording,
     resumeRecording,
+    finalTranscript,
+    resetTranscript,
     // audioUrl,
   } = UseSpeechToText();
-  const { formattedTime, resetTimer } = useRecordingTimer(
-    isRecording,
-    isPaused
-  );
+  const { formattedTime } = useRecordingTimer(isRecording, isPaused);
 
   useEffect(() => {
-    if (transcript) {
-      console.log("🎙️ 인식된 텍스트:", transcript);
+    if (finalTranscript !== "") {
+      console.log("🎙️ 시간", formattedTime);
+      console.log("🎙️ 인식된 텍스트:", finalTranscript);
+      setScripts((prev) => [
+        ...prev,
+        {
+          time: formattedTime,
+          script: finalTranscript,
+        },
+      ]);
     }
-  }, [transcript]);
+
+    // 여기서 백엔드한테 보내기
+    resetTranscript();
+  }, [finalTranscript]);
 
   const stopClick = () => {
     toggleListening();
-    resetTimer();
   };
 
   const [mode, setMode] = useState<string>("none");

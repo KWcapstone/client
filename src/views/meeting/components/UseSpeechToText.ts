@@ -5,7 +5,8 @@ import SpeechRecognition, {
 import { useState, useRef } from "react";
 
 const UseSpeechToText = () => {
-  const { transcript, listening } = useSpeechRecognition();
+  const { transcript, listening, finalTranscript, resetTranscript } =
+    useSpeechRecognition();
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -78,6 +79,8 @@ const UseSpeechToText = () => {
     toggleListening,
     pauseRecording,
     resumeRecording,
+    finalTranscript,
+    resetTranscript,
   };
 };
 
