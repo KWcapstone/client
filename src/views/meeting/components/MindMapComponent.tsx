@@ -9,7 +9,9 @@ import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
-import { useEffect } from "react";
+
+import { useEffect, useState } from "react";
+
 
 const MindMapComponent = () => {
   const {
@@ -37,7 +39,7 @@ const MindMapComponent = () => {
     resetTimer();
   };
 
-  // const [mode, setMode] = useState<string>("none");
+  const [mode, setMode] = useState<string>("none");
 
   const initialNodes = [
     { id: "1", position: { x: 0, y: 0 }, data: { label: "2" } },
@@ -48,46 +50,41 @@ const MindMapComponent = () => {
 
   return (
     <div className="mind-map-container">
-      {!isRecording ? (
-        <div className="start-wrap">
-          <p>
-            녹음을 시작하고 자동으로 생성되는
-            <br />
-            마인드맵을 확인해보세요.
-          </p>
-          <button className="btn-mic" onClick={toggleListening}>
-            녹음 시작하기
-          </button>
-        </div>
-      ) : (
-        <div className="mind-map-main">
-          <div className="mind-map-wrap">
-            <ReactFlow nodes={initialNodes} edges={initialEdges} />
-            <ReactFlow nodes={initialNodes} edges={initialEdges} />
+
+      {
+        mode === 'none' ? (
+          <div className='start-wrap'>
+            <p>녹음을 시작하고 자동으로 생성되는<br/>마인드맵을 확인해보세요.</p>
+            <button className='btn-mic' onClick={() => (toggleListening(), setMode('meeting'))}>녹음 시작하기</button>
           </div>
-          <div className="middle-bar">
-            <div className="record-length-wrap">
-              <div className="box-wrap">
-                <div className="red box"></div>
-                {Array.from({ length: 9 }).map(() => (
-                  <div className="box"></div>
-                ))}
-              </div>
-              <div className="box-time">{formattedTime}</div>
-              <div className="box-menu">
-                {isRecording && !isPaused && (
-                  <button className="btn-pause" onClick={pauseRecording}>
-                    일시정지
-                  </button>
-                )}
-                {isRecording && isPaused && (
-                  <button className="btn-resume" onClick={resumeRecording}>
-                    ▶️ 재개
-                  </button>
-                )}
-                <button className="btn-record" onClick={stopClick}>
-                  {isRecording ? "정지" : "시작"}
-                </button>
+        ) : (
+          <div className="mind-map-main">
+            <div className='mind-map-wrap'>
+              <ReactFlow nodes={initialNodes} edges={initialEdges} />
+            </div>
+            <div className="middle-bar">
+              <div className="record-length-wrap">
+                <div className="box-wrap">
+                  <div className='red box'></div>
+                  {Array.from({ length: 9 }).map(() => (
+                    <div className='box'></div>
+                  ))}
+                </div>
+                <div className="box-time">
+                  {formattedTime}
+                </div>
+                {
+                  isRecording &&
+                  <div className="box-menu">
+                    {isRecording && !isPaused && (
+                      <button className='btn-pause' onClick={pauseRecording}></button>
+                    )}
+                    {isRecording && isPaused && (
+                      <button className='btn-resume' onClick={resumeRecording}>재개</button>
+                    )}
+                    <button className='btn-stop' onClick={stopClick}></button>
+                  </div>
+                }
               </div>
             </div>
           </div>

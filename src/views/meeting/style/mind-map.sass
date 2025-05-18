@@ -68,4 +68,23 @@
           color: #505457
           font-weight: 500
           line-height: 21px
-  
+        
+        .box-menu
+          +flex-box(center, center, 10px)
+          button
+            +btn(40px, 40px, 50px)
+          
+          .btn-pause, .btn-resume, .btn-stop
+            background-position: center
+            background-repeat: no-repeat
+
+          .btn-pause
+            background-image: url('/src/assets/imgs/icon/btn_pause.svg')
+            background-color: $white
+
+          .btn-resume
+            background-color: $white
+
+          .btn-stop
+            background-image: url('/src/assets/imgs/icon/btn_stop.svg')
+            background-color: #EC2526
