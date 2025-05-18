@@ -9,10 +9,18 @@ import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
-
 import { useEffect, useState } from "react";
 
-const MindMapComponent = () => {
+interface scriptData {
+  time: string;
+  script: string;
+}
+
+interface MindMapComponentProps {
+  setScripts: React.Dispatch<React.SetStateAction<scriptData[]>>;
+}
+
+const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
   const {
     // transcript,
     isRecording,
@@ -30,8 +38,17 @@ const MindMapComponent = () => {
   );
 
   useEffect(() => {
-    console.log("🎙️ 시간", formattedTime);
-    console.log("🎙️ 인식된 텍스트:", finalTranscript);
+    if (finalTranscript !== "") {
+      console.log("🎙️ 시간", formattedTime);
+      console.log("🎙️ 인식된 텍스트:", finalTranscript);
+      setScripts((prev) => [
+        ...prev,
+        {
+          time: formattedTime,
+          script: finalTranscript,
+        },
+      ]);
+    }
 
     // 여기서 백엔드한테 보내기
     resetTranscript();

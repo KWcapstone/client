@@ -7,9 +7,16 @@ import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 
 import { useState, useRef } from "react";
 
+interface scriptData {
+  time: string;
+  script: string;
+}
+
 const MeetingPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // 사이드바 상태
   const modalBackground = useRef<HTMLDivElement>(null);
+  const [scripts, setScripts] = useState<scriptData[]>([]); // 스크립트 상태
+
   // modal
   type ModalType = "share" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
@@ -37,6 +44,7 @@ const MeetingPage = () => {
       <SideBar
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        scripts={scripts}
       />
 
       <div
@@ -46,7 +54,7 @@ const MeetingPage = () => {
         }}
       >
         {/* <MyVoiceComponent /> */}
-        <MindMapComponent />
+        <MindMapComponent setScripts={setScripts} />
       </div>
     </>
   );
