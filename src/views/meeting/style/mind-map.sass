@@ -5,35 +5,67 @@
 
 
 .mind-map-container
+  background-color: $gray-50
   position: relative
+  +size(100%, 100%)
 
-  .mind-map-wrap
-    +size(100vw, 100vh)
-
-  .middle-bar
-    +size(435px, 64px)
-    +flex-box(center, center)
-    position: absolute
-    bottom: 117px
-    border-radius: 16px
-    background-color: $gray-50
+  .start-wrap
+    +flex-box(center, center, 28px)
+    flex-direction: column
+    position: fixed
+    top: 40%
     left: 50%
-    transform: translate(-50%, -50%)
 
-    .record-length-wrap
-      +flex-box(center, center, 10px)
+    p
+      font-size: 16px
+      font-weight: 500
+      color: $gray-600
+      line-height: 24px
+      text-align: center
+    
+    .btn-mic
+      +flex-box(center, center, 8px)
+      +btn(160px, 48px, 50px)
+      background-color: $page-color
+      color: $white
+      font-weight: 700
+      font-size: 16px
+      
 
-      .box-wrap
-        +flex-box(center, center, 4.86px)
+      &:before
+        +size(20px, 20px)
+        content : url('@/assets/imgs/icon/mic.svg')
 
-        .box
-          +size(5.5px, 13px)
-          background-color: $gray-300
 
-        .red
-          background-color: #F05B56
+  .mind-map-main
+    .mind-map-wrap
+      +size(100vw, 100vh)
 
-      .box-time
-        color: #505457
-        font-weight: 500
-        line-height: 21px
+    .middle-bar
+      +size(435px, 64px)
+      +flex-box(center, center)
+      position: absolute
+      bottom: 117px
+      border-radius: 16px
+      background-color: $gray-100
+      left: 50%
+      transform: translate(-50%, -50%)
+
+      .record-length-wrap
+        +flex-box(center, center, 10px)
+
+        .box-wrap
+          +flex-box(center, center, 4.86px)
+
+          .box
+            +size(5.5px, 13px)
+            background-color: $gray-300
+
+          .red
+            background-color: #F05B56
+
+        .box-time
+          color: #505457
+          font-weight: 500
+          line-height: 21px
+  
