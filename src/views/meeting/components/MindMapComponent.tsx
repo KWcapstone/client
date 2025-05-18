@@ -8,7 +8,7 @@ import "@/views/meeting/style/mind-map.sass";
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 
 // import
-// import { useState, useEffect } from "react";
+import { useState } from "react";
 
 
 const MindMapComponent = () => {
@@ -22,7 +22,7 @@ const MindMapComponent = () => {
     audioUrl,
   } = UseSpeechToText();
 
-  // const [mode, setMode] = useState<string>("none");
+  const [mode, setMode] = useState<string>("none");
 
   const initialNodes = [
     { id: '1', position: { x: 0, y: 0 }, data: { label: '2' } },
@@ -36,15 +36,14 @@ const MindMapComponent = () => {
   return (
     <div className="mind-map-container">
       {
-        !isRecording ? (
+        mode === 'none' ? (
           <div className='start-wrap'>
             <p>녹음을 시작하고 자동으로 생성되는<br/>마인드맵을 확인해보세요.</p>
-            <button className='btn-mic' onClick={toggleListening}>녹음 시작하기</button>
+            <button className='btn-mic' onClick={() => (toggleListening(), setMode('meeting'))}>녹음 시작하기</button>
           </div>
         ) : (
           <div className="mind-map-main">
             <div className='mind-map-wrap'>
-              <ReactFlow nodes={initialNodes} edges={initialEdges} />
               <ReactFlow nodes={initialNodes} edges={initialEdges} />
             </div>
             <div className="middle-bar">
@@ -58,15 +57,18 @@ const MindMapComponent = () => {
                 <div className="box-time">
                   13:28
                 </div>
-                <div className="box-menu">
-                  {isRecording && !isPaused && (
-                    <button className='btn-pause' onClick={pauseRecording}>일시정지</button>
-                  )}
-                  {isRecording && isPaused && (
-                    <button className='btn-resume' onClick={resumeRecording}>▶️ 재개</button>
-                  )}
-                  <button className='btn-record' onClick={toggleListening}>{isRecording ? "정지" : "시작"}</button>
-                </div>
+                {
+                  isRecording &&
+                  <div className="box-menu">
+                    {isRecording && !isPaused && (
+                      <button className='btn-pause' onClick={pauseRecording}></button>
+                    )}
+                    {isRecording && isPaused && (
+                      <button className='btn-resume' onClick={resumeRecording}>제개</button>
+                    )}
+                    <button className='btn-stop' onClick={toggleListening}></button>
+                  </div>
+                }
               </div>
             </div>
           </div>
