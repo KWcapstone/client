@@ -97,7 +97,7 @@ const PasswordChangeModal = ({
       return;
     }
 
-    console.log("현재 비밀번호 입력");
+    // console.log("현재 비밀번호 입력");
 
     PostCheckPW(currentPWValue)
       .then((res) => {
@@ -143,7 +143,7 @@ const PasswordChangeModal = ({
     }
 
     // 변경 로직 추가
-    console.log("변경");
+    // console.log("변경");
 
     PostChangePW(currentPWValue, newPWValue)
       .then((res) => {

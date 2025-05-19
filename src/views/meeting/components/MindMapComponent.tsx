@@ -98,8 +98,8 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   useEffect(() => {
     if (finalTranscript !== "") {
-      console.log("🎙️ 시간", formattedTime);
-      console.log("🎙️ 인식된 텍스트:", finalTranscript);
+      // console.log("🎙️ 시간", formattedTime);
+      // console.log("🎙️ 인식된 텍스트:", finalTranscript);
       setScripts((prev) => [
         ...prev,
         {

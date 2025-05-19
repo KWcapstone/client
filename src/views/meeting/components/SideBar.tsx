@@ -28,7 +28,7 @@ const SideBar = ({
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
 
-  console.log("스크립트", scripts);
+  // console.log("스크립트", scripts);
 
   return (
     <div

@@ -86,7 +86,7 @@ const UserModal = ({ onCloseModal, onOpenChangePW }: UserModalProps) => {
                     name: newName,
                     imageUrl: profile?.imageUrl ?? "",
                   } as profileData).then(() => {
-                    console.log("프로필 변경 성공");
+                    // console.log("프로필 변경 성공");
                     setProfile((prev) => prev && { ...prev, name: newName });
                     window.location.reload();
                   });
