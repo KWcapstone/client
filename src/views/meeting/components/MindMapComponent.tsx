@@ -61,7 +61,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
+      brokerURL: "wss://moaba.site/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
@@ -98,8 +98,8 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   useEffect(() => {
     if (finalTranscript !== "") {
-      // console.log("🎙️ 시간", formattedTime);
-      // console.log("🎙️ 인식된 텍스트:", finalTranscript);
+      console.log("🎙️ 시간", formattedTime);
+      console.log("🎙️ 인식된 텍스트:", finalTranscript);
       setScripts((prev) => [
         ...prev,
         {
@@ -198,7 +198,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           </p>
           <button
             className="btn-mic"
-            onClick={() => (toggleListening(), setMode("meeting"), meetingStart())}
+            onClick={() => (toggleListening().then(()=>{setMode("meeting")}), meetingStart())}
           >
             녹음 시작하기
           </button>
