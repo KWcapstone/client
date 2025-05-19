@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 
 // type
 import { conferenceData } from "@/types/conferanceData";
+import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
 // api
 import { getProfile } from "@/api/main/profile";
@@ -25,6 +26,7 @@ interface SideBarProps {
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   scripts?: scriptData[];
   conferenceData: conferenceData;
+  summarys?: RealTimeSummaryData[];
 }
 
 const SideBar = ({
@@ -32,6 +34,7 @@ const SideBar = ({
   setIsSidebarOpen,
   scripts,
   conferenceData,
+  summarys,
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
@@ -145,107 +148,23 @@ const SideBar = ({
               ) : (
                 <>
                   <div className="des-wrap">
-                    <div className="des-timestamp">21:03</div>
-                    <div className="des-title">기획자의 문서 작성법</div>
-                    <ul className="des-list">
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="des-wrap">
-                    <div className="des-timestamp">21:03</div>
-                    <div className="des-title">기획자의 문서 작성법</div>
-                    <ul className="des-list">
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="des-wrap">
-                    <div className="des-timestamp">21:03</div>
-                    <div className="des-title">기획자의 문서 작성법</div>
-                    <ul className="des-list">
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">
-                        중간중간 회고를 하거나 아니면 어떤 제품에서 어떤 기능을
-                        조금 스펙 아웃하고 다른 기능을 좀 더 신경 써야 되지
-                        않을까라는 것들을 볼 수 있게끔 하는 걸 추천함 사람이
-                        하는 일이다 보니까 어쩔 수 없이 변동
-                      </li>
-                      <li className="des-item">이얍</li>
-                    </ul>
+                    {summarys && summarys.length > 0 ? (
+                      summarys.map((item, index) => (
+                        <div className="des-wrap" key={index}>
+                          <div className="des-timestamp">{item.time}</div>
+                          <div className="des-title">{item.title}</div>
+                          <ul className="des-list">
+                            {item.item.split("\n").map((listItem, idx) => (
+                              <li className="des-item" key={idx}>
+                                {listItem}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-script">스크립트가 없습니다.</div>
+                    )}
                   </div>
                 </>
               )}
