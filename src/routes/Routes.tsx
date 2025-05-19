@@ -49,6 +49,10 @@ const Router = () => {
           path="/main/project/:projectID/accept"
           element={<InvitePage />}
         />
+        <Route
+          path="/main/project/:projectID/add_by_link"
+          element={<InvitePage />}
+        />
       </Routes>
     </BrowserRouter>
   );
