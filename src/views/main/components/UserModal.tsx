@@ -17,16 +17,19 @@ import { clearTokens } from "@/utils/auth";
 
 interface UserModalProps {
   onCloseModal: () => void;
+  onOpenChangePW: () => void;
 }
 
-const UserModal = ({ onCloseModal }: UserModalProps) => {
+const UserModal = ({ onCloseModal, onOpenChangePW }: UserModalProps) => {
   const [profile, setProfile] = useState<profileData>();
   const [isEdit, setIsEdit] = useState(false);
   const [editName, setEditName] = useState("");
+
   const clickEdit = () => {
     setEditName(profile?.name ?? "");
     setIsEdit(true);
   };
+
   const clickLogout = () => {
     logout().then(() => {
       alert("로그아웃 되었습니다.");
@@ -43,6 +46,10 @@ const UserModal = ({ onCloseModal }: UserModalProps) => {
         window.location.href = "/";
       });
     }
+  };
+
+  const clickChangePW = () => {
+    onOpenChangePW();
   };
 
   useEffect(() => {
@@ -96,7 +103,9 @@ const UserModal = ({ onCloseModal }: UserModalProps) => {
           <li className="log-out" onClick={clickLogout}>
             로그아웃
           </li>
-          <li className="pwd-edit">비밀번호 변경</li>
+          <li className="pwd-edit" onClick={clickChangePW}>
+            비밀번호 변경
+          </li>
         </ul>
         <button className="remove" onClick={clickWithdraw}>
           계정 삭제
