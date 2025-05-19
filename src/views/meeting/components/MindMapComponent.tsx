@@ -7,13 +7,15 @@ import {
   getIncomers,
   getOutgoers,
   getConnectedEdges,
+  Node
 } from "@xyflow/react";
 
 // style
 import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
-// import { getProfile } from "@/api/main/profile";
+// api
+import { postScript } from "@/api/meeting/meeting";
 
 // component
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
@@ -22,6 +24,7 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 // import
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import html2canvas from 'html2canvas';
 
 // type
 import { conferenceData } from "@/types/conferanceData";
@@ -52,9 +55,11 @@ const MindMapComponent = ({
     // audioUrl,
   } = UseSpeechToText();
 
-  console.log("컨퍼런스 데이터 :", conferenceData);
-
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
+
+  const [scriptList, setScriptList] = useState<
+  { time: string; script: string }[]
+  >([]);
 
   const [mode, setMode] = useState<string>("none");
 
@@ -103,49 +108,88 @@ const MindMapComponent = ({
     // })
   };
 
+  const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+    if (!ref.current) return;
+  
+    html2canvas(ref.current).then((canvas) => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = title === '' ? '제목없음' : title;
+      document.body.appendChild(link);
+      link.click();
+    });
+  };
+
   useEffect(() => {
     if (finalTranscript !== "") {
-      // console.log("🎙️ 시간", formattedTime);
-      // console.log("🎙️ 인식된 텍스트:", finalTranscript);
-      setScripts((prev) => [
-        ...prev,
-        {
-          time: formattedTime,
-          script: finalTranscript,
-        },
-      ]);
+      const newScript = {
+        time: formattedTime,
+        script: finalTranscript,
+      };
+  
+      setScripts((prev) => [...prev, newScript]);
+      setScriptList((prev) => {
+        const updated = [...prev, newScript];
+  
+        if (updated.length >= 2) {
+          const testString = updated.map((item) => item.script).join(" ");
+  
+          let data = {
+            "event": "script",
+            "projectId": conferenceData.projectId,
+            "scription": testString
+          }
+          postScript(data).then((res: any) => {
+            setScriptList([]);
+            setInitialNodes(res.data.data.nodes)
+          });
+        }
+  
+        return updated.length >= 7 ? [] : updated;
+      });
+  
+      resetTranscript();
     }
-
-    // 여기서 백엔드한테 보내기
-    resetTranscript();
   }, [finalTranscript]);
 
   const stopClick = () => {
     toggleListening();
   };
 
-  const initialNodes = [
+  const [initialNodes, setInitialNodes] = useState<Node[]>([
     {
-      id: "1",
-      type: "input",
-      data: { label: "Start here..." },
+      id: '1',
+      type: 'input',
+      data: { label: '회의 시작' },
       position: { x: -150, y: 0 },
     },
     {
-      id: "2",
-      type: "input",
-      data: { label: "...or here!" },
+      id: '2',
+      type: 'output',
+      data: { label: '키워드' },
       position: { x: 150, y: 0 },
     },
-    { id: "3", data: { label: "Delete me." }, position: { x: 0, y: 100 } },
-    { id: "4", data: { label: "Then me!" }, position: { x: 0, y: 200 } },
-    {
-      id: "5",
-      type: "output",
-      data: { label: "End here!" },
-      position: { x: 0, y: 300 },
-    },
-  ];
+    // {
+    //   id: '1',
+    //   type: 'input',
+    //   data: { label: 'Start here...' },
+    //   position: { x: -150, y: 0 },
+    // },
+    // {
+    //   id: '2',
+    //   type: 'input',
+    //   data: { label: '...or here!' },
+    //   position: { x: 150, y: 0 },
+    // },
+    // { id: '3', data: { label: 'Delete me.' }, position: { x: 0, y: 100 } },
+    // { id: '4', data: { label: 'Then me!' }, position: { x: 0, y: 200 } },
+    // {
+    //   id: '5',
+    //   type: 'output',
+    //   data: { label: 'End here!' },
+    //   position: { x: 0, y: 300 },
+    // },
+  ]);
 
   const initialEdges = [
     { id: "1->3", source: "1", target: "3" },
@@ -159,7 +203,7 @@ const MindMapComponent = ({
 
   useEffect(() => {
     setNodes(initialNodes);
-  }, []); // 임시방편으로 만듦
+  }, [initialNodes]); // 임시방편으로 만듦
 
   const onConnect = useCallback(
     (params: any) => setEdges(addEdge(params, edges)),
@@ -208,8 +252,7 @@ const MindMapComponent = ({
             onClick={() => (
               toggleListening().then(() => {
                 setMode("meeting");
-              }),
-              meetingStart()
+              })
             )}
           >
             녹음 시작하기

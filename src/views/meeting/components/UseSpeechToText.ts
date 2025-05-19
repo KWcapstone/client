@@ -43,8 +43,17 @@ const UseSpeechToText = () => {
 
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
-        const url = URL.createObjectURL(audioBlob);
-        setAudioUrl(url);
+
+        const formData = new FormData();
+        formData.append("file", audioBlob, "recording.webm");
+
+        // await fetch("https://your-backend/upload", {
+        //   method: "POST",
+        //   body: formData,
+        // });
+
+        // const url = URL.createObjectURL(audioBlob);
+        // setAudioUrl(url);
       };
 
       mediaRecorder.start();

@@ -7,6 +7,14 @@ export const getMeetingId = () => {
   });
 };
 
+export const postScript = (data: any) => {
+  return Send({
+    method: "post",
+    url: "conference/script",
+    data: data
+  });
+};
+
 export const getInviting = (projectId: string, data: any) => {
   return Send({
     method: "post",
