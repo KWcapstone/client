@@ -6,7 +6,7 @@ import test from "@/assets/imgs/common/user.svg";
 
 // api
 import { getSearch, patchProjectName } from "@/api/common/common";
-import { getProject } from "@/api/main/project";
+import { getProject, deleteProject } from "@/api/main/project";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 
 // type
 import { projectData } from "@/types/projectData";
+import { projects } from "@/types/deleteProject";
 
 const ProjectPage = () => {
   // value
@@ -32,6 +33,7 @@ const ProjectPage = () => {
   const [editedTitle, setEditedTitle] = useState<string>("");
   const menuRef = useRef<HTMLUListElement | null>(null);
   const orderRef = useRef<HTMLDivElement | null>(null);
+  const [deleteProjectList, setDeleteProjectList] = useState<projects[]>([]);
 
   // modal
   type ModalType = "dwn" | "share" | null;
@@ -42,6 +44,17 @@ const ProjectPage = () => {
   // function
   const toggleMenu = (id: number) => {
     setOpenMenuId((prev) => (prev === id ? null : id));
+  };
+
+  const clickProjectDelete = (projectID: Array<string>) => {
+    if (confirm("정말 프로젝트를 삭제하시겠습니까?")) {
+      setDeleteProjectList([{ projectId: projectID, type: "project" }]);
+
+      deleteProject(deleteProjectList).then(() => {
+        alert("프로젝트가 정상적으로 삭제되었습니다.");
+        window.location.reload();
+      });
+    }
   };
 
   const getSearchList = () => {
@@ -229,7 +242,18 @@ const ProjectPage = () => {
                     >
                       공유하기
                     </li>
-                    <li className="del">삭제하기</li>
+                    <li
+                      className="del"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        clickProjectDelete(list.projectId);
+                        setOpenMenuId(null);
+                        setProjectId(list.projectId);
+                      }}
+                    >
+                      삭제하기
+                    </li>
                   </ul>
                 )}
                 <div className="info-wrap">
@@ -258,9 +282,6 @@ const ProjectPage = () => {
                               .catch(() => {
                                 console.log("이름 변경 실패");
                               });
-
-                            // 여기서 API 호출도 함께 하면 좋음
-                            // await updateProjectName(list.projectId, editedTitle);
                           }
                         }}
                       />

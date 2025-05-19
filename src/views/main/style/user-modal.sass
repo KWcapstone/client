@@ -15,6 +15,16 @@
       +padding(bottom 32px)
       +flex-box(center, center)
       flex-direction: column
+      .title-rename-input
+        +margin(top 8px)
+        +border(1px solid $gray-200)
+        +size(100px, 30px)
+        +border-radius(4px)
+        +box-sizing(border-box)
+        +padding(6px 4px)
+        font-weight: 500
+        line-height: 21px
+        background-color: $gray-50
 
       .user-img
         position: relative
@@ -25,7 +35,7 @@
           border-radius: 50px
           background: #B3C4DE
 
-        &:after
+        .edit-div
           content: ""
           +size(24px, 24px)
           +box-sizing(border-box)
