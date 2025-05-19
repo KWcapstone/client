@@ -8,10 +8,13 @@ import sidePanel from "@/assets/imgs/icon/side_panel.svg";
 import test from "@/assets/imgs/common/user.svg";
 
 // import
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // type
 import { conferenceData } from "@/types/conferanceData";
+
+// api
+import { getProfile } from "@/api/main/profile";
 
 interface scriptData {
   time: string;
@@ -32,9 +35,40 @@ const SideBar = ({
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
+  const [usrName, setUsrName] = useState<string>("");
 
   // console.log("스크립트", scripts);
+  function formatDateString(input: string): string {
+    const date = new Date(input);
+
+    // 년, 월, 일
+    const year = String(date.getFullYear()).slice(2); // '25'
+    const month = date.getMonth() + 1; // 0-based
+    const day = date.getDate();
+
+    // 요일
+    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+    const dayOfWeek = weekdays[date.getDay()];
+
+    // 시간
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    const isPM = hours >= 12;
+    const period = isPM ? "오후" : "오전";
+    hours = hours % 12 || 12; // 0시는 12로 표시
+
+    return `${year}.${month}.${day} ${dayOfWeek} ${period} ${hours}:${minutes}`;
+  }
+
+  useEffect(() => {
+    getProfile().then((res: any) => {
+      setUsrName(res.data.data.name);
+    });
+  }, []);
+
   console.log("프로젝트 아이디", conferenceData.projectId);
+
   return (
     <div
       className={`side-bar ${isSidebarOpen ? "open" : "closed"}`}
@@ -51,17 +85,19 @@ const SideBar = ({
               onClick={() => setIsSidebarOpen(false)}
             />
             <div className="side-bar-title-wrap">
-              <div className="side-bar-title">새 회의</div>
+              <div className="side-bar-title">{conferenceData.projectName}</div>
               <div className="side-bar-details">
                 <div className="detail date">
                   <span className="detail-title">회의일자</span>
-                  <span className="detail-des">25.2.24 월 오후 11:47</span>
+                  <span className="detail-des">
+                    {formatDateString(conferenceData.updatedAt)}
+                  </span>
                 </div>
                 <div className="detail creator">
                   <span className="detail-title">생성자</span>
                   <div className="creator-wrap">
                     <img src={test} alt="creator" className="creator-icon" />
-                    <span className="detail-des">모아바</span>
+                    <span className="detail-des">{usrName}</span>
                   </div>
                 </div>
               </div>
