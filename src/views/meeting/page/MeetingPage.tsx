@@ -6,8 +6,13 @@ import ShareModal from "@/views/components/ShareModal";
 import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 
 // import
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
+// api
+import { getMeetingId } from "@/api/meeting/meeting";
+
+// type
+import { conferenceData } from "@/types/conferanceData";
 interface scriptData {
   time: string;
   script: string;
@@ -17,7 +22,13 @@ const MeetingPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // 사이드바 상태
   const modalBackground = useRef<HTMLDivElement>(null);
   const [scripts, setScripts] = useState<scriptData[]>([]); // 스크립트 상태
-  const [projectId, setProjectId] = useState<string>("");
+  const [conferenceData, setConferenceData] = useState<conferenceData>({
+    projectId: "",
+    projectName: "",
+    projectImage: null,
+    updatedAt: "",
+    creator: "",
+  });
 
   // modal
   type ModalType = "share" | null;
@@ -26,6 +37,12 @@ const MeetingPage = () => {
   const openModal = () => setModalType("share");
 
   //console.log("projectId", projectId);
+
+  useEffect(() => {
+    getMeetingId().then((res: any) => {
+      setConferenceData(res.data.data);
+    });
+  }, []);
 
   return (
     <>
@@ -40,7 +57,10 @@ const MeetingPage = () => {
               }
             }}
           >
-            <ShareModal onCloseModal={closeModal} projectId={projectId} />
+            <ShareModal
+              onCloseModal={closeModal}
+              projectId={conferenceData.projectId}
+            />
           </div>
         )}
       </div>
@@ -49,7 +69,7 @@ const MeetingPage = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         scripts={scripts}
-        projectId={projectId}
+        conferenceData={conferenceData}
       />
 
       <div
@@ -61,8 +81,7 @@ const MeetingPage = () => {
         {/* <MyVoiceComponent /> */}
         <MindMapComponent
           setScripts={setScripts}
-          setProjectId={setProjectId}
-          projectId={projectId}
+          conferenceData={conferenceData}
         />
       </div>
     </>
