@@ -61,7 +61,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "wss://moaba.site/ws", // 서버 WebSocket URL q
+      brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
