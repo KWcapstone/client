@@ -36,7 +36,7 @@ const ProjectPage = () => {
   // modal
   type ModalType = "dwn" | "share" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
-  const [projectId, setProjectId] = useState<string[]>([]);
+  const [projectId, setProjectId] = useState<string>("");
   const closeModal = () => setModalType(null);
 
   // function
@@ -44,14 +44,13 @@ const ProjectPage = () => {
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
 
-  const clickProjectDelete = (projectID: Array<string>) => {
+  const clickProjectDelete = (projectID: string) => {
     if (confirm("정말 프로젝트를 삭제하시겠습니까?")) {
       const updatedList = [{ projectId: projectID, type: "project" }];
 
-
       deleteProject(updatedList).then(() => {
         alert("프로젝트가 정상적으로 삭제되었습니다.");
-        getProjectList()
+        getProjectList();
       });
     }
   };

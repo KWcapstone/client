@@ -1,7 +1,7 @@
 export interface projectData {
   creator: string;
   imageUrl: string;
-  projectId: Array<string>;
+  projectId: string;
   projectName: string;
   updatedAt: string;
 }

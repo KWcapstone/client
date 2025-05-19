@@ -7,7 +7,7 @@ export interface ShareModalData {
 }
 
 export interface InviteUserByEmail {
-  projectId: Array<string>;
+  projectId: string;
   inviteMember: string;
   code: string;
 }

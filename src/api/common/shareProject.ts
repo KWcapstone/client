@@ -1,13 +1,13 @@
 import Send from "@/api/send.ts";
 
-export const openShereModal = (projectId: string[]) => {
+export const openShereModal = (projectId: string) => {
   return Send({
     method: "get",
     url: `/main/project/${projectId}`,
   });
 };
 
-export const postEmail = (email: string, projectId: string[]) => {
+export const postEmail = (email: string, projectId: string) => {
   return Send({
     method: "post",
     url: `/main/project/${projectId}/add_by_email`,
