@@ -6,7 +6,7 @@ import ShareModal from "@/views/components/ShareModal";
 import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 
 // import
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 interface scriptData {
   time: string;

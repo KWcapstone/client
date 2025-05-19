@@ -14,8 +14,8 @@ import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
 // api
-import { getMeetingId, getInviting } from "@/api/meeting/meeting";
-import { getProfile } from "@/api/main/profile";
+import { getMeetingId } from "@/api/meeting/meeting";
+// import { getProfile } from "@/api/main/profile";
 
 // component
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
