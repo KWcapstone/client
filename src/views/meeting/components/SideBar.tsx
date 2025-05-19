@@ -10,6 +10,9 @@ import test from "@/assets/imgs/common/user.svg";
 // import
 import { useState } from "react";
 
+// type
+import { conferenceData } from "@/types/conferanceData";
+
 interface scriptData {
   time: string;
   script: string;
@@ -18,20 +21,20 @@ interface SideBarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   scripts?: scriptData[];
-  projectId: string;
+  conferenceData: conferenceData;
 }
 
 const SideBar = ({
   isSidebarOpen,
   setIsSidebarOpen,
   scripts,
-  projectId,
+  conferenceData,
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
 
   // console.log("스크립트", scripts);
-  console.log("프로젝트 아이디", projectId);
+  console.log("프로젝트 아이디", conferenceData.projectId);
   return (
     <div
       className={`side-bar ${isSidebarOpen ? "open" : "closed"}`}

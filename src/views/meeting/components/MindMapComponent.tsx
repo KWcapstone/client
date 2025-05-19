@@ -13,8 +13,6 @@ import {
 import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
-// api
-import { getMeetingId } from "@/api/meeting/meeting";
 // import { getProfile } from "@/api/main/profile";
 
 // component
@@ -25,6 +23,9 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
 
+// type
+import { conferenceData } from "@/types/conferanceData";
+
 interface scriptData {
   time: string;
   script: string;
@@ -32,14 +33,12 @@ interface scriptData {
 
 interface MindMapComponentProps {
   setScripts: React.Dispatch<React.SetStateAction<scriptData[]>>;
-  setProjectId: React.Dispatch<React.SetStateAction<string>>;
-  projectId: string;
+  conferenceData: conferenceData;
 }
 
 const MindMapComponent = ({
   setScripts,
-  setProjectId,
-  projectId,
+  conferenceData,
 }: MindMapComponentProps) => {
   const {
     // transcript,
@@ -53,15 +52,11 @@ const MindMapComponent = ({
     // audioUrl,
   } = UseSpeechToText();
 
+  console.log("컨퍼런스 데이터 :", conferenceData);
+
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
 
   const [mode, setMode] = useState<string>("none");
-
-  useEffect(() => {
-    getMeetingId().then((res: any) => {
-      setProjectId(res.data.data.projectId);
-    });
-  }, []);
 
   const meetingStart = () => {
     const client = new Client({
@@ -73,7 +68,7 @@ const MindMapComponent = ({
       onConnect: () => {
         console.log("연결");
         client.subscribe(
-          `/topic/conference/${projectId}/participants`,
+          `/topic/conference/${conferenceData.projectId}/participants`,
           (message: any) => {
             const data: any = JSON.parse(message.body);
             console.log(data.participants);
