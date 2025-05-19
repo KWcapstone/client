@@ -55,7 +55,7 @@ const AgreeModal = ({
       return;
     }
     // 가입하기 버튼 클릭 시 동작
-    console.log("가입하기 버튼 클릭");
+    //console.log("가입하기 버튼 클릭");
 
     const userData: UserData = {
       name: localStorage.getItem("name") || "",

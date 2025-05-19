@@ -46,42 +46,46 @@ const RecordPage = () => {
   };
 
   const getSearchList = () => {
-    setTap("all")
-    setOrder("latest")
+    setTap("all");
+    setOrder("latest");
     let params = {
-      tap: 'record',
+      tap: "record",
       keyword: keyword,
     };
-    getSearch(params).then((res: any) => {
-      const mappedData: recordData[] = res.data.data.map((item: any, index: number) => {
-        const result = item.result[0] || {};
-        return {
-          id: index,
-          creator: item.creator,
-          recordId: item.projectId, // 해당 구조에는 recordId가 없으므로 빈 배열 처리
-          name: result.fileName,
-          sizeInBytes: result.sizeInBytes?.toString() || "0",
-          length: result.length || 0,
-          updatedAt: item.updatedAt,
-          selected: false,
-        };
+    getSearch(params)
+      .then((res: any) => {
+        const mappedData: recordData[] = res.data.data.map(
+          (item: any, index: number) => {
+            const result = item.result[0] || {};
+            return {
+              id: index,
+              creator: item.creator,
+              recordId: item.projectId, // 해당 구조에는 recordId가 없으므로 빈 배열 처리
+              name: result.fileName,
+              sizeInBytes: result.sizeInBytes?.toString() || "0",
+              length: result.length || 0,
+              updatedAt: item.updatedAt,
+              selected: false,
+            };
+          }
+        );
+        setRecord(mappedData);
+      })
+      .catch(() => {
+        setRecord([]);
       });
-      setRecord(mappedData);
-    }).catch(()=>{
-      setRecord([])
-    });
   };
 
   const formatDuration = (seconds: number): string => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-  
+
     const parts = [];
     if (hrs > 0) parts.push(`${hrs}시간`);
     if (mins > 0) parts.push(`${mins}분`);
     if (secs > 0 || parts.length === 0) parts.push(`${secs}초`);
-  
+
     return parts.join(" ");
   };
 
@@ -98,7 +102,7 @@ const RecordPage = () => {
       }));
       setRecord(dataWithSelection);
     });
-    console.log(record)
+    // console.log(record)
   };
 
   useEffect(() => {
@@ -132,7 +136,7 @@ const RecordPage = () => {
           <div className="title-wrap">
             <h2>음성・스크립트</h2>
             <div className="search-wrap">
-              <input 
+              <input
                 type="text"
                 placeholder="음성명 검색"
                 value={keyword}
@@ -141,7 +145,7 @@ const RecordPage = () => {
                   if (e.key === "Enter") {
                     getSearchList();
                   }
-                }}  
+                }}
               />
               <Link to="/meeting">새로 만들기</Link>
             </div>
@@ -210,22 +214,29 @@ const RecordPage = () => {
             <thead>
               <tr>
                 <th onClick={handleSelectAll}>
-                  <input type="checkbox" checked={isAllSelected}/>
+                  <input type="checkbox" checked={isAllSelected} />
                 </th>
-                {
-                  isCheck ? (
-                    <th>
-                      <div className="craft-wrap">
-                        <div>{ checkCount }개 선택됨</div>
-                        <button className="dwn">다운로드 하기</button>
-                        <button className="del">삭제하기</button>
-                        <button className="cancel" onClick={() => setRecord(record.map(row => ({ ...row, selected: false })))}>취소</button>
-                      </div>
-                    </th>
-                  ) : (
-                    <th>음성 이름</th>
-                  )
-                }
+                {isCheck ? (
+                  <th>
+                    <div className="craft-wrap">
+                      <div>{checkCount}개 선택됨</div>
+                      <button className="dwn">다운로드 하기</button>
+                      <button className="del">삭제하기</button>
+                      <button
+                        className="cancel"
+                        onClick={() =>
+                          setRecord(
+                            record.map((row) => ({ ...row, selected: false }))
+                          )
+                        }
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </th>
+                ) : (
+                  <th>음성 이름</th>
+                )}
                 <th>생성일</th>
                 <th>생성자</th>
                 <th>음성 길이</th>
@@ -236,10 +247,7 @@ const RecordPage = () => {
               {record.map((list) => (
                 <tr key={list.id} onClick={() => handleSelectRow(list.id)}>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={list.selected}
-                    />
+                    <input type="checkbox" checked={list.selected} />
                   </td>
                   <td>{list.name}</td>
                   <td>{new Date(list.updatedAt).toLocaleDateString()}</td>

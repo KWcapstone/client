@@ -88,7 +88,7 @@ const PasswordResetModal = ({
       return;
     }
     // 로그인 로직 추가
-    console.log("로그인");
+    // console.log("로그인");
 
     const data: LoginData = {
       email: emailValue,
@@ -158,7 +158,7 @@ const PasswordResetModal = ({
       return;
     }
 
-    console.log("이메일 전송");
+    // console.log("이메일 전송");
 
     const data: ResetPWData = {
       email: emailValue,

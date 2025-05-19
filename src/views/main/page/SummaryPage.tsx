@@ -33,7 +33,10 @@ const SummaryPage = () => {
 
   // 전체 선택 / 해제
   const handleSelectAll = () => {
-    const newData = summary.map((row) => ({ ...row, selected: !isAllSelected }));
+    const newData = summary.map((row) => ({
+      ...row,
+      selected: !isAllSelected,
+    }));
     setSummary(newData);
   };
 
@@ -46,31 +49,33 @@ const SummaryPage = () => {
   };
 
   const getSearchList = () => {
-    setTap("all")
-    setOrder("latest")
+    setTap("all");
+    setOrder("latest");
     let params = {
-      tap: 'summary',
+      tap: "summary",
       keyword: keyword,
     };
-    getSearch(params).then((res: any) => {
-      const mappedSummary = res.data.data.map((item: any, index: number) => {
-        const result = item.result[0] || {};
-  
-        return {
-          id: index,
-          creator: item.creator,
-          projectId: item.projectId,
-          projectName: result.fileName,
-          sizeInBytes: result.sizeInBytes?.toString() || "0",
-          updatedAt: item.updatedAt,
-          selected: false,
-        };
-      });
+    getSearch(params)
+      .then((res: any) => {
+        const mappedSummary = res.data.data.map((item: any, index: number) => {
+          const result = item.result[0] || {};
 
-      setSummary(mappedSummary);
-    }).catch(()=>{
-      setSummary([])
-    });
+          return {
+            id: index,
+            creator: item.creator,
+            projectId: item.projectId,
+            projectName: result.fileName,
+            sizeInBytes: result.sizeInBytes?.toString() || "0",
+            updatedAt: item.updatedAt,
+            selected: false,
+          };
+        });
+
+        setSummary(mappedSummary);
+      })
+      .catch(() => {
+        setSummary([]);
+      });
   };
 
   const getSummaryList = () => {
@@ -86,7 +91,7 @@ const SummaryPage = () => {
       }));
       setSummary(dataWithSelection);
     });
-    console.log(summary)
+    // console.log(summary)
   };
 
   useEffect(() => {
@@ -120,7 +125,7 @@ const SummaryPage = () => {
           <div className="title-wrap">
             <h2>요약본</h2>
             <div className="search-wrap">
-              <input 
+              <input
                 type="text"
                 placeholder="요약본명 검색"
                 value={keyword}
@@ -198,22 +203,29 @@ const SummaryPage = () => {
             <thead>
               <tr>
                 <th onClick={handleSelectAll}>
-                  <input type="checkbox" checked={isAllSelected}/>
+                  <input type="checkbox" checked={isAllSelected} />
                 </th>
-                {
-                  isCheck ? (
-                    <th>
-                      <div className="craft-wrap">
-                        <div>{ checkCount }개 선택됨</div>
-                        <button className="dwn">다운로드 하기</button>
-                        <button className="del">삭제하기</button>
-                        <button className="cancel" onClick={() => setSummary(summary.map(row => ({ ...row, selected: false })))}>취소</button>
-                      </div>
-                    </th>
-                  ) : (
-                    <th>요약본 이름</th>
-                  )
-                }
+                {isCheck ? (
+                  <th>
+                    <div className="craft-wrap">
+                      <div>{checkCount}개 선택됨</div>
+                      <button className="dwn">다운로드 하기</button>
+                      <button className="del">삭제하기</button>
+                      <button
+                        className="cancel"
+                        onClick={() =>
+                          setSummary(
+                            summary.map((row) => ({ ...row, selected: false }))
+                          )
+                        }
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </th>
+                ) : (
+                  <th>요약본 이름</th>
+                )}
                 <th>생성일</th>
                 <th>생성자</th>
                 <th>문서크기(KB)</th>
@@ -223,10 +235,7 @@ const SummaryPage = () => {
               {summary.map((list) => (
                 <tr key={list.id} onClick={() => handleSelectRow(list.id)}>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={list.selected}
-                    />
+                    <input type="checkbox" checked={list.selected} />
                   </td>
                   <td>{list.projectName}</td>
                   <td>{new Date(list.updatedAt).toLocaleDateString()}</td>
