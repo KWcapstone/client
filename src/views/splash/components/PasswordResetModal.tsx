@@ -1,7 +1,26 @@
-import "@/views/splash/style/password-reset-modal.sass";
-import Modal from "@/views/components/modal";
+// import
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+// style
+import "@/views/splash/style/password-reset-modal.sass";
+
+// component
+import Modal from "@/views/components/modal";
+
+// assets
 import arrow_back from "@/assets/imgs/icon/arrow_back_outlined.svg";
+
+//api
+import { postResetPW } from "@/api/splash/resetPW";
+import { postLogin } from "@/api/splash/login";
+
+// type
+import { ResetPWData } from "@/types/loginData";
+import { LoginData } from "@/types/loginData";
+
+// utils
+import { setTokens } from "@/utils/auth";
 
 interface PasswordResetModalProps {
   onCloseModal: () => void;
@@ -12,6 +31,8 @@ const PasswordResetModal = ({
   onCloseModal,
   onOpenLogin,
 }: PasswordResetModalProps) => {
+  const navigate = useNavigate();
+
   const [active, setActive] = useState(false);
   const [loginActive, setLoginActive] = useState(false);
 
@@ -23,15 +44,23 @@ const PasswordResetModal = ({
 
   const [emailValue, setEmailInput] = useState("");
   const [emailError, setEmailError] = useState("");
+
+  const [nameValue, setNameInput] = useState("");
+  const [nameError, setNameError] = useState("");
+
   const [emailBtnShake, setEmailBtnShake] = useState(false);
 
   useEffect(() => {
-    setActive(emailValue.includes("@"));
-  }, [emailValue]);
+    setActive(emailValue.includes("@") && nameValue.length >= 2);
+  }, [emailValue, nameValue]);
 
   useEffect(() => {
     setEmailError("");
   }, [emailValue]);
+
+  useEffect(() => {
+    setNameError("");
+  }, [nameValue]);
 
   useEffect(() => {
     setLoginActive(loginValue.length >= 1);
@@ -46,6 +75,7 @@ const PasswordResetModal = ({
     setLoginBtnShake(true);
     setTimeout(() => setLoginBtnShake(false), 500);
   };
+
   const handleLoginClick = () => {
     let hasError = false;
 
@@ -59,6 +89,44 @@ const PasswordResetModal = ({
     }
     // 로그인 로직 추가
     console.log("로그인");
+
+    const data: LoginData = {
+      email: emailValue,
+      password: loginValue,
+    };
+
+    postLogin(data)
+      .then((res) => {
+        if (res.status === 200) {
+          alert(res.data.message);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error logging in:", error);
+      });
+
+    postLogin(data)
+      .then((response) => {
+        setTokens(
+          response.data.data.accessToken,
+          response.data.data.refreshToken
+        );
+        onCloseModal();
+        navigate("/project");
+      })
+      .catch((error) => {
+        console.error("로그인 실패", error);
+        // 로그인 실패 처리
+        if (error.response.status === 401) {
+          alert("비밀번호가 일치하지 않습니다.");
+        } else if (error.response.status === 404) {
+          alert("비밀번호가 일치하지 않습니다.");
+        } else {
+          alert("로그인에 실패했습니다. 다시 시도해주세요.");
+        }
+      });
   };
 
   // 비밀번호 재설정 버튼 애니메이션
@@ -76,13 +144,50 @@ const PasswordResetModal = ({
       setEmailError("올바른 이메일 형식이 아닙니다.");
       hasError = true;
     }
+
+    if (!nameValue) {
+      setNameError("이름을 입력해주세요.");
+      hasError = true;
+    } else if (nameValue.length < 2) {
+      setNameError("이름은 2자 이상이어야 합니다.");
+      hasError = true;
+    }
+
     if (hasError) {
       triggerEmailShake();
       return;
     }
-    // 이메일 전송 로직 추가
+
     console.log("이메일 전송");
+
+    const data: ResetPWData = {
+      email: emailValue,
+      name: nameValue,
+    };
+
+    postResetPW(data)
+      .then((res) => {
+        if (res.status === 200) {
+          alert(res.data.message);
+          setBtnClicked(true);
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending email:", error);
+      });
     setBtnClicked(true);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (btnClicked) {
+        handleLoginClick();
+      } else {
+        handleEmailClick();
+      }
+    }
   };
 
   return (
@@ -122,6 +227,7 @@ const PasswordResetModal = ({
               }
               value={loginValue}
               onChange={(e) => setLoginInput(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             {loginError && <p className="modal-error">{loginError}</p>}
           </div>
@@ -147,7 +253,7 @@ const PasswordResetModal = ({
             <p className="modal-title">비밀번호 재설정</p>
           </div>
           <div className="modal-contents modal-contents-margin">
-            기존 이메일을 입력하시면 <br />
+            기존 이메일과 이름을 입력하시면 <br />
             비밀번호 변경 메일을 발송해드립니다.
           </div>
           <div className="input-wrap">
@@ -161,8 +267,23 @@ const PasswordResetModal = ({
                 emailError ? "modal-input modal-input-error" : "modal-input"
               }
               onChange={(e) => setEmailInput(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             {emailError && <p className="modal-error">{emailError}</p>}
+          </div>
+          <div className="input-wrap">
+            <label htmlFor="name" className="modal-input-label">
+              이름
+            </label>
+            <input
+              type="text"
+              placeholder="이름을 입력해주세요"
+              className={
+                nameError ? "modal-input modal-input-error" : "modal-input"
+              }
+              onChange={(e) => setNameInput(e.target.value)}
+            />
+            {nameError && <p className="modal-error">{nameError}</p>}
           </div>
           <button
             className={
