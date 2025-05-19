@@ -14,16 +14,18 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import UserModal from "@/views/main/components/UserModal";
-
+import PasswordChangeModal from "@/views/main/components/ChangePWModal";
 
 const SideBar = () => {
   const [sort, setSort] = useState<string>("/");
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  type ModalType = "user" | null;
+  type ModalType = "user" | "changePW" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
   const closeModal = () => setModalType(null);
+  const openChangePWModal = () => setModalType("changePW");
+  const openUserModal = () => setModalType("user");
 
   const [profile, setProfile] = useState<profileData>();
 
@@ -31,7 +33,7 @@ const SideBar = () => {
     getProfile().then((res: any) => {
       setProfile(res.data.data);
     });
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (pathname === "/" || pathname === "/project") {
@@ -53,8 +55,12 @@ const SideBar = () => {
           <button className="new"></button>
         </div>
         <div className="user-wrap">
-          <div className="user" onClick={() => setModalType('user')}>
-            <img src={profile?.imageUrl ? profile?.imageUrl : test} className="user-profile-img" alt="" />
+          <div className="user" onClick={openUserModal}>
+            <img
+              src={profile?.imageUrl ? profile?.imageUrl : test}
+              className="user-profile-img"
+              alt=""
+            />
             <div className="info-wrap">
               <div className="name">{profile?.name}</div>
               <div className="email">{profile?.email}</div>
@@ -64,7 +70,9 @@ const SideBar = () => {
         <div className="list-wrap">
           <ul>
             <li
-              className={`list-li project ${sort === "/project" ? "active" : ""}`}
+              className={`list-li project ${
+                sort === "/project" ? "active" : ""
+              }`}
               onClick={() => navigate("/project")}
             >
               전체 회의
@@ -76,7 +84,9 @@ const SideBar = () => {
               음성・스크립트
             </li>
             <li
-              className={`list-li summary ${sort === "/summary" ? "active" : ""}`}
+              className={`list-li summary ${
+                sort === "/summary" ? "active" : ""
+              }`}
               onClick={() => navigate("/summary")}
             >
               <span>요약본</span>
@@ -91,7 +101,9 @@ const SideBar = () => {
           <div className="bar">
             <div className="status"></div>
           </div>
-          <div className="remainder">다음 충전일까지 {profile?.date ?? 0}일 남음</div>
+          <div className="remainder">
+            다음 충전일까지 {profile?.date ?? 0}일 남음
+          </div>
         </div>
       </div>
       {modalType === "user" && (
@@ -105,6 +117,22 @@ const SideBar = () => {
         >
           <UserModal
             onCloseModal={closeModal}
+            onOpenChangePW={openChangePWModal}
+          />
+        </div>
+      )}
+      {modalType === "changePW" && (
+        <div
+          className="modal-container"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              closeModal();
+            }
+          }}
+        >
+          <PasswordChangeModal
+            onCloseModal={closeModal}
+            onOpenUserModal={openUserModal}
           />
         </div>
       )}
