@@ -61,7 +61,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "wss://moaba.site/ws", // 서버 WebSocket URL q
+      brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
@@ -219,12 +219,12 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           </div>
           <div className="middle-bar">
             <div className="record-length-wrap">
-              {/* <div className="box-wrap">
+              <div className="box-wrap">
                 <div className="red box"></div>
                 {Array.from({ length: 9 }).map(() => (
                   <div className="box"></div>
                 ))}
-              </div> */}
+              </div>
               <div className="box-time">{formattedTime}</div>
               {isRecording && (
                 <div className="box-menu">
