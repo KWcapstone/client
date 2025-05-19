@@ -49,6 +49,7 @@ const MeetingPage = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         scripts={scripts}
+        projectId={projectId}
       />
 
       <div
