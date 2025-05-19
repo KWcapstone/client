@@ -19,7 +19,6 @@ import { Link } from "react-router-dom";
 
 // type
 import { projectData } from "@/types/projectData";
-import { projects } from "@/types/deleteProject";
 
 const ProjectPage = () => {
   // value
@@ -33,7 +32,6 @@ const ProjectPage = () => {
   const [editedTitle, setEditedTitle] = useState<string>("");
   const menuRef = useRef<HTMLUListElement | null>(null);
   const orderRef = useRef<HTMLDivElement | null>(null);
-  const [deleteProjectList, setDeleteProjectList] = useState<projects[]>([]);
 
   // modal
   type ModalType = "dwn" | "share" | null;
@@ -48,9 +46,10 @@ const ProjectPage = () => {
 
   const clickProjectDelete = (projectID: Array<string>) => {
     if (confirm("정말 프로젝트를 삭제하시겠습니까?")) {
-      setDeleteProjectList([{ projectId: projectID, type: "project" }]);
+      const updatedList = [{ projectId: projectID, type: "project" }];
 
-      deleteProject(deleteProjectList).then(() => {
+      console.log(updatedList);
+      deleteProject(updatedList).then(() => {
         alert("프로젝트가 정상적으로 삭제되었습니다.");
         window.location.reload();
       });
