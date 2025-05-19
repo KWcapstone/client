@@ -85,7 +85,7 @@ const MeetingPage = () => {
         <MindMapComponent
           setScripts={setScripts}
           conferenceData={conferenceData}
-          // setSummary={setSummary}
+          setSummary={setSummary}
         />
       </div>
     </>

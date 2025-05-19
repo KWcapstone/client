@@ -7,7 +7,7 @@ import {
   getIncomers,
   getOutgoers,
   getConnectedEdges,
-  Node
+  Node,
 } from "@xyflow/react";
 
 // style
@@ -23,11 +23,12 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
 import { useEffect, useState } from "react";
-import { Client } from "@stomp/stompjs";
-import html2canvas from 'html2canvas';
+//import { Client } from "@stomp/stompjs";
+import html2canvas from "html2canvas";
 
 // type
 import { conferenceData } from "@/types/conferanceData";
+import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
 interface scriptData {
   time: string;
@@ -37,11 +38,13 @@ interface scriptData {
 interface MindMapComponentProps {
   setScripts: React.Dispatch<React.SetStateAction<scriptData[]>>;
   conferenceData: conferenceData;
+  setSummary: React.Dispatch<React.SetStateAction<RealTimeSummaryData[]>>;
 }
 
 const MindMapComponent = ({
   setScripts,
   conferenceData,
+  setSummary,
 }: MindMapComponentProps) => {
   const {
     // transcript,
@@ -58,67 +61,70 @@ const MindMapComponent = ({
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
 
   const [scriptList, setScriptList] = useState<
-  { time: string; script: string }[]
+    { time: string; script: string }[]
   >([]);
+
+  console.log("스크립트: ", scriptList);
 
   const [mode, setMode] = useState<string>("none");
 
-  const meetingStart = () => {
-    const client = new Client({
-      brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
-      reconnectDelay: 5000,
-      debug: (str) => {
-        console.log(str);
-      },
-      onConnect: () => {
-        console.log("연결");
-        client.subscribe(
-          `/topic/conference/${conferenceData.projectId}/participants`,
-          (message: any) => {
-            const data: any = JSON.parse(message.body);
-            console.log(data.participants);
-          }
-        );
-      },
-      onWebSocketError: (event) => {
-        console.error("❌ WebSocket 연결 실패:", event);
-      },
-      onStompError: (frame) => {
-        console.error("❌ STOMP 에러:", frame);
-      },
-      // onConnect: (conn: any) => {
-      //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
-      //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
-      //   //   const receiveData = JSON.parse(message.body);
-      //   // });
-      // },
-    });
-    console.log(client);
-    client.activate();
+  // const meetingStart = () => {
+  //   const client = new Client({
+  //     brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
+  //     reconnectDelay: 5000,
+  //     debug: (str) => {
+  //       console.log(str);
+  //     },
+  //     onConnect: () => {
+  //       console.log("연결");
+  //       client.subscribe(
+  //         `/topic/conference/${conferenceData.projectId}/participants`,
+  //         (message: any) => {
+  //           const data: any = JSON.parse(message.body);
+  //           console.log(data.participants);
+  //         }
+  //       );
+  //     },
+  //     onWebSocketError: (event) => {
+  //       console.error("❌ WebSocket 연결 실패:", event);
+  //     },
+  //     onStompError: (frame) => {
+  //       console.error("❌ STOMP 에러:", frame);
+  //     },
+  //     // onConnect: (conn: any) => {
+  //     //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
+  //     //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
+  //     //   //   const receiveData = JSON.parse(message.body);
+  //     //   // });
+  //     // },
+  //   });
+  //   console.log(client);
+  //   client.activate();
 
-    // getProfile().then((res: any) => {
-    //   let data = {
-    //     "event": "participant_join",
-    //     "projectId": projectId,
-    //     "memberId": res.data.data.memberId
-    //   }
-    //   getInviting(projectId, data).then((res: any) => {
+  //   // getProfile().then((res: any) => {
+  //   //   let data = {
+  //   //     "event": "participant_join",
+  //   //     "projectId": projectId,
+  //   //     "memberId": res.data.data.memberId
+  //   //   }
+  //   //   getInviting(projectId, data).then((res: any) => {
 
-    //   })
-    // })
-  };
+  //   //   })
+  //   // })
+  // };
 
-  const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-    if (!ref.current) return;
-  
-    html2canvas(ref.current).then((canvas) => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = title === '' ? '제목없음' : title;
-      document.body.appendChild(link);
-      link.click();
-    });
-  };
+  const handleDownload =
+    (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+      if (!ref.current) return;
+
+      html2canvas(ref.current).then((canvas) => {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = title === "" ? "제목없음" : title;
+        document.body.appendChild(link);
+        link.click();
+      });
+    };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -126,28 +132,37 @@ const MindMapComponent = ({
         time: formattedTime,
         script: finalTranscript,
       };
-  
+
       setScripts((prev) => [...prev, newScript]);
+
       setScriptList((prev) => {
         const updated = [...prev, newScript];
-  
+
         if (updated.length >= 2) {
           const testString = updated.map((item) => item.script).join(" ");
-  
+
           let data = {
-            "event": "script",
-            "projectId": conferenceData.projectId,
-            "scription": testString
-          }
+            event: "script",
+            projectId: conferenceData.projectId,
+            scription: testString,
+          };
           postScript(data).then((res: any) => {
             setScriptList([]);
-            setInitialNodes(res.data.data.nodes)
+            setSummary((prev) => [
+              ...prev,
+              {
+                time: formattedTime,
+                title: res.data.data.summary.title,
+                item: res.data.data.summary.content,
+              },
+            ]);
+            setInitialNodes(res.data.data.nodes);
           });
         }
-  
+
         return updated.length >= 7 ? [] : updated;
       });
-  
+
       resetTranscript();
     }
   }, [finalTranscript]);
@@ -158,15 +173,15 @@ const MindMapComponent = ({
 
   const [initialNodes, setInitialNodes] = useState<Node[]>([
     {
-      id: '1',
-      type: 'input',
-      data: { label: '회의 시작' },
+      id: "1",
+      type: "input",
+      data: { label: "회의 시작" },
       position: { x: -150, y: 0 },
     },
     {
-      id: '2',
-      type: 'output',
-      data: { label: '키워드' },
+      id: "2",
+      type: "output",
+      data: { label: "키워드" },
       position: { x: 150, y: 0 },
     },
     // {
@@ -249,11 +264,11 @@ const MindMapComponent = ({
           </p>
           <button
             className="btn-mic"
-            onClick={() => (
+            onClick={() =>
               toggleListening().then(() => {
                 setMode("meeting");
               })
-            )}
+            }
           >
             녹음 시작하기
           </button>
