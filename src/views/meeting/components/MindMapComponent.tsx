@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import {
   ReactFlow,
-  // Background,
   useNodesState,
   useEdgesState,
   addEdge,
@@ -14,12 +13,17 @@ import {
 import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
+// api
+import { getMeetingId, getInviting } from "@/api/meeting/meeting";
+import { getProfile } from "@/api/main/profile";
+
 // component
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
 import { useEffect, useState } from "react";
+import { Client } from "@stomp/stompjs";
 
 interface scriptData {
   time: string;
@@ -42,12 +46,57 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
     resetTranscript,
     // audioUrl,
   } = UseSpeechToText();
+
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
+
+  const [mode, setMode] = useState<string>("none");
+
+  const [projectId, setProjectId] = useState<string>("");
+
+  useEffect(() => {
+    getMeetingId().then((res: any) => {
+      setProjectId(res.data.data.projectId)
+    });
+  }, []);
+
+  const meetingStart = () => {
+    const client = new Client({
+      brokerURL: "https://moaba.site/ws", // 서버 WebSocket URL
+      reconnectDelay: 5000,
+      onConnect: () => {
+        console.log("연결")
+        client.subscribe(`/topic/conference/${projectId}/participants`, (message: any) => {
+          const data:any = JSON.parse(message.body);
+          console.log(data.participants);
+        });
+      },
+      // onConnect: (conn: any) => {
+      //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
+      //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
+      //   //   const receiveData = JSON.parse(message.body);
+      //   // });
+      // },
+    });
+    console.log(client)
+    client.activate();
+    
+    // getProfile().then((res: any) => {
+    //   let data = {
+    //     "event": "participant_join",
+    //     "projectId": projectId,
+    //     "memberId": res.data.data.memberId
+    //   }
+    //   getInviting(projectId, data).then((res: any) => {
+
+    //   })
+    // })
+  }
+
 
   useEffect(() => {
     if (finalTranscript !== "") {
-      console.log("🎙️ 시간", formattedTime);
-      console.log("🎙️ 인식된 텍스트:", finalTranscript);
+      // console.log("🎙️ 시간", formattedTime);
+      // console.log("🎙️ 인식된 텍스트:", finalTranscript);
       setScripts((prev) => [
         ...prev,
         {
@@ -64,8 +113,6 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
   const stopClick = () => {
     toggleListening();
   };
-
-  const [mode, setMode] = useState<string>("none");
 
   const initialNodes = [
     {
@@ -148,7 +195,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           </p>
           <button
             className="btn-mic"
-            onClick={() => (toggleListening(), setMode("meeting"))}
+            onClick={() => (toggleListening(), setMode("meeting"), meetingStart())}
           >
             녹음 시작하기
           </button>
@@ -169,12 +216,12 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           </div>
           <div className="middle-bar">
             <div className="record-length-wrap">
-              <div className="box-wrap">
+              {/* <div className="box-wrap">
                 <div className="red box"></div>
                 {Array.from({ length: 9 }).map(() => (
                   <div className="box"></div>
                 ))}
-              </div>
+              </div> */}
               <div className="box-time">{formattedTime}</div>
               {isRecording && (
                 <div className="box-menu">

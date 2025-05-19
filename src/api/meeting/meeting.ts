@@ -1,9 +1,16 @@
 import Send from "@/api/send.ts";
 
-export const getUser = (data: any) => {
+export const getMeetingId = () => {
   return Send({
-    method: "get",
-    url: "conference/modify_inviting",
+    method: "post",
+    url: "conference"
+  });
+};
+
+export const getInviting = (projectId: string, data: any) => {
+  return Send({
+    method: "post",
+    url: `conference/${projectId}/modify_inviting`,
     data: data,
   });
 };

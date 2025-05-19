@@ -5,7 +5,8 @@ import SideBar from "../components/SideBar";
 import ShareModal from "@/views/components/ShareModal";
 import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 
-import { useState, useRef } from "react";
+// import
+import { useState, useRef, useEffect } from "react";
 
 interface scriptData {
   time: string;
@@ -56,7 +57,7 @@ const MeetingPage = () => {
         }}
       >
         {/* <MyVoiceComponent /> */}
-        <MindMapComponent setScripts={setScripts} />
+        <MindMapComponent  setScripts={setScripts} />
       </div>
     </>
   );
