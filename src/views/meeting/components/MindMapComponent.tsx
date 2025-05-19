@@ -32,9 +32,15 @@ interface scriptData {
 
 interface MindMapComponentProps {
   setScripts: React.Dispatch<React.SetStateAction<scriptData[]>>;
+  setProjectId: React.Dispatch<React.SetStateAction<string>>;
+  projectId: string;
 }
 
-const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
+const MindMapComponent = ({
+  setScripts,
+  setProjectId,
+  projectId,
+}: MindMapComponentProps) => {
   const {
     // transcript,
     isRecording,
@@ -51,11 +57,9 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const [mode, setMode] = useState<string>("none");
 
-  const [projectId, setProjectId] = useState<string>("");
-
   useEffect(() => {
     getMeetingId().then((res: any) => {
-      setProjectId(res.data.data.projectId)
+      setProjectId(res.data.data.projectId);
     });
   }, []);
 
@@ -67,11 +71,14 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
         console.log(str);
       },
       onConnect: () => {
-        console.log("연결")
-        client.subscribe(`/topic/conference/${projectId}/participants`, (message: any) => {
-          const data:any = JSON.parse(message.body);
-          console.log(data.participants);
-        });
+        console.log("연결");
+        client.subscribe(
+          `/topic/conference/${projectId}/participants`,
+          (message: any) => {
+            const data: any = JSON.parse(message.body);
+            console.log(data.participants);
+          }
+        );
       },
       onWebSocketError: (event) => {
         console.error("❌ WebSocket 연결 실패:", event);
@@ -86,9 +93,9 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
       //   // });
       // },
     });
-    console.log(client)
+    console.log(client);
     client.activate();
-    
+
     // getProfile().then((res: any) => {
     //   let data = {
     //     "event": "participant_join",
@@ -99,8 +106,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
     //   })
     // })
-  }
-
+  };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -204,7 +210,12 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           </p>
           <button
             className="btn-mic"
-            onClick={() => (toggleListening().then(()=>{setMode("meeting")}), meetingStart())}
+            onClick={() => (
+              toggleListening().then(() => {
+                setMode("meeting");
+              }),
+              meetingStart()
+            )}
           >
             녹음 시작하기
           </button>

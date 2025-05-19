@@ -16,7 +16,7 @@ export const getSearch = (params: searchParams) => {
   });
 };
 
-export const patchProjectName = (projectId: string[], name: string) => {
+export const patchProjectName = (projectId: string, name: string) => {
   return Send({
     method: "patch",
     url: `/main/project/${projectId}/edit`,

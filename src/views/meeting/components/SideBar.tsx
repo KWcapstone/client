@@ -18,18 +18,20 @@ interface SideBarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   scripts?: scriptData[];
+  projectId: string;
 }
 
 const SideBar = ({
   isSidebarOpen,
   setIsSidebarOpen,
   scripts,
+  projectId,
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
 
   // console.log("스크립트", scripts);
-
+  console.log("프로젝트 아이디", projectId);
   return (
     <div
       className={`side-bar ${isSidebarOpen ? "open" : "closed"}`}

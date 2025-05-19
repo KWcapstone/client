@@ -1,4 +1,4 @@
 export interface projects {
-  projectId: Array<string>;
+  projectId: string;
   type: string;
 }

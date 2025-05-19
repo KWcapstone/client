@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { ShareModalData, InviteUserByEmail } from "@/types/shareModalData";
 interface ShareModalProps {
   onCloseModal: () => void;
-  projectId: string[];
+  projectId: string;
 }
 
 const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {

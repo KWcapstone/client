@@ -17,6 +17,7 @@ const MeetingPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // 사이드바 상태
   const modalBackground = useRef<HTMLDivElement>(null);
   const [scripts, setScripts] = useState<scriptData[]>([]); // 스크립트 상태
+  const [projectId, setProjectId] = useState<string>("");
 
   // modal
   type ModalType = "share" | null;
@@ -24,7 +25,7 @@ const MeetingPage = () => {
   const closeModal = () => setModalType(null);
   const openModal = () => setModalType("share");
 
-  const projectId: string[] = ["67e7aedf96cc842290b68950"]; //임시방편
+  //console.log("projectId", projectId);
 
   return (
     <>
@@ -48,6 +49,7 @@ const MeetingPage = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         scripts={scripts}
+        projectId={projectId}
       />
 
       <div
@@ -57,7 +59,11 @@ const MeetingPage = () => {
         }}
       >
         {/* <MyVoiceComponent /> */}
-        <MindMapComponent  setScripts={setScripts} />
+        <MindMapComponent
+          setScripts={setScripts}
+          setProjectId={setProjectId}
+          projectId={projectId}
+        />
       </div>
     </>
   );

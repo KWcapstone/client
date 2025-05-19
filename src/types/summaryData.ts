@@ -1,9 +1,9 @@
 export interface summaryData {
   creator: string;
-  projectId: Array<string>;
+  projectId: string;
   projectName: string;
   sizeInBytes: string;
   updatedAt: string;
   selected: boolean;
-  id: number
+  id: number;
 }
