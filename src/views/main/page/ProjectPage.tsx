@@ -48,10 +48,9 @@ const ProjectPage = () => {
     if (confirm("정말 프로젝트를 삭제하시겠습니까?")) {
       const updatedList = [{ projectId: projectID, type: "project" }];
 
-      console.log(updatedList);
       deleteProject(updatedList).then(() => {
         alert("프로젝트가 정상적으로 삭제되었습니다.");
-        window.location.reload();
+        getProjectList()
       });
     }
   };

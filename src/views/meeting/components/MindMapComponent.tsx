@@ -61,8 +61,11 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "https://moaba.site/ws", // 서버 WebSocket URL
+      brokerURL: "wss://moaba.site/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
+      debug: (str) => {
+        console.log(str);
+      },
       onConnect: () => {
         console.log("연결")
         client.subscribe(`/topic/conference/${projectId}/participants`, (message: any) => {
