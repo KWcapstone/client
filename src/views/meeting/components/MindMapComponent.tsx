@@ -61,7 +61,7 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "wss://moaba.site/ws", // 서버 WebSocket URL q
+      brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
@@ -72,6 +72,12 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           const data:any = JSON.parse(message.body);
           console.log(data.participants);
         });
+      },
+      onWebSocketError: (event) => {
+        console.error("❌ WebSocket 연결 실패:", event);
+      },
+      onStompError: (frame) => {
+        console.error("❌ STOMP 에러:", frame);
       },
       // onConnect: (conn: any) => {
       //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
