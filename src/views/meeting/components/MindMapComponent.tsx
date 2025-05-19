@@ -73,6 +73,12 @@ const MindMapComponent = ({ setScripts }: MindMapComponentProps) => {
           console.log(data.participants);
         });
       },
+      onWebSocketError: (event) => {
+        console.error("❌ WebSocket 연결 실패:", event);
+      },
+      onStompError: (frame) => {
+        console.error("❌ STOMP 에러:", frame);
+      },
       // onConnect: (conn: any) => {
       //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
       //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
