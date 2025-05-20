@@ -3,6 +3,13 @@
 @import '@/sass/uix/_input.sass'
 @import '@/sass/uix/_button.sass'
 
+@keyframes fadeInUp
+  0%
+    opacity: 0
+    transform: translateY(10px)
+  100%
+    opacity: 1
+    transform: translateY(0)
 
 .mind-map-container
   background-color: $gray-50
@@ -73,6 +80,7 @@
 
         .box-menu
           +flex-box(center, center, 10px)
+
           button
             +btn(40px, 40px, 50px)
 
@@ -93,6 +101,67 @@
           .btn-stop
             background-image: url('/src/assets/imgs/icon/btn_stop.svg')
             background-color: #EC2526
+
+        .live-mode-wrap
+          +margin(left 10px)
+          +flex-box(center, center, 20px)
+
+          &:before
+            +size(1px, 24px)
+            content: ""
+            display: block
+            background-color: #C2CCDA
+
+
+          .btn-live
+            display: none
+
+          label
+            +size(109px, 40px)
+            display: block
+            position: relative
+            background: #d3d3d3
+            border-radius: 60px
+            transition: background 0.4s
+            cursor: pointer
+
+          label
+            &:before
+              content: "라이브 모드"
+              font-size: 12px
+              color: $gray-500
+              position: absolute
+              top: 50%
+              left: 42px
+              line-height: 18px
+              transform: translateY(-50%)
+              transition: left 0.4s
+
+            &:after
+              +size(30px, 30px)
+              content: ""
+              position: absolute
+              top: 50%
+              left: 6px
+              border-radius: 100%
+              background-color: #fff
+              transform: translateY(-50%)
+              box-shadow: 1px 3px 4px rgba(0,0,0,0.1)
+              transition: left 0.4s
+
+          #live + label::after
+            +background('@/assets/imgs/icon/live_off.svg',no-repeat, center)
+
+          #live:checked + label
+            background:$page-color
+
+            &:before
+              color: $white
+              left: 13px
+
+            &:after
+              +background('@/assets/imgs/icon/live_on.svg',no-repeat, center)
+              left: calc(100% - 36px)
 
     .keyword-container
       +size(240px)
@@ -120,15 +189,28 @@
           +flex-box(center, center, 12px 8px)
           flex-wrap: wrap
           +padding(top 14px)
+          transition: all 0.4s ease
 
           .keyword
             +padding(6px 12px)
             font-size: 13px
             line-height: 19.5px
             text-align: center
-            cursor: pointer
             border: 1px solid $gray-200
             border-radius: 50px
+            transform: translateY(10px)
+            animation: fadeInUp 0.4s ease forwards
+
+          button
+            +btn()
+
+            &:before
+              content: "+ "
 
             &:hover
+              border: 1px solid $page-color
+
+            &:active
+              color: $page-color
+              background-color: #EEE8FD
               border: 1px solid $page-color

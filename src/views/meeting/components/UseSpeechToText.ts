@@ -10,11 +10,12 @@ const UseSpeechToText = () => {
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null); // ✅ 추가
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false); // ✅ 일시정지 상태
   const audioChunks = useRef<Blob[]>([]);
 
-  const toggleListening = async () => {
+  const toggleListening = async (onStopCallback?: (blob: Blob) => void) => {
     if (isRecording) {
       // 정지
       SpeechRecognition.stopListening();
@@ -44,9 +45,10 @@ const UseSpeechToText = () => {
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
 
-        const formData = new FormData();
-        formData.append("file", audioBlob, "recording.webm");
-
+        setAudioBlob(audioBlob);
+        if (onStopCallback) {
+          onStopCallback(audioBlob); // ✅ 콜백 실행
+        }
         // await fetch("https://your-backend/upload", {
         //   method: "POST",
         //   body: formData,
@@ -85,6 +87,7 @@ const UseSpeechToText = () => {
     isRecording,
     isPaused,
     audioUrl,
+    audioBlob,
     toggleListening,
     pauseRecording,
     resumeRecording,

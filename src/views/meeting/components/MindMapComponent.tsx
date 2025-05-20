@@ -16,16 +16,16 @@ import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
 // api
-import { postScript } from "@/api/meeting/meeting";
+import { postScript, endMeeting } from "@/api/meeting/meeting";
 
 // component
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 // import { Client } from "@stomp/stompjs";
-// import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas';
 
 // type
 import { conferenceData } from "@/types/conferanceData";
@@ -53,7 +53,7 @@ const MindMapComponent = ({
     resumeRecording,
     finalTranscript,
     resetTranscript,
-    // audioUrl,
+    audioBlob,
   } = UseSpeechToText();
 
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
@@ -62,7 +62,11 @@ const MindMapComponent = ({
   { time: string; script: string }[]
   >([]);
 
+  const [allScripts, setAllScripts] = useState<string[]>([]);
+
   const [mode, setMode] = useState<string>("none");
+
+  const mindMapRef = useRef<HTMLDivElement>(null);
 
   // const meetingStart = () => {
   //   const client = new Client({
@@ -118,6 +122,7 @@ const MindMapComponent = ({
       };
 
       setScripts((prev) => [...prev, newScript]);
+      setAllScripts((prev) => [...prev, finalTranscript]);
       setScriptList((prev) => {
         const updated = [...prev, newScript];
 
@@ -151,8 +156,42 @@ const MindMapComponent = ({
     }
   }, [finalTranscript]);
 
-  const stopClick = () => {
+  const stopClick = async () => {
+    console.log('asd')
     toggleListening();
+    setMode("end")
+
+    const fullScript = allScripts.join(" ");
+
+    if (mindMapRef.current){
+      console.log('afaf')
+      const canvas = await html2canvas(mindMapRef.current);
+      const imageBlob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob((b:any) => resolve(b), "image/jpeg")
+      );
+
+      console.log(audioBlob)
+
+      if (imageBlob && audioBlob) {
+        console.log('qwtwtqw')
+        const imageData = new FormData();
+        imageData.append("file", imageBlob, "mindmap.jpg");
+
+        const audioData = new FormData();
+        audioData.append("file", audioBlob, "recording.webm");
+
+        let data = {
+          "projectId": conferenceData.projectId,
+          "scription": fullScript,
+          "record" : audioData,
+          "node": imageData
+        }
+        endMeeting(data).then((res: any) => {
+          console.log(res)
+        })
+      }
+    };
+
   };
 
   const [initialNodes, setInitialNodes] = useState<Node[]>([
@@ -230,7 +269,7 @@ const MindMapComponent = ({
             className="btn-mic"
             onClick={() => (
               toggleListening().then(() => {
-                setMode("meeting");
+                setMode("live");
               })
             )}
           >
@@ -239,7 +278,7 @@ const MindMapComponent = ({
         </div>
       ) : (
         <div className="mind-map-main">
-          <div className="mind-map-wrap">
+          <div className="mind-map-wrap" ref={mindMapRef}>
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -261,45 +300,82 @@ const MindMapComponent = ({
               </div>
               <div className="box-time">{formattedTime}</div>
               {isRecording && (
-                <div className="box-menu">
-                  {isRecording && !isPaused && (
-                    <button
-                      className="btn-pause"
-                      onClick={pauseRecording}
-                    ></button>
-                  )}
-                  {isRecording && isPaused && (
-                    <button className="btn-resume" onClick={resumeRecording}></button>
-                  )}
-                  <button className="btn-stop" onClick={stopClick}></button>
-                </div>
+                <>
+                  <div className="box-menu">
+                    {isRecording && !isPaused && (
+                      <button
+                        className="btn-pause"
+                        onClick={pauseRecording}
+                      ></button>
+                    )}
+                    {isRecording && isPaused && (
+                      <button className="btn-resume" onClick={resumeRecording}></button>
+                    )}
+                    <button className="btn-stop" onClick={stopClick}></button>
+                  </div>
+                  <div className="live-mode-wrap">
+                    <input className="btn-live" type="checkbox" id="live" onClick={() => {setMode(mode === "live" ? "meeting" : "live")}} checked={mode === "live"}/><label htmlFor="live"></label>
+                  </div>
+                </>
               )}
             </div>
           </div>
           <div className="keyword-container">
             <h2>라이브 키워드</h2>
-            <div className="main-keyword-wrap">
-              <h3>주요 키워드</h3>
-              <div className="keyword-wrap">
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-              </div>
-            </div>
-            <div className="recommend-keyword-wrap">
-              <h3>추천 키워드</h3>
-              <div className="keyword-wrap">
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-                <div className="keyword">GPU</div>
-              </div>
-            </div>
+            {
+              mode === "live" ? (
+                <>
+                  <div className="main-keyword-wrap">
+                    <h3>주요 키워드</h3>
+                    <div className="keyword-wrap">
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                    </div>
+                  </div>
+                  <div className="recommend-keyword-wrap">
+                    <h3>추천 키워드</h3>
+                    <div className="keyword-wrap">
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="main-keyword-wrap">
+                    <h3>주요 키워드</h3>
+                    <div className="keyword-wrap">
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                    </div>
+                  </div>
+                  <div className="recommend-keyword-wrap">
+                    <h3>추천 키워드</h3>
+                    <div className="keyword-wrap">
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                    </div>
+                  </div>
+                </>
+
+              )
+            }
           </div>
         </div>
       )}
