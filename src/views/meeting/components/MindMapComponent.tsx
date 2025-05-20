@@ -110,7 +110,7 @@ const MindMapComponent = ({
 
   const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
     if (!ref.current) return;
-  
+
     html2canvas(ref.current).then((canvas) => {
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
@@ -126,14 +126,14 @@ const MindMapComponent = ({
         time: formattedTime,
         script: finalTranscript,
       };
-  
+
       setScripts((prev) => [...prev, newScript]);
       setScriptList((prev) => {
         const updated = [...prev, newScript];
-  
+
         if (updated.length >= 2) {
           const testString = updated.map((item) => item.script).join(" ");
-  
+
           let data = {
             "event": "script",
             "projectId": conferenceData.projectId,
@@ -144,10 +144,10 @@ const MindMapComponent = ({
             setInitialNodes(res.data.data.nodes)
           });
         }
-  
+
         return updated.length >= 7 ? [] : updated;
       });
-  
+
       resetTranscript();
     }
   }, [finalTranscript]);
@@ -160,15 +160,15 @@ const MindMapComponent = ({
     {
       id: '1',
       type: 'input',
-      data: { label: '회의 시작' },
+      data: { label: '회의 키워드' },
       position: { x: -150, y: 0 },
     },
-    {
-      id: '2',
-      type: 'output',
-      data: { label: '키워드' },
-      position: { x: 150, y: 0 },
-    },
+    // {
+    //   id: '2',
+    //   type: 'output',
+    //   data: { label: '키워드드' },
+    //   position: { x: 150, y: 0 },
+    // },
     // {
     //   id: '1',
     //   type: 'input',
@@ -192,10 +192,7 @@ const MindMapComponent = ({
   ]);
 
   const initialEdges = [
-    { id: "1->3", source: "1", target: "3" },
-    { id: "2->3", source: "2", target: "3" },
-    { id: "3->4", source: "3", target: "4" },
-    { id: "4->5", source: "4", target: "5" },
+    { id: "1->2", source: "1", target: "3" },
   ];
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -290,13 +287,36 @@ const MindMapComponent = ({
                     ></button>
                   )}
                   {isRecording && isPaused && (
-                    <button className="btn-resume" onClick={resumeRecording}>
-                      재개
-                    </button>
+                    <button className="btn-resume" onClick={resumeRecording}></button>
                   )}
                   <button className="btn-stop" onClick={stopClick}></button>
                 </div>
               )}
+            </div>
+          </div>
+          <div className="keyword-container">
+            <h2>라이브 키워드</h2>
+            <div className="main-keyword-wrap">
+              <h3>주요 키워드</h3>
+              <div className="keyword-wrap">
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+              </div>
+            </div>
+            <div className="recommend-keyword-wrap">
+              <h3>추천 키워드</h3>
+              <div className="keyword-wrap">
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+                <div className="keyword">GPU</div>
+              </div>
             </div>
           </div>
         </div>

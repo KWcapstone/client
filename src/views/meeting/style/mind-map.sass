@@ -22,7 +22,7 @@
       color: $gray-600
       line-height: 24px
       text-align: center
-    
+
     .btn-mic
       +flex-box(center, center, 8px)
       +btn(160px, 48px, 50px)
@@ -30,7 +30,7 @@
       color: $white
       font-weight: 700
       font-size: 16px
-      
+
 
       &:before
         +size(20px, 20px)
@@ -70,12 +70,12 @@
           color: #505457
           font-weight: 500
           line-height: 21px
-        
+
         .box-menu
           +flex-box(center, center, 10px)
           button
             +btn(40px, 40px, 50px)
-          
+
           .btn-pause, .btn-resume, .btn-stop
             background-position: center
             background-repeat: no-repeat
@@ -85,8 +85,50 @@
             background-color: $white
 
           .btn-resume
+            background-image: url('/src/assets/imgs/icon/btn_play.svg')
+            background-size: 22px
+            background-position: center
             background-color: $white
 
           .btn-stop
             background-image: url('/src/assets/imgs/icon/btn_stop.svg')
             background-color: #EC2526
+
+    .keyword-container
+      +size(240px)
+      +box-sizing(borde-box)
+      +padding(24px 16px)
+      position: absolute
+      top: 74px
+      right: 16px
+      background-color: $white
+      border-radius: 20px
+
+      h2
+        font-size: 20px
+        font-weight: bold
+        line-height: 30px
+
+      .main-keyword-wrap, .recommend-keyword-wrap
+        +padding(top 24px)
+
+        h3
+          font-weight: bold
+          line-height: 21px
+
+        .keyword-wrap
+          +flex-box(center, center, 12px 8px)
+          flex-wrap: wrap
+          +padding(top 14px)
+
+          .keyword
+            +padding(6px 12px)
+            font-size: 13px
+            line-height: 19.5px
+            text-align: center
+            cursor: pointer
+            border: 1px solid $gray-200
+            border-radius: 50px
+
+            &:hover
+              border: 1px solid $page-color
