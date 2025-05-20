@@ -7,7 +7,8 @@ import {
   getIncomers,
   getOutgoers,
   getConnectedEdges,
-  Node
+  Node,
+  Edge
 } from "@xyflow/react";
 
 // style
@@ -23,8 +24,8 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
 import { useEffect, useState } from "react";
-import { Client } from "@stomp/stompjs";
-import html2canvas from 'html2canvas';
+// import { Client } from "@stomp/stompjs";
+// import html2canvas from 'html2canvas';
 
 // type
 import { conferenceData } from "@/types/conferanceData";
@@ -57,68 +58,57 @@ const MindMapComponent = ({
 
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
 
-  const [scriptList, setScriptList] = useState<
+  const [, setScriptList] = useState<
   { time: string; script: string }[]
   >([]);
 
   const [mode, setMode] = useState<string>("none");
 
-  const meetingStart = () => {
-    const client = new Client({
-      brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
-      reconnectDelay: 5000,
-      debug: (str) => {
-        console.log(str);
-      },
-      onConnect: () => {
-        console.log("연결");
-        client.subscribe(
-          `/topic/conference/${conferenceData.projectId}/participants`,
-          (message: any) => {
-            const data: any = JSON.parse(message.body);
-            console.log(data.participants);
-          }
-        );
-      },
-      onWebSocketError: (event) => {
-        console.error("❌ WebSocket 연결 실패:", event);
-      },
-      onStompError: (frame) => {
-        console.error("❌ STOMP 에러:", frame);
-      },
-      // onConnect: (conn: any) => {
-      //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
-      //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
-      //   //   const receiveData = JSON.parse(message.body);
-      //   // });
-      // },
-    });
-    console.log(client);
-    client.activate();
+  // const meetingStart = () => {
+  //   const client = new Client({
+  //     brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
+  //     reconnectDelay: 5000,
+  //     debug: (str) => {
+  //       console.log(str);
+  //     },
+  //     onConnect: () => {
+  //       console.log("연결");
+  //       client.subscribe(
+  //         `/topic/conference/${conferenceData.projectId}/participants`,
+  //         (message: any) => {
+  //           const data: any = JSON.parse(message.body);
+  //           console.log(data.participants);
+  //         }
+  //       );
+  //     },
+  //     onWebSocketError: (event) => {
+  //       console.error("❌ WebSocket 연결 실패:", event);
+  //     },
+  //     onStompError: (frame) => {
+  //       console.error("❌ STOMP 에러:", frame);
+  //     },
+  //     onConnect: (conn: any) => {
+  //       console.log('[+] WebSocket 연결이 되었습니다.', conn);
+  //       // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
+  //       //   const receiveData = JSON.parse(message.body);
+  //       // });
+  //     },
+  //   });
+  //   console.log(client);
+  //   client.activate();
+  // };
 
-    // getProfile().then((res: any) => {
-    //   let data = {
-    //     "event": "participant_join",
-    //     "projectId": projectId,
-    //     "memberId": res.data.data.memberId
-    //   }
-    //   getInviting(projectId, data).then((res: any) => {
+  // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+  //   if (!ref.current) return;
 
-    //   })
-    // })
-  };
-
-  const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-    if (!ref.current) return;
-
-    html2canvas(ref.current).then((canvas) => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = title === '' ? '제목없음' : title;
-      document.body.appendChild(link);
-      link.click();
-    });
-  };
+  //   html2canvas(ref.current).then((canvas) => {
+  //     const link = document.createElement('a');
+  //     link.href = canvas.toDataURL('image/png');
+  //     link.download = title === '' ? '제목없음' : title;
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -131,7 +121,7 @@ const MindMapComponent = ({
       setScriptList((prev) => {
         const updated = [...prev, newScript];
 
-        if (updated.length >= 2) {
+        if (updated.length >= 7) {
           const testString = updated.map((item) => item.script).join(" ");
 
           let data = {
@@ -142,6 +132,15 @@ const MindMapComponent = ({
           postScript(data).then((res: any) => {
             setScriptList([]);
             setInitialNodes(res.data.data.nodes)
+            const edges = res.data.data.nodes
+              .filter((node: any) => node.parentId)
+              .map((node: any, index: number) => ({
+                id: `${index}`,
+                source: node.parentId!,
+                target: node.id,
+              }));
+
+            setInitialEdges(edges);
           });
         }
 
@@ -163,44 +162,27 @@ const MindMapComponent = ({
       data: { label: '회의 키워드' },
       position: { x: -150, y: 0 },
     },
-    // {
-    //   id: '2',
-    //   type: 'output',
-    //   data: { label: '키워드드' },
-    //   position: { x: 150, y: 0 },
-    // },
-    // {
-    //   id: '1',
-    //   type: 'input',
-    //   data: { label: 'Start here...' },
-    //   position: { x: -150, y: 0 },
-    // },
-    // {
-    //   id: '2',
-    //   type: 'input',
-    //   data: { label: '...or here!' },
-    //   position: { x: 150, y: 0 },
-    // },
-    // { id: '3', data: { label: 'Delete me.' }, position: { x: 0, y: 100 } },
-    // { id: '4', data: { label: 'Then me!' }, position: { x: 0, y: 200 } },
-    // {
-    //   id: '5',
-    //   type: 'output',
-    //   data: { label: 'End here!' },
-    //   position: { x: 0, y: 300 },
-    // },
+    {
+      id: '2',
+      type: 'output',
+      data: { label: '다음 키워드' },
+      position: { x: 150, y: 0 },
+    },
   ]);
 
-  const initialEdges = [
-    { id: "1->2", source: "1", target: "3" },
-  ];
+  const [initialEdges, setInitialEdges] = useState<Edge[]>([
+    { id: "1", source: "1", target: "2" },
+  ]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   useEffect(() => {
     setNodes(initialNodes);
-  }, [initialNodes]); // 임시방편으로 만듦
+    setEdges(initialEdges);
+
+    console.log(initialNodes, initialEdges)
+  }, [initialNodes, initialEdges]); // 임시방편으로 만듦
 
   const onConnect = useCallback(
     (params: any) => setEdges(addEdge(params, edges)),
