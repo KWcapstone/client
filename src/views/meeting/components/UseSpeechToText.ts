@@ -9,7 +9,7 @@ const UseSpeechToText = () => {
     useSpeechRecognition();
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [audioUrl] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null); // ✅ 추가
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false); // ✅ 일시정지 상태
