@@ -1,5 +1,3 @@
-//수정
-
 import React, { useCallback } from "react";
 import {
   ReactFlow,
@@ -68,6 +66,9 @@ const MindMapComponent = ({
   const [allScripts, setAllScripts] = useState<string[]>([]);
 
   const [mode, setMode] = useState<string>("none");
+
+  const [mainKeyword, setMainKeyword] = useState([]);
+  const [recommendKeyword, setRecommendKeyword] = useState([]);
 
   const mindMapRef = useRef<HTMLDivElement>(null);
 
@@ -159,6 +160,13 @@ const MindMapComponent = ({
               }));
 
             setInitialEdges(edges);
+            setMainKeyword(JSON.parse(res.data.data.mainKeywords).map((x:any, i:number) => ({ id: i, value: x })));
+            setRecommendKeyword(
+              JSON.parse(res.data.data.recommendedScripts)
+                .filter(Boolean)
+                .map((x:any, i:number) => ({ id: i, value: x }))
+            );
+            
           });
         }
 
@@ -280,11 +288,11 @@ const MindMapComponent = ({
           </p>
           <button
             className="btn-mic"
-            onClick={() =>
+            onClick={() =>{
               toggleListening().then(() => {
                 setMode("live");
               })
-            }
+            }}
           >
             녹음 시작하기
           </button>
@@ -351,50 +359,70 @@ const MindMapComponent = ({
               <>
                 <div className="main-keyword-wrap">
                   <h3>주요 키워드</h3>
-                  <div className="keyword-wrap">
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                  </div>
+                  {
+                    mainKeyword.length? (
+                      <div className="keyword-wrap">
+                        {mainKeyword.map((x:any) => (
+                          <div className="keyword" id={x.id.toString()} key={x.id}>
+                            {x.value}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
+                    ) 
+                  }
                 </div>
                 <div className="recommend-keyword-wrap">
                   <h3>추천 키워드</h3>
-                  <div className="keyword-wrap">
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                    <div className="keyword">GPU</div>
-                  </div>
+                  {
+                    recommendKeyword.length? (
+                      <div className="keyword-wrap">
+                        {recommendKeyword.map((x:any) => (
+                          <div className="keyword" id={x.id.toString()} key={x.id}>
+                            {x.value}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>회의가 진행되면 추천 키워드가 자동 생성됩니다.</p>
+                    ) 
+                  }
                 </div>
               </>
             ) : (
               <>
                 <div className="main-keyword-wrap">
                   <h3>주요 키워드</h3>
-                  <div className="keyword-wrap">
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                  </div>
+                  {
+                    mainKeyword.length? (
+                      <div className="keyword-wrap">
+                        {mainKeyword.map((x:any) => (
+                          <button className="keyword" id={x.id.toString()} key={x.id}>
+                            {x.value}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
+                    ) 
+                  }
                 </div>
                 <div className="recommend-keyword-wrap">
                   <h3>추천 키워드</h3>
-                  <div className="keyword-wrap">
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                    <button className="keyword">GPU</button>
-                  </div>
+                  {
+                    recommendKeyword.length? (
+                      <div className="keyword-wrap">
+                        {recommendKeyword.map((x:any) => (
+                          <button className="keyword" id={x.id.toString()} key={x.id}>
+                            {x.value}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
+                    ) 
+                  }
                 </div>
               </>
             )}
