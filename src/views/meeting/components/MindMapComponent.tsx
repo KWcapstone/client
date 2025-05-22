@@ -160,13 +160,16 @@ const MindMapComponent = ({
               }));
 
             setInitialEdges(edges);
-            setMainKeyword(JSON.parse(res.data.data.mainKeywords).map((x:any, i:number) => ({ id: i, value: x })));
-            setRecommendKeyword(
-              JSON.parse(res.data.data.recommendedScripts)
-                .filter(Boolean)
-                .map((x:any, i:number) => ({ id: i, value: x }))
+            setMainKeyword(
+              JSON.parse(res.data.data.mainKeywords).map(
+                (x: any, i: number) => ({ id: i, value: x })
+              )
             );
-            
+            setRecommendKeyword(
+              JSON.parse(res.data.data.recommendedKeywords)
+                .filter(Boolean)
+                .map((x: any, i: number) => ({ id: i, value: x }))
+            );
           });
         }
 
@@ -288,10 +291,10 @@ const MindMapComponent = ({
           </p>
           <button
             className="btn-mic"
-            onClick={() =>{
+            onClick={() => {
               toggleListening().then(() => {
                 setMode("live");
-              })
+              });
             }}
           >
             녹음 시작하기
@@ -359,70 +362,78 @@ const MindMapComponent = ({
               <>
                 <div className="main-keyword-wrap">
                   <h3>주요 키워드</h3>
-                  {
-                    mainKeyword.length? (
-                      <div className="keyword-wrap">
-                        {mainKeyword.map((x:any) => (
-                          <div className="keyword" id={x.id.toString()} key={x.id}>
-                            {x.value}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
-                    ) 
-                  }
+                  {mainKeyword.length ? (
+                    <div className="keyword-wrap">
+                      {mainKeyword.map((x: any) => (
+                        <div
+                          className="keyword"
+                          id={x.id.toString()}
+                          key={x.id}
+                        >
+                          {x.value}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
+                  )}
                 </div>
                 <div className="recommend-keyword-wrap">
                   <h3>추천 키워드</h3>
-                  {
-                    recommendKeyword.length? (
-                      <div className="keyword-wrap">
-                        {recommendKeyword.map((x:any) => (
-                          <div className="keyword" id={x.id.toString()} key={x.id}>
-                            {x.value}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p>회의가 진행되면 추천 키워드가 자동 생성됩니다.</p>
-                    ) 
-                  }
+                  {recommendKeyword.length ? (
+                    <div className="keyword-wrap">
+                      {recommendKeyword.map((x: any) => (
+                        <div
+                          className="keyword"
+                          id={x.id.toString()}
+                          key={x.id}
+                        >
+                          {x.value}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>회의가 진행되면 추천 키워드가 자동 생성됩니다.</p>
+                  )}
                 </div>
               </>
             ) : (
               <>
                 <div className="main-keyword-wrap">
                   <h3>주요 키워드</h3>
-                  {
-                    mainKeyword.length? (
-                      <div className="keyword-wrap">
-                        {mainKeyword.map((x:any) => (
-                          <button className="keyword" id={x.id.toString()} key={x.id}>
-                            {x.value}
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
-                    ) 
-                  }
+                  {mainKeyword.length ? (
+                    <div className="keyword-wrap">
+                      {mainKeyword.map((x: any) => (
+                        <button
+                          className="keyword"
+                          id={x.id.toString()}
+                          key={x.id}
+                        >
+                          {x.value}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
+                  )}
                 </div>
                 <div className="recommend-keyword-wrap">
                   <h3>추천 키워드</h3>
-                  {
-                    recommendKeyword.length? (
-                      <div className="keyword-wrap">
-                        {recommendKeyword.map((x:any) => (
-                          <button className="keyword" id={x.id.toString()} key={x.id}>
-                            {x.value}
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
-                    ) 
-                  }
+                  {recommendKeyword.length ? (
+                    <div className="keyword-wrap">
+                      {recommendKeyword.map((x: any) => (
+                        <button
+                          className="keyword"
+                          id={x.id.toString()}
+                          key={x.id}
+                        >
+                          {x.value}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>회의가 진행되면 주요 키워드가 자동 생성됩니다.</p>
+                  )}
                 </div>
               </>
             )}
