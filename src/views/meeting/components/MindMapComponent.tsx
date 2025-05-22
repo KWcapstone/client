@@ -10,7 +10,7 @@ import {
   getOutgoers,
   getConnectedEdges,
   Node,
-  Edge
+  Edge,
 } from "@xyflow/react";
 
 // style
@@ -27,8 +27,7 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 // import
 import { useEffect, useState, useRef } from "react";
 // import { Client } from "@stomp/stompjs";
-import html2canvas from 'html2canvas';
-
+import html2canvas from "html2canvas";
 
 // type
 import { conferenceData } from "@/types/conferanceData";
@@ -63,10 +62,8 @@ const MindMapComponent = ({
   } = UseSpeechToText();
 
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
-  
-  const [scriptList, setScriptList] = useState<
-  { time: string; script: string }[]
-  >([]);
+
+  const [, setScriptList] = useState<{ time: string; script: string }[]>([]);
 
   const [allScripts, setAllScripts] = useState<string[]>([]);
 
@@ -151,9 +148,8 @@ const MindMapComponent = ({
                 item: res.data.data.summary.content,
               },
             ]);
-            
 
-            setInitialNodes(res.data.data.nodes)
+            setInitialNodes(res.data.data.nodes);
             const edges = res.data.data.nodes
               .filter((node: any) => node.parentId)
               .map((node: any, index: number) => ({
@@ -163,7 +159,6 @@ const MindMapComponent = ({
               }));
 
             setInitialEdges(edges);
-
           });
         }
 
@@ -175,23 +170,23 @@ const MindMapComponent = ({
   }, [finalTranscript]);
 
   const stopClick = async () => {
-    console.log('asd')
+    console.log("asd");
     toggleListening();
-    setMode("end")
+    setMode("end");
 
     const fullScript = allScripts.join(" ");
 
-    if (mindMapRef.current){
-      console.log('afaf')
+    if (mindMapRef.current) {
+      console.log("afaf");
       const canvas = await html2canvas(mindMapRef.current);
       const imageBlob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob((b:any) => resolve(b), "image/jpeg")
+        canvas.toBlob((b: any) => resolve(b), "image/jpeg")
       );
 
-      console.log(audioBlob)
+      console.log(audioBlob);
 
       if (imageBlob && audioBlob) {
-        console.log('qwtwtqw')
+        console.log("qwtwtqw");
         const imageData = new FormData();
         imageData.append("file", imageBlob, "mindmap.jpg");
 
@@ -199,31 +194,29 @@ const MindMapComponent = ({
         audioData.append("file", audioBlob, "recording.webm");
 
         let data = {
-          "projectId": conferenceData.projectId,
-          "scription": fullScript,
-          "record" : audioData,
-          "node": imageData
-        }
+          projectId: conferenceData.projectId,
+          scription: fullScript,
+          record: audioData,
+          node: imageData,
+        };
         endMeeting(data).then((res: any) => {
-          console.log(res)
-        })
+          console.log(res);
+        });
       }
-    };
-
+    }
   };
 
   const [initialNodes, setInitialNodes] = useState<Node[]>([
     {
-
-      id: '1',
-      type: 'input',
-      data: { label: '회의 키워드' },
+      id: "1",
+      type: "input",
+      data: { label: "회의 키워드" },
       position: { x: -150, y: 0 },
     },
     {
-      id: '2',
-      type: 'output',
-      data: { label: '다음 키워드' },
+      id: "2",
+      type: "output",
+      data: { label: "다음 키워드" },
 
       position: { x: 150, y: 0 },
     },
@@ -240,7 +233,7 @@ const MindMapComponent = ({
     setNodes(initialNodes);
     setEdges(initialEdges);
 
-    console.log(initialNodes, initialEdges)
+    console.log(initialNodes, initialEdges);
   }, [initialNodes, initialEdges]); // 임시방편으로 만듦
 
   const onConnect = useCallback(
@@ -329,12 +322,24 @@ const MindMapComponent = ({
                       ></button>
                     )}
                     {isRecording && isPaused && (
-                      <button className="btn-resume" onClick={resumeRecording}></button>
+                      <button
+                        className="btn-resume"
+                        onClick={resumeRecording}
+                      ></button>
                     )}
                     <button className="btn-stop" onClick={stopClick}></button>
                   </div>
                   <div className="live-mode-wrap">
-                    <input className="btn-live" type="checkbox" id="live" onClick={() => {setMode(mode === "live" ? "meeting" : "live")}} checked={mode === "live"}/><label htmlFor="live"></label>
+                    <input
+                      className="btn-live"
+                      type="checkbox"
+                      id="live"
+                      onClick={() => {
+                        setMode(mode === "live" ? "meeting" : "live");
+                      }}
+                      checked={mode === "live"}
+                    />
+                    <label htmlFor="live"></label>
                   </div>
                 </>
               )}
@@ -342,60 +347,57 @@ const MindMapComponent = ({
           </div>
           <div className="keyword-container">
             <h2>라이브 키워드</h2>
-            {
-              mode === "live" ? (
-                <>
-                  <div className="main-keyword-wrap">
-                    <h3>주요 키워드</h3>
-                    <div className="keyword-wrap">
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                    </div>
+            {mode === "live" ? (
+              <>
+                <div className="main-keyword-wrap">
+                  <h3>주요 키워드</h3>
+                  <div className="keyword-wrap">
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
                   </div>
-                  <div className="recommend-keyword-wrap">
-                    <h3>추천 키워드</h3>
-                    <div className="keyword-wrap">
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                      <div className="keyword">GPU</div>
-                    </div>
+                </div>
+                <div className="recommend-keyword-wrap">
+                  <h3>추천 키워드</h3>
+                  <div className="keyword-wrap">
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
+                    <div className="keyword">GPU</div>
                   </div>
-                </>
-              ) : (
-                <>
-                  <div className="main-keyword-wrap">
-                    <h3>주요 키워드</h3>
-                    <div className="keyword-wrap">
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                    </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="main-keyword-wrap">
+                  <h3>주요 키워드</h3>
+                  <div className="keyword-wrap">
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
                   </div>
-                  <div className="recommend-keyword-wrap">
-                    <h3>추천 키워드</h3>
-                    <div className="keyword-wrap">
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                      <button className="keyword">GPU</button>
-                    </div>
+                </div>
+                <div className="recommend-keyword-wrap">
+                  <h3>추천 키워드</h3>
+                  <div className="keyword-wrap">
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
+                    <button className="keyword">GPU</button>
                   </div>
-                </>
-
-              )
-            }
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
