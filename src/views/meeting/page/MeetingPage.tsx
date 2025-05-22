@@ -1,3 +1,5 @@
+// 수정
+
 // style
 import "@/views/meeting/style/meeting.sass";
 import HeaderBar from "../components/HeaderBar";
@@ -85,7 +87,7 @@ const MeetingPage = () => {
         <MindMapComponent
           setScripts={setScripts}
           conferenceData={conferenceData}
-          // setSummary={setSummary}
+          setSummary={setSummary}
         />
       </div>
     </>

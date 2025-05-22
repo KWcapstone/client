@@ -1,3 +1,5 @@
+//수정
+
 import React, { useCallback } from "react";
 import {
   ReactFlow,
@@ -27,8 +29,10 @@ import { useEffect, useState, useRef } from "react";
 // import { Client } from "@stomp/stompjs";
 import html2canvas from 'html2canvas';
 
+
 // type
 import { conferenceData } from "@/types/conferanceData";
+import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
 interface scriptData {
   time: string;
@@ -38,11 +42,13 @@ interface scriptData {
 interface MindMapComponentProps {
   setScripts: React.Dispatch<React.SetStateAction<scriptData[]>>;
   conferenceData: conferenceData;
+  setSummary: React.Dispatch<React.SetStateAction<RealTimeSummaryData[]>>;
 }
 
 const MindMapComponent = ({
   setScripts,
   conferenceData,
+  setSummary,
 }: MindMapComponentProps) => {
   const {
     // transcript,
@@ -57,8 +63,8 @@ const MindMapComponent = ({
   } = UseSpeechToText();
 
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
-
-  const [, setScriptList] = useState<
+  
+  const [scriptList, setScriptList] = useState<
   { time: string; script: string }[]
   >([]);
 
@@ -130,12 +136,23 @@ const MindMapComponent = ({
           const testString = updated.map((item) => item.script).join(" ");
 
           let data = {
-            "event": "script",
-            "projectId": conferenceData.projectId,
-            "scription": testString
-          }
+            event: "script",
+            projectId: conferenceData.projectId,
+            scription: testString,
+          };
           postScript(data).then((res: any) => {
             setScriptList([]);
+
+            setSummary((prev) => [
+              ...prev,
+              {
+                time: formattedTime,
+                title: res.data.data.summary.title,
+                item: res.data.data.summary.content,
+              },
+            ]);
+            
+
             setInitialNodes(res.data.data.nodes)
             const edges = res.data.data.nodes
               .filter((node: any) => node.parentId)
@@ -146,6 +163,7 @@ const MindMapComponent = ({
               }));
 
             setInitialEdges(edges);
+
           });
         }
 
@@ -196,6 +214,7 @@ const MindMapComponent = ({
 
   const [initialNodes, setInitialNodes] = useState<Node[]>([
     {
+
       id: '1',
       type: 'input',
       data: { label: '회의 키워드' },
@@ -205,6 +224,7 @@ const MindMapComponent = ({
       id: '2',
       type: 'output',
       data: { label: '다음 키워드' },
+
       position: { x: 150, y: 0 },
     },
   ]);
@@ -267,11 +287,11 @@ const MindMapComponent = ({
           </p>
           <button
             className="btn-mic"
-            onClick={() => (
+            onClick={() =>
               toggleListening().then(() => {
                 setMode("live");
               })
-            )}
+            }
           >
             녹음 시작하기
           </button>
