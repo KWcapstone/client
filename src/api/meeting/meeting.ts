@@ -15,6 +15,14 @@ export const postScript = (data: any) => {
   });
 };
 
+export const endMeeting = (data: any) => {
+  return Send({
+    method: "post",
+    url: "conference/save",
+    data: data
+  });
+};
+
 export const getInviting = (projectId: string, data: any) => {
   return Send({
     method: "post",

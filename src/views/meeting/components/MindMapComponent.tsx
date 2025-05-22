@@ -10,6 +10,7 @@ import {
   getOutgoers,
   getConnectedEdges,
   Node,
+  Edge
 } from "@xyflow/react";
 
 // style
@@ -17,16 +18,17 @@ import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
 // api
-import { postScript } from "@/api/meeting/meeting";
+import { postScript, endMeeting } from "@/api/meeting/meeting";
 
 // component
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
 import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
-import { useEffect, useState } from "react";
-//import { Client } from "@stomp/stompjs";
-import html2canvas from "html2canvas";
+import { useEffect, useState, useRef } from "react";
+// import { Client } from "@stomp/stompjs";
+import html2canvas from 'html2canvas';
+
 
 // type
 import { conferenceData } from "@/types/conferanceData";
@@ -57,18 +59,20 @@ const MindMapComponent = ({
     resumeRecording,
     finalTranscript,
     resetTranscript,
-    // audioUrl,
+    audioBlob,
   } = UseSpeechToText();
 
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
-
+  
   const [scriptList, setScriptList] = useState<
-    { time: string; script: string }[]
+  { time: string; script: string }[]
   >([]);
 
-  console.log("스크립트: ", scriptList);
+  const [allScripts, setAllScripts] = useState<string[]>([]);
 
   const [mode, setMode] = useState<string>("none");
+
+  const mindMapRef = useRef<HTMLDivElement>(null);
 
   // const meetingStart = () => {
   //   const client = new Client({
@@ -93,40 +97,28 @@ const MindMapComponent = ({
   //     onStompError: (frame) => {
   //       console.error("❌ STOMP 에러:", frame);
   //     },
-  //     // onConnect: (conn: any) => {
-  //     //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
-  //     //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
-  //     //   //   const receiveData = JSON.parse(message.body);
-  //     //   // });
-  //     // },
+  //     onConnect: (conn: any) => {
+  //       console.log('[+] WebSocket 연결이 되었습니다.', conn);
+  //       // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
+  //       //   const receiveData = JSON.parse(message.body);
+  //       // });
+  //     },
   //   });
   //   console.log(client);
   //   client.activate();
-
-  //   // getProfile().then((res: any) => {
-  //   //   let data = {
-  //   //     "event": "participant_join",
-  //   //     "projectId": projectId,
-  //   //     "memberId": res.data.data.memberId
-  //   //   }
-  //   //   getInviting(projectId, data).then((res: any) => {
-
-  //   //   })
-  //   // })
   // };
 
-  const handleDownload =
-    (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-      if (!ref.current) return;
+  // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+  //   if (!ref.current) return;
 
-      html2canvas(ref.current).then((canvas) => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = title === "" ? "제목없음" : title;
-        document.body.appendChild(link);
-        link.click();
-      });
-    };
+  //   html2canvas(ref.current).then((canvas) => {
+  //     const link = document.createElement('a');
+  //     link.href = canvas.toDataURL('image/png');
+  //     link.download = title === '' ? '제목없음' : title;
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -136,11 +128,11 @@ const MindMapComponent = ({
       };
 
       setScripts((prev) => [...prev, newScript]);
-
+      setAllScripts((prev) => [...prev, finalTranscript]);
       setScriptList((prev) => {
         const updated = [...prev, newScript];
 
-        if (updated.length >= 2) {
+        if (updated.length >= 7) {
           const testString = updated.map((item) => item.script).join(" ");
 
           let data = {
@@ -150,6 +142,7 @@ const MindMapComponent = ({
           };
           postScript(data).then((res: any) => {
             setScriptList([]);
+
             setSummary((prev) => [
               ...prev,
               {
@@ -158,7 +151,19 @@ const MindMapComponent = ({
                 item: res.data.data.summary.content,
               },
             ]);
-            setInitialNodes(res.data.data.nodes);
+            
+
+            setInitialNodes(res.data.data.nodes)
+            const edges = res.data.data.nodes
+              .filter((node: any) => node.parentId)
+              .map((node: any, index: number) => ({
+                id: `${index}`,
+                source: node.parentId!,
+                target: node.id,
+              }));
+
+            setInitialEdges(edges);
+
           });
         }
 
@@ -169,58 +174,74 @@ const MindMapComponent = ({
     }
   }, [finalTranscript]);
 
-  const stopClick = () => {
+  const stopClick = async () => {
+    console.log('asd')
     toggleListening();
+    setMode("end")
+
+    const fullScript = allScripts.join(" ");
+
+    if (mindMapRef.current){
+      console.log('afaf')
+      const canvas = await html2canvas(mindMapRef.current);
+      const imageBlob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob((b:any) => resolve(b), "image/jpeg")
+      );
+
+      console.log(audioBlob)
+
+      if (imageBlob && audioBlob) {
+        console.log('qwtwtqw')
+        const imageData = new FormData();
+        imageData.append("file", imageBlob, "mindmap.jpg");
+
+        const audioData = new FormData();
+        audioData.append("file", audioBlob, "recording.webm");
+
+        let data = {
+          "projectId": conferenceData.projectId,
+          "scription": fullScript,
+          "record" : audioData,
+          "node": imageData
+        }
+        endMeeting(data).then((res: any) => {
+          console.log(res)
+        })
+      }
+    };
+
   };
 
   const [initialNodes, setInitialNodes] = useState<Node[]>([
     {
-      id: "1",
-      type: "input",
-      data: { label: "회의 시작" },
+
+      id: '1',
+      type: 'input',
+      data: { label: '회의 키워드' },
       position: { x: -150, y: 0 },
     },
     {
-      id: "2",
-      type: "output",
-      data: { label: "키워드" },
+      id: '2',
+      type: 'output',
+      data: { label: '다음 키워드' },
+
       position: { x: 150, y: 0 },
     },
-    // {
-    //   id: '1',
-    //   type: 'input',
-    //   data: { label: 'Start here...' },
-    //   position: { x: -150, y: 0 },
-    // },
-    // {
-    //   id: '2',
-    //   type: 'input',
-    //   data: { label: '...or here!' },
-    //   position: { x: 150, y: 0 },
-    // },
-    // { id: '3', data: { label: 'Delete me.' }, position: { x: 0, y: 100 } },
-    // { id: '4', data: { label: 'Then me!' }, position: { x: 0, y: 200 } },
-    // {
-    //   id: '5',
-    //   type: 'output',
-    //   data: { label: 'End here!' },
-    //   position: { x: 0, y: 300 },
-    // },
   ]);
 
-  const initialEdges = [
-    { id: "1->3", source: "1", target: "3" },
-    { id: "2->3", source: "2", target: "3" },
-    { id: "3->4", source: "3", target: "4" },
-    { id: "4->5", source: "4", target: "5" },
-  ];
+  const [initialEdges, setInitialEdges] = useState<Edge[]>([
+    { id: "1", source: "1", target: "2" },
+  ]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   useEffect(() => {
     setNodes(initialNodes);
-  }, [initialNodes]); // 임시방편으로 만듦
+    setEdges(initialEdges);
+
+    console.log(initialNodes, initialEdges)
+  }, [initialNodes, initialEdges]); // 임시방편으로 만듦
 
   const onConnect = useCallback(
     (params: any) => setEdges(addEdge(params, edges)),
@@ -268,7 +289,7 @@ const MindMapComponent = ({
             className="btn-mic"
             onClick={() =>
               toggleListening().then(() => {
-                setMode("meeting");
+                setMode("live");
               })
             }
           >
@@ -277,7 +298,7 @@ const MindMapComponent = ({
         </div>
       ) : (
         <div className="mind-map-main">
-          <div className="mind-map-wrap">
+          <div className="mind-map-wrap" ref={mindMapRef}>
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -299,22 +320,82 @@ const MindMapComponent = ({
               </div>
               <div className="box-time">{formattedTime}</div>
               {isRecording && (
-                <div className="box-menu">
-                  {isRecording && !isPaused && (
-                    <button
-                      className="btn-pause"
-                      onClick={pauseRecording}
-                    ></button>
-                  )}
-                  {isRecording && isPaused && (
-                    <button className="btn-resume" onClick={resumeRecording}>
-                      재개
-                    </button>
-                  )}
-                  <button className="btn-stop" onClick={stopClick}></button>
-                </div>
+                <>
+                  <div className="box-menu">
+                    {isRecording && !isPaused && (
+                      <button
+                        className="btn-pause"
+                        onClick={pauseRecording}
+                      ></button>
+                    )}
+                    {isRecording && isPaused && (
+                      <button className="btn-resume" onClick={resumeRecording}></button>
+                    )}
+                    <button className="btn-stop" onClick={stopClick}></button>
+                  </div>
+                  <div className="live-mode-wrap">
+                    <input className="btn-live" type="checkbox" id="live" onClick={() => {setMode(mode === "live" ? "meeting" : "live")}} checked={mode === "live"}/><label htmlFor="live"></label>
+                  </div>
+                </>
               )}
             </div>
+          </div>
+          <div className="keyword-container">
+            <h2>라이브 키워드</h2>
+            {
+              mode === "live" ? (
+                <>
+                  <div className="main-keyword-wrap">
+                    <h3>주요 키워드</h3>
+                    <div className="keyword-wrap">
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                    </div>
+                  </div>
+                  <div className="recommend-keyword-wrap">
+                    <h3>추천 키워드</h3>
+                    <div className="keyword-wrap">
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                      <div className="keyword">GPU</div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="main-keyword-wrap">
+                    <h3>주요 키워드</h3>
+                    <div className="keyword-wrap">
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                    </div>
+                  </div>
+                  <div className="recommend-keyword-wrap">
+                    <h3>추천 키워드</h3>
+                    <div className="keyword-wrap">
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                      <button className="keyword">GPU</button>
+                    </div>
+                  </div>
+                </>
+
+              )
+            }
           </div>
         </div>
       )}
