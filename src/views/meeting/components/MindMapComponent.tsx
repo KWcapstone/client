@@ -74,7 +74,7 @@ const MindMapComponent = ({
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "ws://3.39.11.168:8080/ws", // 서버 WebSocket URL q
+      brokerURL: "wss://3.39.11.168:8080/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
