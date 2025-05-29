@@ -24,7 +24,7 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 
 // import
 import { useEffect, useState, useRef } from "react";
-// import { Client } from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 import html2canvas from "html2canvas";
 
 // type
@@ -72,39 +72,39 @@ const MindMapComponent = ({
 
   const mindMapRef = useRef<HTMLDivElement>(null);
 
-  // const meetingStart = () => {
-  //   const client = new Client({
-  //     brokerURL: "wss://www.moaba.site/ws", // 서버 WebSocket URL q
-  //     reconnectDelay: 5000,
-  //     debug: (str) => {
-  //       console.log(str);
-  //     },
-  //     onConnect: () => {
-  //       console.log("연결");
-  //       client.subscribe(
-  //         `/topic/conference/${conferenceData.projectId}/participants`,
-  //         (message: any) => {
-  //           const data: any = JSON.parse(message.body);
-  //           console.log(data.participants);
-  //         }
-  //       );
-  //     },
-  //     onWebSocketError: (event) => {
-  //       console.error("❌ WebSocket 연결 실패:", event);
-  //     },
-  //     onStompError: (frame) => {
-  //       console.error("❌ STOMP 에러:", frame);
-  //     },
-  //     onConnect: (conn: any) => {
-  //       console.log('[+] WebSocket 연결이 되었습니다.', conn);
-  //       // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
-  //       //   const receiveData = JSON.parse(message.body);
-  //       // });
-  //     },
-  //   });
-  //   console.log(client);
-  //   client.activate();
-  // };
+  const meetingStart = () => {
+    const client = new Client({
+      brokerURL: "ws://3.39.11.168:8080/ws", // 서버 WebSocket URL q
+      reconnectDelay: 5000,
+      debug: (str) => {
+        console.log(str);
+      },
+      onConnect: () => {
+        console.log("연결");
+        client.subscribe(
+          `/topic/conference/${conferenceData.projectId}/participants`,
+          (message: any) => {
+            const data: any = JSON.parse(message.body);
+            console.log(data.participants);
+          }
+        );
+      },
+      onWebSocketError: (event) => {
+        console.error("❌ WebSocket 연결 실패:", event);
+      },
+      onStompError: (frame) => {
+        console.error("❌ STOMP 에러:", frame);
+      },
+      // onConnect: (conn: any) => {
+      //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
+      //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
+      //   //   const receiveData = JSON.parse(message.body);
+      //   // });
+      // },
+    });
+    console.log(client);
+    client.activate();
+  };
 
   // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
   //   if (!ref.current) return;
@@ -294,6 +294,7 @@ const MindMapComponent = ({
             onClick={() => {
               toggleListening().then(() => {
                 setMode("live");
+                meetingStart();
               });
             }}
           >
