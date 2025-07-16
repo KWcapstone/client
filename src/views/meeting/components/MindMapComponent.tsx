@@ -74,7 +74,7 @@ const MindMapComponent = ({
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "wss://3.39.11.168:8080/ws", // 서버 WebSocket URL q
+      brokerURL: "ws://3.39.11.168:8080/ws", // 서버 WebSocket URL q
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
@@ -138,7 +138,7 @@ const MindMapComponent = ({
             projectId: conferenceData.projectId,
             scription: testString,
           };
-          postScript(data).then((res: any) => {
+          postScript(conferenceData.projectId, data).then((res: any) => {
             setScriptList([]);
 
             setSummary((prev) => [
@@ -243,8 +243,6 @@ const MindMapComponent = ({
   useEffect(() => {
     setNodes(initialNodes);
     setEdges(initialEdges);
-
-    console.log(initialNodes, initialEdges);
   }, [initialNodes, initialEdges]); // 임시방편으로 만듦
 
   const onConnect = useCallback(
@@ -279,6 +277,20 @@ const MindMapComponent = ({
     },
     [nodes, edges]
   );
+
+const ClickKeyword = (keyword: string) => {
+  const newNode: Node = {
+    id: `${Date.now()}`,
+    type: "default",
+    data: { label: keyword },
+    position: {
+      x: Math.random() * 250,
+      y: Math.random() * 250,
+    },
+  };
+
+  setNodes((nds) => [...nds, newNode]);
+};
 
   return (
     <div className="mind-map-container">
@@ -409,6 +421,7 @@ const MindMapComponent = ({
                           className="keyword"
                           id={x.id.toString()}
                           key={x.id}
+                          onClick={() => {ClickKeyword(x.value)}}
                         >
                           {x.value}
                         </button>
@@ -427,6 +440,7 @@ const MindMapComponent = ({
                           className="keyword"
                           id={x.id.toString()}
                           key={x.id}
+                          onClick={() => {ClickKeyword(x.value)}}
                         >
                           {x.value}
                         </button>

@@ -50,6 +50,29 @@
       max-width: 100%
       max-height: 100%
 
+      .react-flow
+        .react-flow__node
+          +padding(8px 16px)
+          border-radius: 10px
+          border: 0
+          font-size: 14px
+          font-weight: bold
+
+          .react-flow__handle
+            +size(4px, 4px)
+            background-color: $purple-100
+
+        .react-flow__node-input
+          color: $white
+          background-color: $purple-600
+
+        .react-flow__node-default
+          background-color: $purple-100
+
+        .react-flow__node-output
+          background-color: $purple-50
+
+
     .middle-bar
       +size(435px, 64px)
       +flex-box(center, center)
@@ -214,7 +237,7 @@
               color: $page-color
               background-color: #EEE8FD
               border: 1px solid $page-color
-          
+
         p
           +margin(top 5px)
           font-size: 12px
