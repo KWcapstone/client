@@ -7,10 +7,10 @@ export const getMeetingId = () => {
   });
 };
 
-export const postScript = (data: any) => {
+export const postScript = (projectId: string, data: any) => {
   return Send({
     method: "post",
-    url: "conference/script",
+    url: `conference/${projectId}/script`,
     data: data
   });
 };
