@@ -106,7 +106,7 @@ const SplashPage = () => {
             <div className="intro-container">
               <div className="intro-headline">
                 음성에서 마인드맵까지,
-                <br /> 아이디어를 더 스마트하게!!!!!
+                <br /> 아이디어를 더 스마트하게
               </div>
               <div className="intro-subheadline">
                 아이디어는 자유롭게, 정리는 자동으로.
