@@ -70,8 +70,6 @@ const SideBar = ({
     });
   }, []);
 
-  console.log("프로젝트 아이디", conferenceData.projectId);
-
   return (
     <div
       className={`side-bar ${isSidebarOpen ? "open" : "closed"}`}

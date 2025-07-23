@@ -16,7 +16,8 @@ import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
 // api
-import { postScript, endMeeting } from "@/api/meeting/meeting";
+import { nameUpdate, postScript, endMeeting } from "@/api/meeting/meeting";
+import { getProfile } from "@/api/main/profile";
 
 // component
 import UseSpeechToText from "@/views/meeting/components/UseSpeechToText";
@@ -72,22 +73,70 @@ const MindMapComponent = ({
 
   const mindMapRef = useRef<HTMLDivElement>(null);
 
+  const clientRef = useRef<Client | null>(null); // WebSocket 클라이언트 저장
+
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "ws://3.39.11.168:8080/ws", // 서버 WebSocket URL q
+      brokerURL: "ws://3.39.11.168:8080/ws",
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
       },
       onConnect: () => {
-        console.log("연결");
         client.subscribe(
-          `/topic/conference/${conferenceData.projectId}/participants`,
+          `/topic/conference/${conferenceData.projectId}`,
           (message: any) => {
             const data: any = JSON.parse(message.body);
-            console.log(data.participants);
+            console.log(data);
+
+            if (data.event === "liveOn") {
+              // GPT 응답이 들어온 경우
+              setSummary((prev) => [
+                ...prev,
+                {
+                  time: formattedTime,
+                  title: data.summary.title,
+                  item: data.summary.content,
+                },
+              ]);
+
+              setInitialNodes(data.nodes);
+
+              const edges = data.nodes
+                .filter((node: any) => node.parentId)
+                .map((node: any, index: number) => ({
+                  id: `${index}`,
+                  source: node.parentId!,
+                  target: node.id,
+                }));
+
+              setInitialEdges(edges);
+
+              setMainKeyword(
+                JSON.parse(data.mainKeywords).map((x: any, i: number) => ({
+                  id: i,
+                  value: x,
+                }))
+              );
+              setRecommendKeyword(
+                JSON.parse(data.recommendedKeywords)
+                  .filter(Boolean)
+                  .map((x: any, i: number) => ({ id: i, value: x }))
+              );
+            }
           }
         );
+
+        getProfile().then((res: any) => {
+          client.publish({
+            destination: `/app/conference/${conferenceData.projectId}/modify_inviting`,
+            body: JSON.stringify({
+              event: "participant_join",
+              projectId: conferenceData.projectId,
+              memberId: res.data.data.memberId,
+            }),
+          });
+        });
       },
       onWebSocketError: (event) => {
         console.error("❌ WebSocket 연결 실패:", event);
@@ -95,28 +144,23 @@ const MindMapComponent = ({
       onStompError: (frame) => {
         console.error("❌ STOMP 에러:", frame);
       },
-      // onConnect: (conn: any) => {
-      //   console.log('[+] WebSocket 연결이 되었습니다.', conn);
-      //   // client.subscribe(SUB_ENDPOINT, (message: IMessage) => {
-      //   //   const receiveData = JSON.parse(message.body);
-      //   // });
-      // },
     });
     console.log(client);
     client.activate();
+    clientRef.current = client;
   };
 
-  // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-  //   if (!ref.current) return;
+  const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+    if (!ref.current) return;
 
-  //   html2canvas(ref.current).then((canvas) => {
-  //     const link = document.createElement('a');
-  //     link.href = canvas.toDataURL('image/png');
-  //     link.download = title === '' ? '제목없음' : title;
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   });
-  // };
+    html2canvas(ref.current).then((canvas) => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = title === '' ? '제목없음' : title;
+      document.body.appendChild(link);
+      link.click();
+    });
+  };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -130,50 +174,70 @@ const MindMapComponent = ({
       setScriptList((prev) => {
         const updated = [...prev, newScript];
 
-        if (updated.length >= 7) {
+        if (updated.length >= 2 && clientRef.current?.connected) {
+          console.log('스크립트 전송')
           const testString = updated.map((item) => item.script).join(" ");
-
-          let data = {
+          const data = {
             event: "script",
             projectId: conferenceData.projectId,
             scription: testString,
           };
-          postScript(conferenceData.projectId, data).then((res: any) => {
-            setScriptList([]);
 
-            setSummary((prev) => [
-              ...prev,
-              {
-                time: formattedTime,
-                title: res.data.data.summary.title,
-                item: res.data.data.summary.content,
-              },
-            ]);
-
-            setInitialNodes(res.data.data.nodes);
-            const edges = res.data.data.nodes
-              .filter((node: any) => node.parentId)
-              .map((node: any, index: number) => ({
-                id: `${index}`,
-                source: node.parentId!,
-                target: node.id,
-              }));
-
-            setInitialEdges(edges);
-            setMainKeyword(
-              JSON.parse(res.data.data.mainKeywords).map(
-                (x: any, i: number) => ({ id: i, value: x })
-              )
-            );
-            setRecommendKeyword(
-              JSON.parse(res.data.data.recommendedKeywords)
-                .filter(Boolean)
-                .map((x: any, i: number) => ({ id: i, value: x }))
-            );
+          // WebSocket 기반 GPT 마인드맵 요청
+          clientRef.current.publish({
+            destination: `/app/conference/${conferenceData.projectId}/script`,
+            body: JSON.stringify(data),
           });
+          
+          console.log(JSON.stringify(data))
+
+          setScriptList([]);
         }
 
-        return updated.length >= 7 ? [] : updated;
+        // if (updated.length >= 7) {
+        //   const testString = updated.map((item) => item.script).join(" ");
+
+        //   let data = {
+        //     event: "script",
+        //     projectId: conferenceData.projectId,
+        //     scription: testString,
+        //   };
+        //   postScript(conferenceData.projectId, data).then((res: any) => {
+        //     setScriptList([]);
+
+        //     setSummary((prev) => [
+        //       ...prev,
+        //       {
+        //         time: formattedTime,
+        //         title: res.data.data.summary.title,
+        //         item: res.data.data.summary.content,
+        //       },
+        //     ]);
+
+        //     setInitialNodes(res.data.data.nodes);
+        //     const edges = res.data.data.nodes
+        //       .filter((node: any) => node.parentId)
+        //       .map((node: any, index: number) => ({
+        //         id: `${index}`,
+        //         source: node.parentId!,
+        //         target: node.id,
+        //       }));
+
+        //     setInitialEdges(edges);
+        //     setMainKeyword(
+        //       JSON.parse(res.data.data.mainKeywords).map(
+        //         (x: any, i: number) => ({ id: i, value: x })
+        //       )
+        //     );
+        //     setRecommendKeyword(
+        //       JSON.parse(res.data.data.recommendedKeywords)
+        //         .filter(Boolean)
+        //         .map((x: any, i: number) => ({ id: i, value: x }))
+        //     );
+        //   });
+        // }
+
+        return updated.length >= 2 ? [] : updated;
       });
 
       resetTranscript();
