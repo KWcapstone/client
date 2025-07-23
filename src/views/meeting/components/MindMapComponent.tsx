@@ -16,7 +16,7 @@ import "@xyflow/react/dist/style.css";
 import "@/views/meeting/style/mind-map.sass";
 
 // api
-import { nameUpdate, postScript, endMeeting } from "@/api/meeting/meeting";
+import { endMeeting } from "@/api/meeting/meeting";
 import { getProfile } from "@/api/main/profile";
 
 // component
