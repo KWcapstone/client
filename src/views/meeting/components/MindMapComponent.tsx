@@ -90,16 +90,6 @@ const MindMapComponent = ({
             console.log(data);
 
             if (data.event === "liveOn") {
-              // GPT 응답이 들어온 경우
-              setSummary((prev) => [
-                ...prev,
-                {
-                  time: formattedTime,
-                  title: data.summary.title,
-                  item: data.summary.content,
-                },
-              ]);
-
               setInitialNodes(data.nodes);
 
               const edges = data.nodes
@@ -111,15 +101,29 @@ const MindMapComponent = ({
                 }));
 
               setInitialEdges(edges);
+            }
 
+            if (data.event === "summary") {
+              setSummary((prev) => [
+                ...prev,
+                {
+                  time: formattedTime,
+                  title: data.title,
+                  item: data.content,
+                },
+              ]);
+            }
+
+            if (data.event === "main_keywords") {
               setMainKeyword(
-                JSON.parse(data.mainKeywords).map((x: any, i: number) => ({
-                  id: i,
-                  value: x,
-                }))
+                data.keywords.map((x: any, i: number) => ({ id: i, value: x }))
               );
+            }
+
+            if (data.event === "recommended_keywords") {
               setRecommendKeyword(
-                JSON.parse(data.recommendedKeywords)
+                data.keywords[0]
+                  .split('\n')
                   .filter(Boolean)
                   .map((x: any, i: number) => ({ id: i, value: x }))
               );
@@ -175,7 +179,6 @@ const MindMapComponent = ({
         const updated = [...prev, newScript];
 
         if (updated.length >= 2 && clientRef.current?.connected) {
-          console.log('스크립트 전송')
           const testString = updated.map((item) => item.script).join(" ");
           const data = {
             event: "script",
