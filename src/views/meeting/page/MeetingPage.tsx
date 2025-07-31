@@ -13,6 +13,9 @@ import { useState, useRef, useEffect } from "react";
 // api
 import { getMeetingId } from "@/api/meeting/meeting";
 
+// component
+import TutorialModal from "@/views/meeting/components/TutorialModal";
+
 // type
 import { conferenceData } from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
@@ -35,7 +38,7 @@ const MeetingPage = () => {
   });
 
   // modal
-  type ModalType = "share" | null;
+  type ModalType = "tutorial" | "share" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
   const closeModal = () => setModalType(null);
   const openModal = () => setModalType("share");
@@ -45,6 +48,7 @@ const MeetingPage = () => {
   useEffect(() => {
     getMeetingId().then((res: any) => {
       setConferenceData(res.data.data);
+      setModalType("tutorial");
     });
   }, []);
 
@@ -65,6 +69,18 @@ const MeetingPage = () => {
               onCloseModal={closeModal}
               projectId={conferenceData.projectId}
             />
+          </div>
+        )}
+        {modalType === "tutorial" && (
+          <div
+            className="modal-container"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                closeModal();
+              }
+            }}
+          >
+            <TutorialModal onCloseModal={closeModal} />
           </div>
         )}
       </div>
