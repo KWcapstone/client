@@ -2,7 +2,7 @@ name: Deploy Frontend
 
 on:
   push:
-    branches: [ main ]  
+    branches: [main]
 
 jobs:
   deploy:
@@ -19,6 +19,5 @@ jobs:
           script: |
             cd /home/ubuntu/client  # 프로젝트 디렉토리
             git pull origin main
-            cd client
             npm install
             npm run build
