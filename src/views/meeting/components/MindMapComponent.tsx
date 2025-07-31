@@ -154,17 +154,17 @@ const MindMapComponent = ({
     clientRef.current = client;
   };
 
-  const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-    if (!ref.current) return;
+  // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+  //   if (!ref.current) return;
 
-    html2canvas(ref.current).then((canvas) => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = title === '' ? '제목없음' : title;
-      document.body.appendChild(link);
-      link.click();
-    });
-  };
+  //   html2canvas(ref.current).then((canvas) => {
+  //     const link = document.createElement('a');
+  //     link.href = canvas.toDataURL('image/png');
+  //     link.download = title === '' ? '제목없음' : title;
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -191,7 +191,7 @@ const MindMapComponent = ({
             destination: `/app/conference/${conferenceData.projectId}/script`,
             body: JSON.stringify(data),
           });
-          
+
           console.log(JSON.stringify(data))
 
           setScriptList([]);
