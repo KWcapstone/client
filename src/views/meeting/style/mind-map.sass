@@ -205,8 +205,33 @@
         +padding(top 24px)
 
         h3
+          +flex-box(normal, center, 4px)
           font-weight: bold
           line-height: 21px
+
+          .toltip-wrap
+            +size(17px, 17px)
+            position: relative
+
+            img
+              +size(17px, 17px)
+ 
+            .toltip
+              display: none
+              +size(200px)
+              +padding(8px 12px)
+              font-size: 13px
+              color: $gray-200
+              background: $gray-800
+              border-radius: 8px
+              z-index: 100
+              left: 50%
+              transform: translate(-50%)
+            
+            &:hover
+              .toltip
+                display: block
+                position: absolute
 
         .keyword-wrap
           +flex-box(center, center, 12px 8px)
