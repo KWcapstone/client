@@ -27,7 +27,7 @@ import useRecordingTimer from "@/views/meeting/components/RecodingTimer";
 import { useEffect, useState, useRef } from "react";
 import { Client } from "@stomp/stompjs";
 import html2canvas from "html2canvas";
-
+import toltip from "@/assets/imgs/icon/toltip.svg";
 // type
 import { conferenceData } from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
@@ -154,17 +154,17 @@ const MindMapComponent = ({
     clientRef.current = client;
   };
 
-  const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-    if (!ref.current) return;
+  // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
+  //   if (!ref.current) return;
 
-    html2canvas(ref.current).then((canvas) => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = title === '' ? '제목없음' : title;
-      document.body.appendChild(link);
-      link.click();
-    });
-  };
+  //   html2canvas(ref.current).then((canvas) => {
+  //     const link = document.createElement('a');
+  //     link.href = canvas.toDataURL('image/png');
+  //     link.download = title === '' ? '제목없음' : title;
+  //     document.body.appendChild(link);
+  //     link.click();
+  //   });
+  // };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -191,7 +191,7 @@ const MindMapComponent = ({
             destination: `/app/conference/${conferenceData.projectId}/script`,
             body: JSON.stringify(data),
           });
-          
+
           console.log(JSON.stringify(data))
 
           setScriptList([]);
@@ -441,7 +441,15 @@ const ClickKeyword = (keyword: string) => {
             {mode === "live" ? (
               <>
                 <div className="main-keyword-wrap">
-                  <h3>주요 키워드</h3>
+                  <h3>
+                    주요 키워드
+                    <div className="toltip-wrap">
+                      <img src={toltip} alt="" />
+                      <div className="toltip">
+                        녹음 중 자동으로 추출된 핵심 키워드예요. 대화에서 자주 언급되는 단어나 중요한 개념을 실시간으로 분석해 제공해요.
+                      </div>
+                    </div>
+                  </h3>
                   {mainKeyword.length ? (
                     <div className="keyword-wrap">
                       {mainKeyword.map((x: any) => (
@@ -459,7 +467,15 @@ const ClickKeyword = (keyword: string) => {
                   )}
                 </div>
                 <div className="recommend-keyword-wrap">
-                  <h3>추천 키워드</h3>
+                  <h3>
+                    추천 키워드
+                    <div className="toltip-wrap">
+                      <img src={toltip} alt="" />
+                      <div className="toltip">
+                        마인드맵에 추가하면 좋을 키워드를 추천해요. 대화의 흐름과 맥락을 분석해 관련성이 높은 키워드를 제안해요.
+                      </div>
+                    </div>
+                  </h3>
                   {recommendKeyword.length ? (
                     <div className="keyword-wrap">
                       {recommendKeyword.map((x: any) => (

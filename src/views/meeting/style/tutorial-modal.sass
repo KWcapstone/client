@@ -1,0 +1,65 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_button.sass'
+
+.modal-content
+  +size(568px)
+  padding: 0 !important
+  overflow: hidden
+
+  .modal-close-btn
+    z-index: 10
+
+  .modal-wrap
+    .swiper
+      .swiper-wrapper
+        .swiper-slide
+          +flex-box(center, center)
+          flex-direction: column
+
+          .img-wrap
+            +size(100%)
+            +flex-box(center)
+            +padding(40px 0)
+            background: linear-gradient(155deg, #9EA5F8 -20.39%, #A48CE7 64.22%)
+
+            img
+              +size(440px, 275px)
+              border-radius: 8px
+          
+          .desc-wrap
+            +padding(50px 0 32px 0)
+            +size(488px)
+            text-align: center
+
+            b
+              font-size: 22px
+              line-height: 33px
+
+            p
+              +margin(top 12px)
+              font-size: 16px
+              font-weight: 500
+              line-height: 26.4px
+              color: #363638
+
+      .swiper-pagination
+        top: 375px
+
+        .swiper-pagination-bullet-active
+          background: $purple-300
+          
+    .btn-wrap
+      +flex-box(center, center, 12px)
+      +padding(bottom 28px)
+
+      button
+        +btn(208px, 48px, 8px)
+        font-weight: 500px
+      
+      .btn-next
+        font-weight: 700
+        color: $white
+        background: $black
+
+      
