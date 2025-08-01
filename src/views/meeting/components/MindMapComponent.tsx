@@ -122,10 +122,7 @@ const MindMapComponent = ({
 
             if (data.event === "recommended_keywords") {
               setRecommendKeyword(
-                data.keywords[0]
-                  .split('\n')
-                  .filter(Boolean)
-                  .map((x: any, i: number) => ({ id: i, value: x }))
+                data.keywords.map((x: any, i: number) => ({ id: i, value: x }))
               );
             }
           }
