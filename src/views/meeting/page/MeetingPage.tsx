@@ -73,7 +73,7 @@ const MeetingPage = () => {
         )}
         {modalType === "tutorial" && (
           <div
-            className="modal-container"
+            className="modal-container long pd-0"
             onClick={(e) => {
               if (e.target === e.currentTarget) {
                 closeModal();

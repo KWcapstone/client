@@ -67,8 +67,8 @@ const TutorialModal = ({
     <Modal onCloseModal={onCloseModal}>
       <div className="modal-wrap">
         <Swiper
-          onSwiper={(swiper) => (swiperRef.current = swiper)}
-          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+          onSwiper={(swiper:any) => (swiperRef.current = swiper)}
+          onSlideChange={(swiper:any) => setActiveIndex(swiper.activeIndex)}
           effect="fade"
           speed={500}
           fadeEffect={{ crossFade: true }}
