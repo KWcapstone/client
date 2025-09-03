@@ -115,7 +115,13 @@ const LoginModal = ({
       import.meta.env.VITE_API_KAKAO_REST_API_KEY
     }&redirect_uri=${import.meta.env.VITE_API_KAKAO_REDIRECT_URI}`;
   };
-  const handleGoogleLoginClick = () => {};
+  const handleGoogleLoginClick = () => {
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+      import.meta.env.VITE_API_GOOGLE_CLIENT_ID
+    }&redirect_uri=${
+      import.meta.env.VITE_API_GOOGLE_REDIRECT_URI
+    }&response_type=code&scope=email profile&prompt=select_account`;
+  };
   const handleNaverLoginClick = () => {
     window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${
       import.meta.env.VITE_API_NAVER_CLIENT_ID

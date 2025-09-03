@@ -7,12 +7,14 @@ import SummaryPage from "@/views/main/page/SummaryPage";
 import MeetingPage from "@/views/meeting/page/MeetingPage";
 import InvitePage from "@/views/invite/page/InvitePage";
 import ProtectedRoute from "./ProtectedRoute";
+import KakaoRedirection from "@/views/splash/components/KakaoRedirection";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SplashRedirect />} />
+        <Route path="/oauth/kakao" element={<KakaoRedirection />} />
         <Route
           path="/project"
           element={
