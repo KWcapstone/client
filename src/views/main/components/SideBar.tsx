@@ -15,18 +15,20 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import UserModal from "@/views/main/components/UserModal";
 import PasswordChangeModal from "@/views/main/components/ChangePWModal";
+import News from "@/views/main/components/News";
 
 const SideBar = () => {
   const [sort, setSort] = useState<string>("/");
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  type ModalType = "user" | "changePW" | null;
+  const [, setOpenNews] = useState(false);
+
+  type ModalType = "user" | "changePW" | "news" | null;
   const [modalType, setModalType] = useState<ModalType>(null);
   const closeModal = () => setModalType(null);
   const openChangePWModal = () => setModalType("changePW");
   const openUserModal = () => setModalType("user");
-
   const [profile, setProfile] = useState<profileData>();
 
   useEffect(() => {
@@ -52,7 +54,13 @@ const SideBar = () => {
           <Link to="/" className="logo-wrap">
             <img src={logo} alt="LOGO" />
           </Link>
-          <button className="new"></button>
+          <button
+            className="new"
+            onClick={() => {
+              setOpenNews((prev) => !prev);
+              setModalType((prev) => (prev === "news" ? null : "news"));
+            }}
+          ></button>
         </div>
         <div className="user-wrap">
           <div className="user" onClick={openUserModal}>
@@ -135,6 +143,16 @@ const SideBar = () => {
             onOpenUserModal={openUserModal}
           />
         </div>
+      )}
+      {modalType === "news" && (
+        <News
+          onCloseModal={closeModal}
+          onClick={(e) => {
+            if (e.target !== e.currentTarget) {
+              closeModal();
+            }
+          }}
+        />
       )}
     </>
   );

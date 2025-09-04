@@ -1,0 +1,21 @@
+@import '@/sass/helpers/_variables.sass'
+@import '@/sass/helpers/_mixins.scss'
+@import '@/sass/uix/_button.sass'
+
+.news-container
+  +size(398px, 448px)
+  +position(absolute, 48px, 0, 0, 198px)
+  +border-radius(16px)
+  +border(1px solid $gray-100)
+
+  background-color: $white
+  z-index: 20
+  
+  .modal-close-btn
+    cursor: pointer
+
+    +size(24px)
+    +flex-box(center, center)
+    +position(absolute, 12px, 12px)
+
+  
