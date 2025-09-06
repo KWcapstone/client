@@ -13,3 +13,17 @@ export const postNaverLogin = (code: string) => {
     url: `/auth/login/naver?code=${code}`,
   });
 };
+
+export const postGoogleLogin = (code: string) => {
+  return Send({
+    method: "get",
+    url: `/auth/login/google?code=${code}`,
+  });
+};
+
+export const postAgree = () => {
+  return Send({
+    method: "post",
+    url: `/auth/agree`,
+  });
+};
