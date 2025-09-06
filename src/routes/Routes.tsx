@@ -8,6 +8,7 @@ import MeetingPage from "@/views/meeting/page/MeetingPage";
 import InvitePage from "@/views/invite/page/InvitePage";
 import ProtectedRoute from "./ProtectedRoute";
 import KakaoRedirection from "@/views/splash/components/KakaoRedirection";
+import NaverRedirection from "@/views/splash/components/NaverRedirection";
 
 const Router = () => {
   return (
@@ -15,6 +16,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<SplashRedirect />} />
         <Route path="/oauth/kakao" element={<KakaoRedirection />} />
+        <Route path="/api/login/naver" element={<NaverRedirection />} />
         <Route
           path="/project"
           element={
