@@ -13,7 +13,6 @@ import "dayjs/locale/ko";
 // interface
 interface NewsProps {
   onCloseModal: () => void;
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 interface NewsItem {
   noticeId: {
@@ -25,7 +24,7 @@ interface NewsItem {
   isRead: boolean;
 }
 
-const News = ({ onCloseModal, onClick }: NewsProps) => {
+const News = ({ onCloseModal }: NewsProps) => {
   type NewsView = "all" | "unread";
 
   const newsResponse = {
@@ -56,19 +55,29 @@ const News = ({ onCloseModal, onClick }: NewsProps) => {
   const [newsView, setNewsView] = useState<NewsView>("all");
 
   return (
-    <div className="news-container" onClick={onClick}>
+    <div className="news-container">
       <div onClick={onCloseModal} className="modal-close-btn">
         <img src={modal_close} alt="닫기" />
       </div>
-      <div className="header">새소식</div>
-      <div>
-        <div>
-          <div>전체</div>
-          <div>안읽은 소식</div>
+      <div className="news-header">새 소식</div>
+      <div className="news-navbar">
+        <div className="left">
+          <div
+            className={`all ${newsView === "all" ? "active" : ""}`}
+            onClick={() => setNewsView("all")}
+          >
+            전체
+          </div>
+          <div
+            className={`unread ${newsView === "unread" ? "active" : ""}`}
+            onClick={() => setNewsView("unread")}
+          >
+            안읽은 소식
+          </div>
         </div>
-        <div>모두 읽음으로 표시</div>
+        <div className="right">모두 읽음으로 표시</div>
       </div>
-      <div>
+      <div className="news-content">
         {newsResponse.data.map((item) => (
           <NewsItem key={item.noticeId.timestamp} data={item} />
         ))}
@@ -98,10 +107,10 @@ const timeAgo = ({ timestamp }: { timestamp: string }) => {
 const NewsItem = ({ data }: { data: NewsItem }) => {
   return (
     <div className="news-item">
-      <img src={user_img} alt="User" />
-      <div className="news-content">
-        <div className="news-title">{data.title}</div>
-        <div className="news-date">
+      <img className="news-item-image" src={user_img} alt="User" />
+      <div className="news-item-content">
+        <div className="news-item-title">{data.title}</div>
+        <div className="news-item-date">
           {timeAgo({ timestamp: data.noticeId.date })}
         </div>
       </div>
