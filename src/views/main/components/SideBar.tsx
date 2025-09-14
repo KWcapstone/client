@@ -144,16 +144,7 @@ const SideBar = () => {
           />
         </div>
       )}
-      {modalType === "news" && (
-        <News
-          onCloseModal={closeModal}
-          onClick={(e) => {
-            if (e.target !== e.currentTarget) {
-              closeModal();
-            }
-          }}
-        />
-      )}
+      {modalType === "news" && <News onCloseModal={closeModal} />}
     </>
   );
 };
