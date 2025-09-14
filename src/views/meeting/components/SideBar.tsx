@@ -161,7 +161,7 @@ const SideBar = ({
                         </div>
                       ))
                     ) : (
-                      <div className="no-script">스크립트가 없습니다.</div>
+                      <div className="no-script">실시간 요약이 없습니다.</div>
                     )}
                   </div>
                 </>
