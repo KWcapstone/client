@@ -26,12 +26,10 @@
 
   .news-navbar
     +flex-box(space-between, center)
-    
-    
-    border-bottom: 1px solid $gray-200
 
     .left
       +flex-box(center, center, 16px)
+      +box-sizing(border-box)
 
       .all, .unread
         +padding(8px 0 8px 0)
@@ -42,10 +40,10 @@
         
 
         &.active
-          +padding(8px 0 0 0)
+          +padding(8px 0 6px 0)
           color: $gray-900
           border-bottom: 2px solid $gray-900
-          padding-bottom: 4px
+         
 
     .right
       font-weight: 600
