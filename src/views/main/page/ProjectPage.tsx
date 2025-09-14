@@ -3,6 +3,7 @@ import "@/views/main/style/project.sass";
 import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
 import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import test from "@/assets/imgs/common/user.svg";
+import projectImg from "@/assets/imgs/common/project_img.svg";
 
 // api
 import { getSearch, patchProjectName } from "@/api/common/common";
@@ -194,7 +195,11 @@ const ProjectPage = () => {
           {projectList &&
             projectList.map((list: projectData, i: number) => (
               <Link to={`${list.projectId}`} className="card" key={i}>
-                <img src={list.imageUrl} alt="" className="card-img" />
+                <img
+                  src={list.imageUrl ?? projectImg}
+                  alt=""
+                  className="card-img"
+                />
                 <button
                   className={`menu-btn ${openMenuId === i && "open"}`}
                   onClick={(e) => {

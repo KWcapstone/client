@@ -2,7 +2,7 @@
 import "@/views/main/style/news.sass";
 import modal_close from "@/assets/imgs/icon/modal_close.svg";
 import user_img from "@/assets/imgs/common/user.svg";
-import news_img from "@/assets/imgs/common/news.svg";
+// import news_img from "@/assets/imgs/common/news.svg";
 
 // import
 import { useState } from "react";
