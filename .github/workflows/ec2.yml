@@ -19,8 +19,9 @@ jobs:
           script: |
             cd /home/ubuntu/client  # 프로젝트 디렉토리
             rm -rf node_modules
-            /home/ubuntu/.nvm/versions/node/v18.20.8/bin/yarn cache clean
+            /home/ubuntu/.nvm/versions/node/v18.20.8/bin/yarn cache clean --all
+            rm -rf ~/.cache/yarn
             sudo journalctl --vacuum-time=1d
             git pull origin main
-            /home/ubuntu/.nvm/versions/node/v18.20.8/bin/yarn install --frozen-lockfile
+            /home/ubuntu/.nvm/versions/node/v18.20.8/bin/yarn install --frozen-lockfile --production=false
             /home/ubuntu/.nvm/versions/node/v18.20.8/bin/yarn build
