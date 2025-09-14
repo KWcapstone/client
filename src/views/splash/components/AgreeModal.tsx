@@ -2,24 +2,30 @@ import "@/views/splash/style/agree-modal.sass";
 import Modal from "@/views/components/modal";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import arrow_back from "@/assets/imgs/icon/arrow_back_outlined.svg";
 import arrow_right from "@/assets/imgs/icon/arrow_right.svg";
 
 import { UserData } from "@/types/userData";
 import { postSignUp } from "@/api/splash/signup";
+import { postAgree } from "@/api/splash/socialLogin.ts";
 
 interface AgreeModalProps {
   onCloseModal: () => void;
-  onOpenSignup: () => void;
-  onOpenLogin: () => void;
+  onOpenSignup?: () => void;
+  onOpenLogin?: () => void;
+  isGoogle?: boolean;
 }
 
 const AgreeModal = ({
   onCloseModal,
   onOpenSignup,
-  onOpenLogin,
+  onOpenLogin = () => {},
+  isGoogle = false,
 }: AgreeModalProps) => {
+  const navigate = useNavigate();
+
   const [active, setActive] = useState(false);
   const [allAgree, setAllAgree] = useState(false);
   const [agree1, setAgree1] = useState(false);
@@ -64,19 +70,25 @@ const AgreeModal = ({
       agreement: true,
     };
 
-    postSignUp(userData)
-      .then((response) => {
-        console.log("가입 성공", response);
-        // 가입 성공 후 처리
-        localStorage.removeItem("name");
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
-        onOpenLogin();
-      })
-      .catch((error) => {
-        console.error("가입 실패", error);
-        // 가입 실패 처리
-      });
+    isGoogle
+      ? postAgree().then((response) => {
+          localStorage.setItem("accessToken", response.data.data.accessToken);
+
+          navigate("/project");
+        })
+      : postSignUp(userData)
+          .then((response) => {
+            console.log("가입 성공", response);
+            // 가입 성공 후 처리
+            localStorage.removeItem("name");
+            localStorage.removeItem("email");
+            localStorage.removeItem("password");
+            onOpenLogin();
+          })
+          .catch((error) => {
+            console.error("가입 실패", error);
+            // 가입 실패 처리
+          });
   };
 
   return (
