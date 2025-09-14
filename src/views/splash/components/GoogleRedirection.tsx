@@ -13,10 +13,12 @@ const GoogleRedirection = () => {
   postGoogleLogin(code!).then((response) => {
     localStorage.setItem("accessToken", response.data.data.accessToken);
     setStatus(response.status);
+
+    status === 200 && navigate("/project");
   });
 
   return status === 200 ? (
-    navigate("/project")
+    <div>카카오 로그인 중...</div>
   ) : (
     <div
       className="modal-container"
