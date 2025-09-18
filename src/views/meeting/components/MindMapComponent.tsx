@@ -101,7 +101,7 @@ const MindMapComponent = ({
             const data: any = JSON.parse(message.body);
             console.log(data);
 
-            if (data.event === "liveOn") {
+            if (data.event === "create_node") {
               setInitialNodes(data.nodes);
 
               const edges = data.nodes
@@ -119,7 +119,7 @@ const MindMapComponent = ({
               setSummary((prev) => [
                 ...prev,
                 {
-                  time: formattedTime,
+                  time: data.time,
                   title: data.title,
                   item: data.content,
                 },
@@ -182,6 +182,23 @@ const MindMapComponent = ({
         script: finalTranscript,
       };
 
+      if (clientRef.current?.connected) {
+        const scriptData = {
+          event: "script",
+          projectId: conferenceData.projectId,
+          scription: finalTranscript,
+          time: formattedTime,
+        };
+
+        // WebSocket 기반 GPT 마인드맵 요청
+        clientRef.current.publish({
+          destination: `/app/conference/${conferenceData.projectId}/script`,
+          body: JSON.stringify(scriptData),
+        });
+
+        console.log(JSON.stringify(scriptData));
+      }
+
       setScripts((prev) => [...prev, newScript]);
       setAllScripts((prev) => [...prev, finalTranscript]);
       setScriptList((prev) => {
@@ -190,14 +207,15 @@ const MindMapComponent = ({
         if (updated.length >= 2 && clientRef.current?.connected) {
           const testString = updated.map((item) => item.script).join(" ");
           const data = {
-            event: "script",
+            event: "gpt",
             projectId: conferenceData.projectId,
             scription: testString,
+            time: formattedTime,
           };
 
           // WebSocket 기반 GPT 마인드맵 요청
           clientRef.current.publish({
-            destination: `/app/conference/${conferenceData.projectId}/script`,
+            destination: `/app/conference/${conferenceData.projectId}/gpt`,
             body: JSON.stringify(data),
           });
 
