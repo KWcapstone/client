@@ -32,6 +32,15 @@ import toltip from "@/assets/imgs/icon/toltip.svg";
 import { conferenceData } from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
+const dataUrlToBlob = (dataUrl: string): Blob => {
+  const [header, base64] = dataUrl.split(",");
+  const mime = header.match(/data:(.*?);base64/)?.[1] || "image/png";
+  const bytes = atob(base64);
+  const arr = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+};
+
 interface scriptData {
   time: string;
   script: string;
@@ -50,6 +59,7 @@ const MindMapComponent = ({
 }: MindMapComponentProps) => {
   const {
     // transcript,
+    stopAndGetBlob,
     isRecording,
     isPaused,
     toggleListening,
@@ -57,7 +67,6 @@ const MindMapComponent = ({
     resumeRecording,
     finalTranscript,
     resetTranscript,
-    audioBlob,
   } = UseSpeechToText();
 
   const { formattedTime } = useRecordingTimer(isRecording, isPaused);
@@ -189,7 +198,7 @@ const MindMapComponent = ({
             body: JSON.stringify(data),
           });
 
-          console.log(JSON.stringify(data))
+          console.log(JSON.stringify(data));
 
           setScriptList([]);
         }
@@ -245,39 +254,55 @@ const MindMapComponent = ({
   }, [finalTranscript]);
 
   const stopClick = async () => {
-    console.log("asd");
-    toggleListening();
-    setMode("end");
+    try {
+      setMode("end");
 
-    const fullScript = allScripts.join(" ");
+      // 1) 녹음 종료 및 Blob 확보 (이벤트 기반)
+      const readyAudioBlob = await stopAndGetBlob();
 
-    if (mindMapRef.current) {
-      console.log("afaf");
-      const canvas = await html2canvas(mindMapRef.current);
-      const imageBlob = await new Promise<Blob | null>((resolve) =>
-        canvas.toBlob((b: any) => resolve(b), "image/jpeg")
-      );
+      // 2) mindmap 캡처
+      if (!mindMapRef.current) throw new Error("mindMap ref null");
 
-      console.log(audioBlob);
+      // ReactFlow는 SVG를 쓰므로 scale을 높이고 CORS 허용 옵션 권장
+      const canvas = await html2canvas(mindMapRef.current, {
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        scale: window.devicePixelRatio || 2,
+        logging: false,
+      });
 
-      if (imageBlob && audioBlob) {
-        console.log("qwtwtqw");
-        const imageData = new FormData();
-        imageData.append("file", imageBlob, "mindmap.jpg");
+      // toBlob이 null일 수 있으므로 폴백 구현
+      const imageBlob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob(
+          (b) => {
+            if (b) return resolve(b);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+            resolve(dataUrlToBlob(dataUrl));
+          },
+          "image/jpeg",
+          0.92
+        );
+      });
 
-        const audioData = new FormData();
-        audioData.append("file", audioBlob, "recording.webm");
+      // 3) 전체 스크립트 합치기
+      const fullScript = allScripts.join(" ");
 
-        let data = {
-          projectId: conferenceData.projectId,
-          scription: fullScript,
-          record: audioData,
-          node: imageData,
-        };
-        endMeeting(data).then((res: any) => {
-          console.log(res);
-        });
-      }
+      // 4) 단일 FormData 로 전송
+      const form = new FormData();
+
+      form.append("projectId", String(conferenceData.projectId));
+      form.append("scription", fullScript);
+      form.append("record", readyAudioBlob, "recording.webm");
+      form.append("node", imageBlob, "mindmap.jpg");
+      form.append("status", "Done");
+
+      endMeeting(form).then((res: any) => {
+        console.log(res);
+      });
+      // endMeeting는 multipart/form-data로 보낸다고 가정
+      // (axios라면 headers는 자동 세팅됨)
+    } catch (err) {
+      console.error("stopClick failed:", err);
     }
   };
 
@@ -342,19 +367,19 @@ const MindMapComponent = ({
     [nodes, edges]
   );
 
-const ClickKeyword = (keyword: string) => {
-  const newNode: Node = {
-    id: `${Date.now()}`,
-    type: "default",
-    data: { label: keyword },
-    position: {
-      x: Math.random() * 250,
-      y: Math.random() * 250,
-    },
-  };
+  const ClickKeyword = (keyword: string) => {
+    const newNode: Node = {
+      id: `${Date.now()}`,
+      type: "default",
+      data: { label: keyword },
+      position: {
+        x: Math.random() * 250,
+        y: Math.random() * 250,
+      },
+    };
 
-  setNodes((nds) => [...nds, newNode]);
-};
+    setNodes((nds) => [...nds, newNode]);
+  };
 
   return (
     <div className="mind-map-container">
@@ -443,7 +468,9 @@ const ClickKeyword = (keyword: string) => {
                     <div className="toltip-wrap">
                       <img src={toltip} alt="" />
                       <div className="toltip">
-                        녹음 중 자동으로 추출된 핵심 키워드예요. 대화에서 자주 언급되는 단어나 중요한 개념을 실시간으로 분석해 제공해요.
+                        녹음 중 자동으로 추출된 핵심 키워드예요. 대화에서 자주
+                        언급되는 단어나 중요한 개념을 실시간으로 분석해
+                        제공해요.
                       </div>
                     </div>
                   </h3>
@@ -469,7 +496,8 @@ const ClickKeyword = (keyword: string) => {
                     <div className="toltip-wrap">
                       <img src={toltip} alt="" />
                       <div className="toltip">
-                        마인드맵에 추가하면 좋을 키워드를 추천해요. 대화의 흐름과 맥락을 분석해 관련성이 높은 키워드를 제안해요.
+                        마인드맵에 추가하면 좋을 키워드를 추천해요. 대화의
+                        흐름과 맥락을 분석해 관련성이 높은 키워드를 제안해요.
                       </div>
                     </div>
                   </h3>
@@ -501,7 +529,9 @@ const ClickKeyword = (keyword: string) => {
                           className="keyword"
                           id={x.id.toString()}
                           key={x.id}
-                          onClick={() => {ClickKeyword(x.value)}}
+                          onClick={() => {
+                            ClickKeyword(x.value);
+                          }}
                         >
                           {x.value}
                         </button>
@@ -520,7 +550,9 @@ const ClickKeyword = (keyword: string) => {
                           className="keyword"
                           id={x.id.toString()}
                           key={x.id}
-                          onClick={() => {ClickKeyword(x.value)}}
+                          onClick={() => {
+                            ClickKeyword(x.value);
+                          }}
                         >
                           {x.value}
                         </button>
