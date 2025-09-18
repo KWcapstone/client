@@ -300,11 +300,14 @@ const MindMapComponent = ({
       form.append("node", imageBlob, "mindmap.jpg");
       form.append("status", "Done");
 
-      endMeeting(form).then((res: any) => {
-        console.log(res);
-      });
+      console.time("[stopClick] upload");
+      const res = await endMeeting(form);
+      console.timeEnd("[stopClick] upload");
+      console.log("[stopClick] upload ok:", res);
       // endMeeting는 multipart/form-data로 보낸다고 가정
       // (axios라면 headers는 자동 세팅됨)
+
+      toggleListening();
     } catch (err) {
       console.error("stopClick failed:", err);
     }
