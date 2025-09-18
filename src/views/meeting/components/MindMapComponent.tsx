@@ -86,7 +86,7 @@ const MindMapComponent = ({
 
   const meetingStart = () => {
     const client = new Client({
-      brokerURL: "ws://3.39.11.168:8080/ws",
+      brokerURL: import.meta.env.VITE_API_WS_URL,
       reconnectDelay: 5000,
       debug: (str) => {
         console.log(str);
