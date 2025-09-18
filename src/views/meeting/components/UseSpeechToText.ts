@@ -93,6 +93,15 @@ const UseSpeechToText = () => {
     new Promise<Blob>((resolve, reject) => {
       try {
         const mr = mediaRecorderRef.current;
+
+        console.log("[stopAndGetBlob] mr:", mr, "state:", mr?.state);
+        console.log(
+          "[stopAndGetBlob] chunks:",
+          chunksRef.current.length,
+          "audioBlob:",
+          audioBlob?.size
+        );
+
         if (!mr) return reject(new Error("MediaRecorder not initialized"));
         if (mr.state === "inactive") {
           // 이미 멈춰있으면, 마지막 state에 남은 blob이 있으면 사용

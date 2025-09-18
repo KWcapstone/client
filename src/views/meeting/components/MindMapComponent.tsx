@@ -69,7 +69,10 @@ const MindMapComponent = ({
     resetTranscript,
   } = UseSpeechToText();
 
-  const { formattedTime } = useRecordingTimer(isRecording, isPaused);
+  const { formattedTime, elapsedTime } = useRecordingTimer(
+    isRecording,
+    isPaused
+  );
 
   const [, setScriptList] = useState<{ time: string; script: string }[]>([]);
 
@@ -293,6 +296,7 @@ const MindMapComponent = ({
       form.append("projectId", String(conferenceData.projectId));
       form.append("scription", fullScript);
       form.append("record", readyAudioBlob, "recording.webm");
+      form.append("recordLength", String(elapsedTime));
       form.append("node", imageBlob, "mindmap.jpg");
       form.append("status", "Done");
 
