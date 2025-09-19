@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import {
   ReactFlow,
+  type ReactFlowInstance,
   useNodesState,
   useEdgesState,
   addEdge,
@@ -32,14 +33,14 @@ import toltip from "@/assets/imgs/icon/toltip.svg";
 import { conferenceData } from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
-const dataUrlToBlob = (dataUrl: string): Blob => {
-  const [header, base64] = dataUrl.split(",");
-  const mime = header.match(/data:(.*?);base64/)?.[1] || "image/png";
-  const bytes = atob(base64);
-  const arr = new Uint8Array(bytes.length);
-  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
-  return new Blob([arr], { type: mime });
-};
+// const dataUrlToBlob = (dataUrl: string): Blob => {
+//   const [header, base64] = dataUrl.split(",");
+//   const mime = header.match(/data:(.*?);base64/)?.[1] || "image/png";
+//   const bytes = atob(base64);
+//   const arr = new Uint8Array(bytes.length);
+//   for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+//   return new Blob([arr], { type: mime });
+// };
 
 interface scriptData {
   time: string;
@@ -83,7 +84,9 @@ const MindMapComponent = ({
   const [mainKeyword, setMainKeyword] = useState([]);
   const [recommendKeyword, setRecommendKeyword] = useState([]);
 
-  const mindMapRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+  const keywordRef = useRef<HTMLDivElement>(null);
+  const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null);
 
   const clientRef = useRef<Client | null>(null); // WebSocket 클라이언트 저장
 
@@ -280,30 +283,50 @@ const MindMapComponent = ({
 
       // 1) 녹음 종료 및 Blob 확보 (이벤트 기반)
       const readyAudioBlob = await stopAndGetBlob();
+      toggleListening();
 
       // 2) mindmap 캡처
-      if (!mindMapRef.current) throw new Error("mindMap ref null");
-
       // ReactFlow는 SVG를 쓰므로 scale을 높이고 CORS 허용 옵션 권장
-      const canvas = await html2canvas(mindMapRef.current, {
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        scale: window.devicePixelRatio || 2,
-        logging: false,
-      });
+      const dpr = window.devicePixelRatio || 2;
+      // 캡처 전 그래프 정렬(선택)
+      reactFlowInstanceRef.current?.fitView({ padding: 0.2, duration: 0 });
+      await new Promise((r) => requestAnimationFrame(() => r(null))); // 1 프레임 대기
 
-      // toBlob이 null일 수 있으므로 폴백 구현
-      const imageBlob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob(
-          (b) => {
-            if (b) return resolve(b);
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
-            resolve(dataUrlToBlob(dataUrl));
-          },
-          "image/jpeg",
-          0.92
-        );
-      });
+      const [mapCanvas, kwCanvas] = await Promise.all([
+        html2canvas(mapRef.current!, {
+          backgroundColor: "#fff",
+          useCORS: true,
+          scale: dpr,
+        }),
+        html2canvas(keywordRef.current!, {
+          backgroundColor: "#fff",
+          useCORS: true,
+          scale: dpr,
+        }),
+      ]);
+
+      // 가로로 합치기: 왼쪽 마인드맵, 오른쪽 키워드
+      const gap = 24 * dpr; // 여백(px)
+      const width = mapCanvas.width + gap + kwCanvas.width;
+      const height = Math.max(mapCanvas.height, kwCanvas.height);
+
+      const comp = document.createElement("canvas");
+      comp.width = width;
+      comp.height = height;
+
+      const ctx = comp.getContext("2d")!;
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, width, height);
+
+      // 세로 가운데 정렬해서 그리기
+      const mapY = (height - mapCanvas.height) / 2;
+      const kwY = (height - kwCanvas.height) / 2;
+
+      ctx.drawImage(mapCanvas, 0, mapY);
+      ctx.drawImage(kwCanvas, mapCanvas.width + gap, kwY);
+      const blob: Blob = await new Promise((resolve) =>
+        comp.toBlob((b) => resolve(b!), "image/jpeg", 0.92)
+      );
 
       // 3) 전체 스크립트 합치기
       const fullScript = allScripts.join(" ");
@@ -315,7 +338,7 @@ const MindMapComponent = ({
       form.append("scription", fullScript);
       form.append("record", readyAudioBlob, "recording.webm");
       form.append("recordLength", String(elapsedTime));
-      form.append("node", imageBlob, "mindmap.jpg");
+      form.append("node", blob, "mindmap.jpg");
       form.append("status", "Done");
 
       console.time("[stopClick] upload");
@@ -324,8 +347,6 @@ const MindMapComponent = ({
       console.log("[stopClick] upload ok:", res);
       // endMeeting는 multipart/form-data로 보낸다고 가정
       // (axios라면 headers는 자동 세팅됨)
-
-      toggleListening();
     } catch (err) {
       console.error("stopClick failed:", err);
     }
@@ -429,7 +450,7 @@ const MindMapComponent = ({
         </div>
       ) : (
         <div className="mind-map-main">
-          <div className="mind-map-wrap" ref={mindMapRef}>
+          <div className="mind-map-wrap" ref={mapRef}>
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -483,7 +504,7 @@ const MindMapComponent = ({
               )}
             </div>
           </div>
-          <div className="keyword-container">
+          <div className="keyword-container" ref={keywordRef}>
             <h2>라이브 키워드</h2>
             {mode === "live" ? (
               <>
