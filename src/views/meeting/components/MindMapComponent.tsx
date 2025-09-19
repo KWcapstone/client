@@ -306,7 +306,7 @@ const MindMapComponent = ({
       ]);
 
       // 가로로 합치기: 왼쪽 마인드맵, 오른쪽 키워드
-      const gap = 24 * dpr; // 여백(px)
+      const gap = 12 * dpr; // 여백(px)
       const width = mapCanvas.width + gap + kwCanvas.width;
       const height = Math.max(mapCanvas.height, kwCanvas.height);
 
