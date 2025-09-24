@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import ProjectPage from "@/views/main/page/ProjectPage";
+import ProjectViewPage from "@/views/main/page/ProjrctViewPage";
 import SplashRedirect from "./SplashRedirect";
 import RecordPage from "@/views/main/page/RecordPage";
 import SummaryPage from "@/views/main/page/SummaryPage";
@@ -24,6 +25,14 @@ const Router = () => {
           element={
             <ProtectedRoute>
               <ProjectPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/project/:projectID"
+          element={
+            <ProtectedRoute>
+              <ProjectViewPage />
             </ProtectedRoute>
           }
         />

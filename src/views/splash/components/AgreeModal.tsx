@@ -16,6 +16,7 @@ interface AgreeModalProps {
   onOpenSignup?: () => void;
   onOpenLogin?: () => void;
   isGoogle?: boolean;
+  memberId?: string;
 }
 
 const AgreeModal = ({
@@ -23,6 +24,7 @@ const AgreeModal = ({
   onOpenSignup,
   onOpenLogin = () => {},
   isGoogle = false,
+  memberId,
 }: AgreeModalProps) => {
   const navigate = useNavigate();
 
@@ -71,7 +73,7 @@ const AgreeModal = ({
     };
 
     isGoogle
-      ? postAgree().then((response) => {
+      ? postAgree(memberId!).then((response) => {
           localStorage.setItem("accessToken", response.data.data.accessToken);
 
           navigate("/project");

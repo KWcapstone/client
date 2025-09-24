@@ -63,6 +63,7 @@ const UseSpeechToText = () => {
 
   const toggleListening = async (onStopCallback?: (blob: Blob) => void) => {
     if (isRecording) {
+      setIsRecording(false);
       // ✅ 반드시 mediaRecorder.stop() 먼저 호출 (onstop 유도)
       const mr = mediaRecorderRef.current;
       if (mr && mr.state !== "inactive") {
@@ -82,7 +83,6 @@ const UseSpeechToText = () => {
       // abort는 예외 시에만 사용 권장. 여기선 불필요.
       // SpeechRecognition.abortListening();
 
-      setIsRecording(false);
       setIsPaused(false);
     } else {
       await start();

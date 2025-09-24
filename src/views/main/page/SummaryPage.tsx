@@ -3,9 +3,12 @@ import "@/views/main/style/summary.sass";
 import arrowUp from "@/assets/imgs/icon/arrow_up_black.svg";
 import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 
+// utils
+import { downloadAs } from "@/utils/download";
 // api
 import { getSearch } from "@/api/common/common";
 import { getSummary } from "@/api/main/summary";
+import { getFileDwn } from "@/api/main/fileDwn";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -209,7 +212,24 @@ const SummaryPage = () => {
                   <th>
                     <div className="craft-wrap">
                       <div>{checkCount}개 선택됨</div>
-                      <button className="dwn">다운로드 하기</button>
+                      <button
+                        className="dwn"
+                        onClick={async () => {
+                          await getFileDwn(
+                            summary.filter((row) => row.selected)[0].projectId,
+                            "SUMMARY"
+                          ).then((res: any) => {
+                            console.log(res);
+                            downloadAs(
+                              res.data.data.projectUrl,
+                              summary.filter((row) => row.selected)[0]
+                                .projectName
+                            );
+                          });
+                        }}
+                      >
+                        다운로드 하기
+                      </button>
                       <button className="del">삭제하기</button>
                       <button
                         className="cancel"

@@ -1,4 +1,5 @@
 import Send from "@/api/send.ts";
+import axios from "axios";
 
 export const postKakaoLogin = (code: string) => {
   return Send({
@@ -21,9 +22,12 @@ export const postGoogleLogin = (code: string) => {
   });
 };
 
-export const postAgree = () => {
-  return Send({
-    method: "post",
-    url: `/auth/agree`,
+export const postAgree = (memberId: string) => {
+  // return Send({
+  //   method: "post",
+  //   url: `/auth/agree`,
+  // });
+  return axios.post(`${import.meta.env.VITE_API_SERVER_URL}auth/agree`, {
+    memberId,
   });
 };
