@@ -283,7 +283,6 @@ const MindMapComponent = ({
 
       // 1) 녹음 종료 및 Blob 확보 (이벤트 기반)
       const readyAudioBlob = await stopAndGetBlob();
-      toggleListening();
 
       // 2) mindmap 캡처
       // ReactFlow는 SVG를 쓰므로 scale을 높이고 CORS 허용 옵션 권장
@@ -330,6 +329,7 @@ const MindMapComponent = ({
 
       // 3) 전체 스크립트 합치기
       const fullScript = allScripts.join(" ");
+      console.log("fullScript:", fullScript);
 
       // 4) 단일 FormData 로 전송
       const form = new FormData();
@@ -338,7 +338,7 @@ const MindMapComponent = ({
       form.append("scription", fullScript);
       form.append("record", readyAudioBlob, "recording.webm");
       form.append("recordLength", String(elapsedTime));
-      form.append("node", blob, "mindmap.jpg");
+      form.append("picture", blob, "mindmap.jpg");
       form.append("status", "Done");
 
       console.time("[stopClick] upload");
@@ -347,6 +347,8 @@ const MindMapComponent = ({
       console.log("[stopClick] upload ok:", res);
       // endMeeting는 multipart/form-data로 보낸다고 가정
       // (axios라면 headers는 자동 세팅됨)
+
+      toggleListening();
     } catch (err) {
       console.error("stopClick failed:", err);
     }
