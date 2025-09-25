@@ -1,6 +1,6 @@
 export interface ShareModalData {
   inviteUrl: string;
-  sharedMembers: {
+  participants: {
     nickname: string;
     role: string;
   }[];

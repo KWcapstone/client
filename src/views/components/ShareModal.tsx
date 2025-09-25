@@ -123,7 +123,7 @@ const ShareModal = ({ onCloseModal, projectId }: ShareModalProps) => {
         <div className="member">
           <span className="member-title">공유된 멤버</span>
           <div className="member-list">
-            {modalData?.sharedMembers.map((member, index) => (
+            {modalData?.participants.map((member, index) => (
               <div className="member-item" key={index}>
                 <div className="member-info-wrap">
                   <img src={user} alt="user" className="member-img" />
