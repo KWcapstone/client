@@ -44,9 +44,6 @@ const SideBar = ({
   const [isSummary, setIsSummary] = useState(true);
   const [usrName, setUsrName] = useState<string>("");
 
-  console.log("생성시간 : ", conferenceData.updateAt);
-
-  // console.log("스크립트", scripts);
   function formatDateString(input: string): string {
     const date = new Date(input);
 

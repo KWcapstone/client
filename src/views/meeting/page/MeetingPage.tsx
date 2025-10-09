@@ -38,8 +38,6 @@ const MeetingPage = () => {
   const closeModal = () => setModalType(null);
   const openModal = () => setModalType("share");
 
-  //console.log("projectId", projectId);
-
   useEffect(() => {
     getMeetingId().then((res: any) => {
       setConferenceData(res.data.data);
