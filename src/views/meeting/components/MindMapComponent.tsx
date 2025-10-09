@@ -329,7 +329,7 @@ const MindMapComponent = ({
 
       // 3) 전체 스크립트 합치기
       const fullScript = allScripts.join(" ");
-      console.log("fullScript:", fullScript);
+      console.log("fullScript: ", fullScript);
 
       // 4) 단일 FormData 로 전송
       const form = new FormData();
@@ -342,13 +342,12 @@ const MindMapComponent = ({
       form.append("status", "Done");
 
       console.time("[stopClick] upload");
+      toggleListening();
       const res = await endMeeting(form);
       console.timeEnd("[stopClick] upload");
       console.log("[stopClick] upload ok:", res);
       // endMeeting는 multipart/form-data로 보낸다고 가정
       // (axios라면 headers는 자동 세팅됨)
-
-      toggleListening();
     } catch (err) {
       console.error("stopClick failed:", err);
     }

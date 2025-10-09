@@ -37,7 +37,7 @@ const News = ({ onCloseModal }: NewsProps) => {
           date: "2025-03-16T08:17:28.000+00:00",
         },
         userName: "최세연",
-        title: "New Feature Update!",
+        title: "최세연님, 새로운 기능이 추가되었습니다!",
         isRead: true,
       },
       {
@@ -46,7 +46,32 @@ const News = ({ onCloseModal }: NewsProps) => {
           date: "2025-03-16T08:17:28.000+00:00",
         },
         userName: "임서연",
-        title: "Welcome to Moaba!",
+        title: "임서연님, Moaba에 오신 것을 환영합니다!",
+        isRead: false,
+      },
+    ],
+  };
+
+  const newsResponse1 = {
+    status: 200,
+    message: "모든 알림을 조회합니다.",
+    data: [
+      {
+        noticeId: {
+          timestamp: 1742113048,
+          date: "2025-03-16T08:17:28.000+00:00",
+        },
+        userName: "강현구",
+        title: "강현구님, 새로운 기능이 추가되었습니다!",
+        isRead: true,
+      },
+      {
+        noticeId: {
+          timestamp: 1742113048,
+          date: "2025-03-16T08:17:28.000+00:00",
+        },
+        userName: "오은진",
+        title: "오은진님, Moaba에 오신 것을 환영합니다!",
         isRead: false,
       },
     ],
@@ -77,11 +102,19 @@ const News = ({ onCloseModal }: NewsProps) => {
         </div>
         <div className="right">모두 읽음으로 표시</div>
       </div>
-      <div className="news-content">
-        {newsResponse.data.map((item) => (
-          <NewsItem key={item.noticeId.timestamp} data={item} />
-        ))}
-      </div>
+      {newsView === "all" ? (
+        <div className="news-content">
+          {newsResponse.data.map((item) => (
+            <NewsItem key={item.noticeId.timestamp} data={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="news-content">
+          {newsResponse1.data.map((item) => (
+            <NewsItem key={item.noticeId.timestamp} data={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
