@@ -3,6 +3,7 @@ export interface newsProps {
   newsAllResponse: newsItemData[];
   newsUnreadResponse: newsItemData[];
   errMessage: string;
+  onClick: () => void;
 }
 
 export interface newsItemData {

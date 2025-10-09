@@ -55,6 +55,43 @@ const SideBar = () => {
     }
   }, [pathname]);
 
+  const onNewsClick = async (allread: boolean) => {
+    setNewsLoading(true);
+    try {
+      const [resAll, resUnread] = await Promise.all([
+        getNews("all"),
+        getNews("unread"),
+      ]);
+
+      const allNews: newsItemData[] = resAll.data.data;
+      const unreadNews: newsItemData[] = resUnread.data.data;
+
+      let message = "";
+      if (!allNews) {
+        message = "소식이 없습니다.";
+      } else if (!unreadNews) {
+        message = "모든 소식을 읽었습니다.";
+      }
+
+      setNewsAllResponse(allNews);
+      setNewsUnreadResponse(unreadNews);
+      setErrMessage(message);
+
+      allread
+        ? null
+        : (setOpenNews((prev) => !prev),
+          setModalType((prev) => (prev === "news" ? null : "news")));
+    } catch (error) {
+      setErrMessage("소식을 불러오지 못했습니다.");
+      allread
+        ? null
+        : (setOpenNews((prev) => !prev),
+          setModalType((prev) => (prev === "news" ? null : "news")));
+    } finally {
+      setNewsLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="side-wrap">
@@ -62,41 +99,7 @@ const SideBar = () => {
           <Link to="/" className="logo-wrap">
             <img src={logo} alt="LOGO" />
           </Link>
-          <button
-            className="new"
-            onClick={async () => {
-              setNewsLoading(true);
-              try {
-                const [resAll, resUnread] = await Promise.all([
-                  getNews("all"),
-                  getNews("unread"),
-                ]);
-
-                const allNews: newsItemData[] = resAll.data.data;
-                const unreadNews: newsItemData[] = resUnread.data.data;
-
-                let message = "";
-                if (!allNews) {
-                  message = "소식이 없습니다.";
-                } else if (!unreadNews) {
-                  message = "모든 소식을 읽었습니다.";
-                }
-
-                setNewsAllResponse(allNews);
-                setNewsUnreadResponse(unreadNews);
-                setErrMessage(message);
-
-                setOpenNews((prev) => !prev);
-                setModalType((prev) => (prev === "news" ? null : "news"));
-              } catch (error) {
-                setErrMessage("소식을 불러오지 못했습니다.");
-                setOpenNews((prev) => !prev);
-                setModalType((prev) => (prev === "news" ? null : "news"));
-              } finally {
-                setNewsLoading(false);
-              }
-            }}
-          ></button>
+          <button className="new" onClick={() => onNewsClick(false)}></button>
         </div>
         <div className="user-wrap">
           <div className="user" onClick={openUserModal}>
@@ -186,6 +189,7 @@ const SideBar = () => {
           newsAllResponse={newsAllResponse}
           newsUnreadResponse={newsUnreadResponse}
           errMessage={newsLoading ? "로딩 중..." : errMessage}
+          onClick={() => onNewsClick(true)}
         />
       )}
     </>

@@ -21,6 +21,7 @@ const News = ({
   newsAllResponse,
   newsUnreadResponse,
   errMessage,
+  onClick,
 }: newsProps) => {
   type NewsView = "all" | "unread";
   const [newsView, setNewsView] = useState<NewsView>("all");
@@ -69,7 +70,9 @@ const News = ({
             안읽은 소식
           </div>
         </div>
-        <div className="right">모두 읽음으로 표시</div>
+        <div className="right" onClick={onClick}>
+          모두 읽음으로 표시
+        </div>
       </div>
       {newsView === "all" ? (
         <div className="news-content">
