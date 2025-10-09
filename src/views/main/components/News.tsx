@@ -13,68 +13,40 @@ import "dayjs/locale/ko";
 // type
 import { newsProps, newsItemData } from "@/types/news";
 
-const News = ({ onCloseModal }: newsProps) => {
+// api
+//import { getNews } from "@/api/main/news.ts";
+
+const News = ({
+  onCloseModal,
+  newsAllResponse,
+  newsUnreadResponse,
+  errMessage,
+}: newsProps) => {
   type NewsView = "all" | "unread";
-
-  const newsResponse = {
-    status: 200,
-    message: "모든 알림을 조회합니다.",
-    data: [
-      {
-        noticeId: {
-          timestamp: 1760035035,
-          date: "2025-10-09T18:37:15.000+00:00",
-        },
-        userName: "테스트",
-        title: "개발 그만하고 싶다.",
-        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
-        official: false,
-        isRead: false,
-      },
-      {
-        noticeId: {
-          timestamp: 1760035127,
-          date: "2025-10-09T18:38:47.000+00:00",
-        },
-        userName: "Unknown",
-        title: "과연 그만할 수 있을까",
-        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
-        official: true,
-        isRead: false,
-      },
-    ],
-  };
-
-  const newsResponse1 = {
-    status: 200,
-    message: "모든 알림을 조회합니다.",
-    data: [
-      {
-        noticeId: {
-          timestamp: 1760035035,
-          date: "2025-10-09T18:37:15.000+00:00",
-        },
-        userName: "테스트",
-        title: "개발 그만하고 싶다.",
-        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
-        official: false,
-        isRead: false,
-      },
-      {
-        noticeId: {
-          timestamp: 1760035127,
-          date: "2025-10-09T18:38:47.000+00:00",
-        },
-        userName: "Unknown",
-        title: "과연 그만할 수 있을까",
-        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
-        official: true,
-        isRead: false,
-      },
-    ],
-  };
-
   const [newsView, setNewsView] = useState<NewsView>("all");
+  //const [newsAllResponse, setNewsAllResponse] = useState<newsItemData[]>(allNews);
+  //const [newsUnreadResponse, setNewsUnreadResponse] = useState<newsItemData[]>(unreadNews);
+
+  // useEffect(() => {
+  //   const res = getNews("all");
+
+  //   res.then((response) => {
+  //     setNewsAllResponse(response.data.data);
+  //   });
+  //   const res2 = getNews("unread");
+  //   res2.then((response) => {
+  //     setNewsUnreadResponse(response.data.data);
+  //   });
+
+  //   console.log("All News:", newsAllResponse);
+  //   console.log("Unread News:", newsUnreadResponse);
+
+  //   newsUnreadResponse
+  //     ? setErrMessage("")
+  //     : setErrMessage("모든 소식을 읽었습니다.");
+
+  //   newsAllResponse ? "" : setErrMessage("소식이 없습니다.");
+  // }, [newsView]);
 
   return (
     <div className="news-container">
@@ -101,15 +73,23 @@ const News = ({ onCloseModal }: newsProps) => {
       </div>
       {newsView === "all" ? (
         <div className="news-content">
-          {newsResponse.data.map((item) => (
-            <NewsItem key={item.noticeId.timestamp} data={item} />
-          ))}
+          {newsAllResponse ? (
+            newsAllResponse.map((item) => (
+              <NewsItem key={item.noticeId.timestamp} data={item} />
+            ))
+          ) : (
+            <div className="no-news">{errMessage}</div>
+          )}
         </div>
       ) : (
         <div className="news-content">
-          {newsResponse1.data.map((item) => (
-            <NewsItem key={item.noticeId.timestamp} data={item} />
-          ))}
+          {newsUnreadResponse ? (
+            newsUnreadResponse.map((item) => (
+              <NewsItem key={item.noticeId.timestamp} data={item} />
+            ))
+          ) : (
+            <div className="no-news"> {errMessage}</div>
+          )}
         </div>
       )}
     </div>
@@ -143,7 +123,18 @@ const NewsItem = ({ data }: { data: newsItemData }) => {
         alt="User"
       />
       <div className="news-item-content">
-        <div className="news-item-title">{data.title}</div>
+        <div className="news-item-title">
+          {data.url ? (
+            <>
+              {data.title}
+              <a className="news-item-url" href={data.url}>
+                read more
+              </a>
+            </>
+          ) : (
+            data.title
+          )}
+        </div>
         <div className="news-item-date">
           {timeAgo({ timestamp: data.noticeId.date })}
         </div>

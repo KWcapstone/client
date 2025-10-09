@@ -5,9 +5,11 @@ import test from "@/assets/imgs/common/user.svg";
 
 // api
 import { getProfile } from "@/api/main/profile";
+import { getNews } from "@/api/main/news.ts";
 
 // type
 import { profileData } from "@/types/profileData";
+import { newsItemData } from "@/types/news";
 
 // component
 import { useState, useEffect } from "react";
@@ -30,6 +32,11 @@ const SideBar = () => {
   const openChangePWModal = () => setModalType("changePW");
   const openUserModal = () => setModalType("user");
   const [profile, setProfile] = useState<profileData>();
+  const [newsAllResponse, setNewsAllResponse] = useState<newsItemData[]>([]);
+  const [newsUnreadResponse, setNewsUnreadResponse] = useState<newsItemData[]>(
+    []
+  );
+  const [errMessage, setErrMessage] = useState<string>("");
 
   useEffect(() => {
     getProfile().then((res: any) => {
@@ -59,6 +66,24 @@ const SideBar = () => {
             onClick={() => {
               setOpenNews((prev) => !prev);
               setModalType((prev) => (prev === "news" ? null : "news"));
+              const res = getNews("all");
+
+              res.then((response) => {
+                setNewsAllResponse(response.data.data);
+              });
+              const res2 = getNews("unread");
+              res2.then((response) => {
+                setNewsUnreadResponse(response.data.data);
+              });
+
+              console.log("All News:", newsAllResponse);
+              console.log("Unread News:", newsUnreadResponse);
+
+              newsUnreadResponse
+                ? setErrMessage("")
+                : setErrMessage("모든 소식을 읽었습니다.");
+
+              newsAllResponse ? "" : setErrMessage("소식이 없습니다.");
             }}
           ></button>
         </div>
@@ -144,7 +169,14 @@ const SideBar = () => {
           />
         </div>
       )}
-      {modalType === "news" && <News onCloseModal={closeModal} />}
+      {modalType === "news" && (
+        <News
+          onCloseModal={closeModal}
+          newsAllResponse={newsAllResponse}
+          newsUnreadResponse={newsUnreadResponse}
+          errMessage={errMessage}
+        />
+      )}
     </>
   );
 };

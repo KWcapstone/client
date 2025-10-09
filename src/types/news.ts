@@ -1,5 +1,8 @@
 export interface newsProps {
   onCloseModal: () => void;
+  newsAllResponse: newsItemData[];
+  newsUnreadResponse: newsItemData[];
+  errMessage: string;
 }
 
 export interface newsItemData {
