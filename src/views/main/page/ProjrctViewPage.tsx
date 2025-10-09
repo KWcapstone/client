@@ -5,11 +5,26 @@ import { useEffect, useState } from "react";
 // apis
 import { getProjectView } from "@/api/main/projectView";
 
+// component
+import SideBar from "../../meeting/components/SideBar";
+
+// type
+import { conferenceData } from "@/types/conferanceData";
+
 export default function ProjectViewPage() {
   const { projectID } = useParams<{ projectID: string }>();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [conferenceData, setConferenceData] = useState<conferenceData>({
+    projectId: "",
+    projectName: "",
+    imageUrl: "",
+    updateAt: "",
+    scriptions: [],
+    summary: { title: "", content: "" },
+  });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // 사이드바 상태
 
   useEffect(() => {
     if (!projectID) {
@@ -24,8 +39,10 @@ export default function ProjectViewPage() {
       try {
         setLoading(true);
         const res = await getProjectView(projectID); // axios라면 config도 가능
+
         if (cancelled) return;
-        setImageUrl(res?.data?.data?.imageUrl ?? null);
+
+        setConferenceData(res?.data?.data ?? {});
       } catch (e: any) {
         if (cancelled) return;
         setError(e?.message ?? "불러오기에 실패했습니다.");
@@ -41,15 +58,31 @@ export default function ProjectViewPage() {
 
   if (loading) return <div style={{ padding: 16 }}>불러오는 중…</div>;
   if (error) return <div style={{ padding: 16, color: "red" }}>{error}</div>;
-  if (!imageUrl) return <div style={{ padding: 16 }}>이미지 없음</div>;
+  if (!conferenceData.imageUrl)
+    return <div style={{ padding: 16 }}>이미지 없음</div>;
 
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
-      <img
-        src={imageUrl}
-        alt="project view"
-        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+    <>
+      <SideBar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+        scripts={conferenceData.scriptions}
+        conferenceData={conferenceData}
+        summary={conferenceData.summary}
+        view={true}
       />
-    </div>
+      <div
+        className="project-content"
+        style={{
+          paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
+        }}
+      >
+        <img
+          src={conferenceData.imageUrl}
+          alt="project view"
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+        />
+      </div>
+    </>
   );
 }
