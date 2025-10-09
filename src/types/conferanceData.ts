@@ -1,11 +1,10 @@
 export interface conferenceData {
   projectId: string;
   projectName: string;
-  projectImage: null;
+  imageUrl: string;
   updatedAt: string;
-  creator: string;
   scriptions?: scriptionsData[];
-  summarys?: summarysWithTitleData | summarysWithTimeData[];
+  summary?: summarysWithTitleData;
 }
 
 export interface scriptionsData {

@@ -28,9 +28,8 @@ const MeetingPage = () => {
   const [conferenceData, setConferenceData] = useState<conferenceData>({
     projectId: "",
     projectName: "",
-    projectImage: null,
+    imageUrl: "",
     updatedAt: "",
-    creator: "",
   });
 
   // modal
