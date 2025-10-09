@@ -9,7 +9,7 @@ export interface newsItemData {
   };
   userName: string;
   title: string;
+  url: string;
+  official: boolean;
   isRead: boolean;
 }
-
-export interface newsResponseData {}

@@ -22,20 +22,24 @@ const News = ({ onCloseModal }: newsProps) => {
     data: [
       {
         noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
+          timestamp: 1760035035,
+          date: "2025-10-09T18:37:15.000+00:00",
         },
-        userName: "최세연",
-        title: "최세연님, 새로운 기능이 추가되었습니다!",
-        isRead: true,
+        userName: "테스트",
+        title: "개발 그만하고 싶다.",
+        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
+        official: false,
+        isRead: false,
       },
       {
         noticeId: {
-          timestamp: 17421130482,
-          date: "2025-03-16T08:17:28.000+00:00",
+          timestamp: 1760035127,
+          date: "2025-10-09T18:38:47.000+00:00",
         },
-        userName: "임서연",
-        title: "임서연님, Moaba에 오신 것을 환영합니다!",
+        userName: "Unknown",
+        title: "과연 그만할 수 있을까",
+        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
+        official: true,
         isRead: false,
       },
     ],
@@ -133,7 +137,11 @@ const timeAgo = ({ timestamp }: { timestamp: string }) => {
 const NewsItem = ({ data }: { data: newsItemData }) => {
   return (
     <div className="news-item">
-      <img className="news-item-image" src={user_img} alt="User" />
+      <img
+        className="news-item-image"
+        src={data.official ? news_img : user_img}
+        alt="User"
+      />
       <div className="news-item-content">
         <div className="news-item-title">{data.title}</div>
         <div className="news-item-date">
