@@ -76,7 +76,9 @@ const SideBar = ({
 
   return (
     <div
-      className={`side-bar ${isSidebarOpen ? "open" : "closed"}`}
+      className={`side-bar ${isSidebarOpen ? "open" : "closed"} ${
+        view ? "" : "side-bar-header"
+      }`}
       style={{ width: isSidebarOpen ? 340 : 56 }}
     >
       {isSidebarOpen ? (
@@ -119,7 +121,7 @@ const SideBar = ({
                   setIsSummary(true);
                 }}
               >
-                실시간 요약
+                {!view ? "실시간 요약" : "전체 요약"}
               </div>
               <div
                 className={`content-title cursor-pointer ${
@@ -150,7 +152,7 @@ const SideBar = ({
               ) : (
                 <>
                   <div className="des-wrap">
-                    {view ? (
+                    {!view ? (
                       summarys && summarys.length > 0 ? (
                         summarys.map((item, index) => (
                           <div className="des-wrap" key={index}>
