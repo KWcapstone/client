@@ -2,7 +2,7 @@
 import "@/views/main/style/news.sass";
 import modal_close from "@/assets/imgs/icon/modal_close.svg";
 import user_img from "@/assets/imgs/common/user.svg";
-// import news_img from "@/assets/imgs/common/news.svg";
+import news_img from "@/assets/imgs/common/news.svg";
 
 // import
 import { useState } from "react";
@@ -10,21 +10,10 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 
-// interface
-interface NewsProps {
-  onCloseModal: () => void;
-}
-interface NewsItem {
-  noticeId: {
-    timestamp: number;
-    date: string;
-  };
-  userName: string;
-  title: string;
-  isRead: boolean;
-}
+// type
+import { newsProps, newsItemData } from "@/types/news";
 
-const News = ({ onCloseModal }: NewsProps) => {
+const News = ({ onCloseModal }: newsProps) => {
   type NewsView = "all" | "unread";
 
   const newsResponse = {
@@ -42,7 +31,7 @@ const News = ({ onCloseModal }: NewsProps) => {
       },
       {
         noticeId: {
-          timestamp: 1742113048,
+          timestamp: 17421130482,
           date: "2025-03-16T08:17:28.000+00:00",
         },
         userName: "임서연",
@@ -58,20 +47,24 @@ const News = ({ onCloseModal }: NewsProps) => {
     data: [
       {
         noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
+          timestamp: 1760035035,
+          date: "2025-10-09T18:37:15.000+00:00",
         },
-        userName: "강현구",
-        title: "강현구님, 새로운 기능이 추가되었습니다!",
-        isRead: true,
+        userName: "테스트",
+        title: "개발 그만하고 싶다.",
+        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
+        official: false,
+        isRead: false,
       },
       {
         noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
+          timestamp: 1760035127,
+          date: "2025-10-09T18:38:47.000+00:00",
         },
-        userName: "오은진",
-        title: "오은진님, Moaba에 오신 것을 환영합니다!",
+        userName: "Unknown",
+        title: "과연 그만할 수 있을까",
+        url: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MTVfMjQ0%2FMDAxNjU3ODEzNjEzODgy.0UZXPfoqzPELjc4N-cnnMpqwveu2y6c_RUkzo8BbbeAg.QYHPBID9gDwrKDRgf-sJ1rd1w3E_nMiJF3qD57rCceEg.JPEG.adsloader%2F3.jpg&type=sc960_832",
+        official: true,
         isRead: false,
       },
     ],
@@ -137,7 +130,7 @@ const timeAgo = ({ timestamp }: { timestamp: string }) => {
   return <span>{date.fromNow()}</span>;
 };
 
-const NewsItem = ({ data }: { data: NewsItem }) => {
+const NewsItem = ({ data }: { data: newsItemData }) => {
   return (
     <div className="news-item">
       <img className="news-item-image" src={user_img} alt="User" />
