@@ -44,6 +44,8 @@ const SideBar = ({
   const [isSummary, setIsSummary] = useState(true);
   const [usrName, setUsrName] = useState<string>("");
 
+  console.log("생성시간 : ", conferenceData.updateAt);
+
   // console.log("스크립트", scripts);
   function formatDateString(input: string): string {
     const date = new Date(input);
@@ -97,7 +99,7 @@ const SideBar = ({
                 <div className="detail date">
                   <span className="detail-title">회의일자</span>
                   <span className="detail-des">
-                    {formatDateString(conferenceData.updatedAt)}
+                    {formatDateString(conferenceData.updateAt)}
                   </span>
                 </div>
                 <div className="detail creator">

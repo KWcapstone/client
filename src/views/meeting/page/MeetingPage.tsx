@@ -29,7 +29,7 @@ const MeetingPage = () => {
     projectId: "",
     projectName: "",
     imageUrl: "",
-    updatedAt: "",
+    updateAt: "",
   });
 
   // modal

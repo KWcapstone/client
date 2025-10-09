@@ -20,7 +20,7 @@ export default function ProjectViewPage() {
     projectId: "",
     projectName: "",
     imageUrl: "",
-    updatedAt: "",
+    updateAt: "",
     scriptions: [],
     summary: { title: "", content: "" },
   });
@@ -43,6 +43,8 @@ export default function ProjectViewPage() {
         if (cancelled) return;
 
         setConferenceData(res?.data?.data ?? {});
+
+        console.log("프로젝트 뷰", res?.data?.data);
       } catch (e: any) {
         if (cancelled) return;
         setError(e?.message ?? "불러오기에 실패했습니다.");
