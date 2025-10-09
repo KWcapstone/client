@@ -19,10 +19,7 @@ import MindMapComponent from "@/views/meeting/components/MindMapComponent.tsx";
 // type
 import { conferenceData } from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
-interface scriptData {
-  time: string;
-  script: string;
-}
+import { scriptData } from "@/types/scriptData";
 
 const MeetingPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // 사이드바 상태
