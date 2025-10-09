@@ -37,6 +37,7 @@ const SideBar = () => {
     []
   );
   const [errMessage, setErrMessage] = useState<string>("");
+  const [newsLoading, setNewsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getProfile().then((res: any) => {
@@ -63,27 +64,37 @@ const SideBar = () => {
           </Link>
           <button
             className="new"
-            onClick={() => {
-              setOpenNews((prev) => !prev);
-              setModalType((prev) => (prev === "news" ? null : "news"));
-              const res = getNews("all");
+            onClick={async () => {
+              setNewsLoading(true);
+              try {
+                const [resAll, resUnread] = await Promise.all([
+                  getNews("all"),
+                  getNews("unread"),
+                ]);
 
-              res.then((response) => {
-                setNewsAllResponse(response.data.data);
-              });
-              const res2 = getNews("unread");
-              res2.then((response) => {
-                setNewsUnreadResponse(response.data.data);
-              });
+                const allNews: newsItemData[] = resAll.data.data;
+                const unreadNews: newsItemData[] = resUnread.data.data;
 
-              console.log("All News:", newsAllResponse);
-              console.log("Unread News:", newsUnreadResponse);
+                let message = "";
+                if (!allNews) {
+                  message = "소식이 없습니다.";
+                } else if (!unreadNews) {
+                  message = "모든 소식을 읽었습니다.";
+                }
 
-              newsUnreadResponse
-                ? setErrMessage("")
-                : setErrMessage("모든 소식을 읽었습니다.");
+                setNewsAllResponse(allNews);
+                setNewsUnreadResponse(unreadNews);
+                setErrMessage(message);
 
-              newsAllResponse ? "" : setErrMessage("소식이 없습니다.");
+                setOpenNews((prev) => !prev);
+                setModalType((prev) => (prev === "news" ? null : "news"));
+              } catch (error) {
+                setErrMessage("소식을 불러오지 못했습니다.");
+                setOpenNews((prev) => !prev);
+                setModalType((prev) => (prev === "news" ? null : "news"));
+              } finally {
+                setNewsLoading(false);
+              }
             }}
           ></button>
         </div>
@@ -174,7 +185,7 @@ const SideBar = () => {
           onCloseModal={closeModal}
           newsAllResponse={newsAllResponse}
           newsUnreadResponse={newsUnreadResponse}
-          errMessage={errMessage}
+          errMessage={newsLoading ? "로딩 중..." : errMessage}
         />
       )}
     </>
