@@ -11,22 +11,24 @@ import test from "@/assets/imgs/common/user.svg";
 import { useEffect, useState } from "react";
 
 // type
-import { conferenceData } from "@/types/conferanceData";
+import {
+  conferenceData,
+  scriptionsData,
+  summarysWithTitleData,
+} from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
 // api
 import { getProfile } from "@/api/main/profile";
 
-interface scriptData {
-  time: string;
-  script: string;
-}
 interface SideBarProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  scripts?: scriptData[];
+  scripts?: scriptionsData[];
   conferenceData: conferenceData;
   summarys?: RealTimeSummaryData[];
+  summary?: summarysWithTitleData;
+  view?: boolean;
 }
 
 const SideBar = ({
@@ -35,6 +37,8 @@ const SideBar = ({
   scripts,
   conferenceData,
   summarys,
+  summary,
+  view = false,
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
@@ -146,22 +150,31 @@ const SideBar = ({
               ) : (
                 <>
                   <div className="des-wrap">
-                    {summarys && summarys.length > 0 ? (
-                      summarys.map((item, index) => (
-                        <div className="des-wrap" key={index}>
-                          <div className="des-timestamp">{item.time}</div>
-                          <div className="des-title">{item.title}</div>
-                          <ul className="des-list">
-                            {item.item.split("\n").map((listItem, idx) => (
-                              <li className="des-item" key={idx}>
-                                {listItem}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))
+                    {view ? (
+                      summarys && summarys.length > 0 ? (
+                        summarys.map((item, index) => (
+                          <div className="des-wrap" key={index}>
+                            <div className="des-timestamp">{item.time}</div>
+                            <div className="des-title">{item.title}</div>
+                            <ul className="des-list">
+                              {item.item.split("\n").map((listItem, idx) => (
+                                <li className="des-item" key={idx}>
+                                  {listItem}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="no-script">실시간 요약이 없습니다.</div>
+                      )
+                    ) : summary ? (
+                      <div className="des-wrap">
+                        <div className="des-title">{summary.title}</div>
+                        <div className="des-item">{summary.content}</div>
+                      </div>
                     ) : (
-                      <div className="no-script">실시간 요약이 없습니다.</div>
+                      <div className="no-script">요약이 없습니다.</div>
                     )}
                   </div>
                 </>
