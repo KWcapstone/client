@@ -7,30 +7,36 @@ import Modal from "@/views/components/modal";
 // libraries
 import { useEffect, useMemo, useState } from "react";
 
-type FileKind = "mindmap" | "record" | "summary";
+// apis
+import { getFileDwn } from "@/api/main/fileDwn";
+import { downloadAs } from "@/utils/download";
+
+type FileKind = "MINDMAP" | "RECORDING" | "SUMMARY";
 type FileFormat = "jpg" | "png" | "zip" | "txt";
 
 interface DwnModalProps {
   onCloseModal: () => void;
-  onSubmit?: (payload: {
-    kind: FileKind;
-    format: FileFormat;
-  }) => void | Promise<void>;
+  projectId: string;
+  projectName: string;
 }
 
 const KIND_FORMAT_OPTIONS: Record<
   FileKind,
   { value: FileFormat; label: string }[]
 > = {
-  mindmap: [
+  MINDMAP: [
     { value: "jpg", label: "JPG 이미지(.jpg)" },
     { value: "png", label: "PNG 이미지(.png)" },
   ],
-  record: [{ value: "zip", label: "ZIP(.zip)" }],
-  summary: [{ value: "txt", label: "텍스트(.txt)" }],
+  RECORDING: [{ value: "zip", label: "ZIP(.zip)" }],
+  SUMMARY: [{ value: "txt", label: "텍스트(.txt)" }],
 };
 
-export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
+export default function DwnModal({
+  onCloseModal,
+  projectId,
+  projectName,
+}: DwnModalProps) {
   const [kind, setKind] = useState<FileKind | "">("");
   const [format, setFormat] = useState<FileFormat>("jpg");
 
@@ -51,8 +57,11 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
-    await onSubmit?.({ kind: kind as FileKind, format });
-    onCloseModal();
+
+    await getFileDwn(projectId, kind).then((res) => {
+      const url = res.data.data.projectUrl;
+      downloadAs(url, `${projectName}.${format}`);
+    });
   };
 
   return (
@@ -66,7 +75,7 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
           <div className="radio-container">
             <label
               className={`radio-wrap mind-map ${
-                kind === "mindmap" ? "active" : ""
+                kind === "MINDMAP" ? "active" : ""
               }`}
               htmlFor="mind-map"
             >
@@ -75,9 +84,9 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
                 type="radio"
                 name="file"
                 id="mind-map"
-                value="mindmap"
-                checked={kind === "mindmap"}
-                onChange={() => setKind("mindmap")}
+                value="MINDMAP"
+                checked={kind === "MINDMAP"}
+                onChange={() => setKind("MINDMAP")}
                 required
               />
               <div className="radio-title">마인드맵</div>
@@ -85,7 +94,7 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
 
             <label
               className={`radio-wrap record ${
-                kind === "record" ? "active" : ""
+                kind === "RECORDING" ? "active" : ""
               }`}
               htmlFor="record"
             >
@@ -94,9 +103,9 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
                 type="radio"
                 name="file"
                 id="record"
-                value="record"
-                checked={kind === "record"}
-                onChange={() => setKind("record")}
+                value="RECORDING"
+                checked={kind === "RECORDING"}
+                onChange={() => setKind("RECORDING")}
                 required
               />
               <div className="radio-title">음성・스크립트</div>
@@ -104,7 +113,7 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
 
             <label
               className={`radio-wrap summary ${
-                kind === "summary" ? "active" : ""
+                kind === "SUMMARY" ? "active" : ""
               }`}
               htmlFor="summary"
             >
@@ -113,9 +122,9 @@ export default function DwnModal({ onCloseModal, onSubmit }: DwnModalProps) {
                 type="radio"
                 name="file"
                 id="summary"
-                value="summary"
-                checked={kind === "summary"}
-                onChange={() => setKind("summary")}
+                value="SUMMARY"
+                checked={kind === "SUMMARY"}
+                onChange={() => setKind("SUMMARY")}
                 required
               />
               <div className="radio-title">요약본</div>
