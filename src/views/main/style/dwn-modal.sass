@@ -133,6 +133,10 @@ $border: #E5E5E7
           padding-right: 36px
           cursor: pointer
 
+          &:disabled
+            
+            cursor: not-allowed
+
           // (선택) placeholder가 있을 경우 색상
           &:invalid
             color: $gray-500
@@ -150,6 +154,7 @@ $border: #E5E5E7
       font-size: 14px
       font-weight: 700
       border-radius: 8px
+      color: $white
 
       &:disabled
         background-color: #E5E5E7
@@ -157,7 +162,6 @@ $border: #E5E5E7
         border: none
       &:enabled
         background-color: $purple-500
-        color: $white
         transition: background-color .15s ease
         cursor: pointer
         border: none
