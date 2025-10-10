@@ -2,7 +2,8 @@
 import "@/views/main/style/news.sass";
 import modal_close from "@/assets/imgs/icon/modal_close.svg";
 import user_img from "@/assets/imgs/common/user.svg";
-// import news_img from "@/assets/imgs/common/news.svg";
+import news_img from "@/assets/imgs/common/news.svg";
+import unread_dot from "@/assets/imgs/icon/unread_dot.svg";
 
 // import
 import { useState } from "react";
@@ -10,74 +11,44 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
 
-// interface
-interface NewsProps {
-  onCloseModal: () => void;
-}
-interface NewsItem {
-  noticeId: {
-    timestamp: number;
-    date: string;
-  };
-  userName: string;
-  title: string;
-  isRead: boolean;
-}
+// type
+import { newsProps, newsItemData } from "@/types/news";
 
-const News = ({ onCloseModal }: NewsProps) => {
+// api
+//import { getNews } from "@/api/main/news.ts";
+
+const News = ({
+  onCloseModal,
+  newsAllResponse,
+  newsUnreadResponse,
+  errMessage,
+  onClick,
+}: newsProps) => {
   type NewsView = "all" | "unread";
-
-  const newsResponse = {
-    status: 200,
-    message: "모든 알림을 조회합니다.",
-    data: [
-      {
-        noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
-        },
-        userName: "최세연",
-        title: "최세연님, 새로운 기능이 추가되었습니다!",
-        isRead: true,
-      },
-      {
-        noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
-        },
-        userName: "임서연",
-        title: "임서연님, Moaba에 오신 것을 환영합니다!",
-        isRead: false,
-      },
-    ],
-  };
-
-  const newsResponse1 = {
-    status: 200,
-    message: "모든 알림을 조회합니다.",
-    data: [
-      {
-        noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
-        },
-        userName: "강현구",
-        title: "강현구님, 새로운 기능이 추가되었습니다!",
-        isRead: true,
-      },
-      {
-        noticeId: {
-          timestamp: 1742113048,
-          date: "2025-03-16T08:17:28.000+00:00",
-        },
-        userName: "오은진",
-        title: "오은진님, Moaba에 오신 것을 환영합니다!",
-        isRead: false,
-      },
-    ],
-  };
-
   const [newsView, setNewsView] = useState<NewsView>("all");
+  //const [newsAllResponse, setNewsAllResponse] = useState<newsItemData[]>(allNews);
+  //const [newsUnreadResponse, setNewsUnreadResponse] = useState<newsItemData[]>(unreadNews);
+
+  // useEffect(() => {
+  //   const res = getNews("all");
+
+  //   res.then((response) => {
+  //     setNewsAllResponse(response.data.data);
+  //   });
+  //   const res2 = getNews("unread");
+  //   res2.then((response) => {
+  //     setNewsUnreadResponse(response.data.data);
+  //   });
+
+  //   console.log("All News:", newsAllResponse);
+  //   console.log("Unread News:", newsUnreadResponse);
+
+  //   newsUnreadResponse
+  //     ? setErrMessage("")
+  //     : setErrMessage("모든 소식을 읽었습니다.");
+
+  //   newsAllResponse ? "" : setErrMessage("소식이 없습니다.");
+  // }, [newsView]);
 
   return (
     <div className="news-container">
@@ -94,25 +65,48 @@ const News = ({ onCloseModal }: NewsProps) => {
             전체
           </div>
           <div
-            className={`unread ${newsView === "unread" ? "active" : ""}`}
+            className={`unread ${newsView === "unread" ? "active" : ""} ${
+              newsUnreadResponse.length > 0 ? "unread-relative" : ""
+            }`}
             onClick={() => setNewsView("unread")}
           >
             안읽은 소식
+            {newsUnreadResponse.length > 0 ? (
+              <img className="unread-dot" src={unread_dot} alt="안읽은 소식" />
+            ) : null}
           </div>
         </div>
-        <div className="right">모두 읽음으로 표시</div>
+        <div className="right" onClick={onClick}>
+          모두 읽음으로 표시
+        </div>
       </div>
       {newsView === "all" ? (
         <div className="news-content">
-          {newsResponse.data.map((item) => (
-            <NewsItem key={item.noticeId.timestamp} data={item} />
-          ))}
+          {newsAllResponse.length > 0 ? (
+            newsAllResponse.map((item) => (
+              <NewsItem
+                key={item.noticeId.timestamp}
+                data={item}
+                isUnread={item.isRead ? false : true}
+              />
+            ))
+          ) : (
+            <div className="no-news">{errMessage}</div>
+          )}
         </div>
       ) : (
         <div className="news-content">
-          {newsResponse1.data.map((item) => (
-            <NewsItem key={item.noticeId.timestamp} data={item} />
-          ))}
+          {newsUnreadResponse.length > 0 ? (
+            newsUnreadResponse.map((item) => (
+              <NewsItem
+                key={item.noticeId.timestamp}
+                data={item}
+                isUnread={true}
+              />
+            ))
+          ) : (
+            <div className="no-news"> {errMessage}</div>
+          )}
         </div>
       )}
     </div>
@@ -137,12 +131,42 @@ const timeAgo = ({ timestamp }: { timestamp: string }) => {
   return <span>{date.fromNow()}</span>;
 };
 
-const NewsItem = ({ data }: { data: NewsItem }) => {
+const NewsItem = ({
+  data,
+  isUnread,
+}: {
+  data: newsItemData;
+  isUnread: boolean;
+}) => {
   return (
     <div className="news-item">
-      <img className="news-item-image" src={user_img} alt="User" />
+      <div className={`news-item-image ${isUnread ? "news-item-unread" : ""}`}>
+        <img
+          className="item-img"
+          src={data.official ? news_img : user_img}
+          alt="User"
+        />
+        {isUnread && (
+          <img
+            className="news-item-unread-dot"
+            src={unread_dot}
+            alt="안읽은 소식"
+          />
+        )}
+      </div>
       <div className="news-item-content">
-        <div className="news-item-title">{data.title}</div>
+        <div className="news-item-title">
+          {data.url ? (
+            <>
+              {data.title}
+              <a className="news-item-url" href={data.url}>
+                read more
+              </a>
+            </>
+          ) : (
+            data.title
+          )}
+        </div>
         <div className="news-item-date">
           {timeAgo({ timestamp: data.noticeId.date })}
         </div>
