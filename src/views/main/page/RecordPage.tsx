@@ -7,6 +7,7 @@ import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 import { getSearch } from "@/api/common/common";
 import { getRecord } from "@/api/main/record";
 import { getNewsNum } from "@/api/main/news";
+import { getFileDwn } from "@/api/main/fileDwn";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -17,6 +18,7 @@ import { Link } from "react-router-dom";
 
 // type
 import { recordData } from "@/types/recordData";
+import { downloadAs } from "@/utils/download";
 
 const RecordPage = () => {
   // value
@@ -104,7 +106,6 @@ const RecordPage = () => {
       }));
       setRecord(dataWithSelection);
     });
-    // console.log(record)
   };
 
   useEffect(() => {
@@ -137,8 +138,6 @@ const RecordPage = () => {
       } else {
         setIsHaveUnreadNews(false);
       }
-
-      console.log("Unread News Num:", res.data.data.num);
     });
   }, []);
 
@@ -237,15 +236,34 @@ const RecordPage = () => {
                   <th>
                     <div className="craft-wrap">
                       <div>{checkCount}개 선택됨</div>
-                      <button className="dwn">다운로드 하기</button>
+                      <button
+                        className="dwn"
+                        onClick={async () => {
+                          await getFileDwn(
+                            record
+                              .filter((row) => row.selected)
+                              .map((row) => row.recordId)
+                              .join(","),
+                            "RECORDING"
+                          ).then((res) => {
+                            console.log(res);
+                            downloadAs(
+                              res.data.data.projectUrl,
+                              record.filter((row) => row.selected)[0].name
+                            );
+                          });
+                        }}
+                      >
+                        다운로드 하기
+                      </button>
                       <button className="del">삭제하기</button>
                       <button
                         className="cancel"
-                        onClick={() =>
+                        onClick={async () => {
                           setRecord(
                             record.map((row) => ({ ...row, selected: false }))
-                          )
-                        }
+                          );
+                        }}
                       >
                         취소
                       </button>

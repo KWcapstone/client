@@ -1,49 +1,161 @@
+// style
 import "@/views/main/style/dwn-modal.sass";
+
+// components
 import Modal from "@/views/components/modal";
+
+// libraries
+import { useEffect, useMemo, useState } from "react";
+
+// apis
+import { getFileDwn } from "@/api/main/fileDwn";
+import { downloadAs } from "@/utils/download";
+
+type FileKind = "MINDMAP" | "RECORDING" | "SUMMARY";
+type FileFormat = "jpg" | "png" | "zip" | "txt";
 
 interface DwnModalProps {
   onCloseModal: () => void;
+  projectId: string;
+  projectName: string;
 }
 
-const DwnModal = ({
+const KIND_FORMAT_OPTIONS: Record<
+  FileKind,
+  { value: FileFormat; label: string }[]
+> = {
+  MINDMAP: [
+    { value: "jpg", label: "JPG 이미지(.jpg)" },
+    { value: "png", label: "PNG 이미지(.png)" },
+  ],
+  RECORDING: [{ value: "zip", label: "ZIP(.zip)" }],
+  SUMMARY: [{ value: "txt", label: "텍스트(.txt)" }],
+};
+
+export default function DwnModal({
   onCloseModal,
-}: DwnModalProps) => {
+  projectId,
+  projectName,
+}: DwnModalProps) {
+  const [kind, setKind] = useState<FileKind | "">("");
+  const [format, setFormat] = useState<FileFormat>("jpg");
+
+  const canSubmit = !!kind;
+
+  // 현재 kind에 따른 형식 옵션
+  const formatOptions = useMemo(() => {
+    return kind ? KIND_FORMAT_OPTIONS[kind as FileKind] : [];
+  }, [kind]);
+
+  // kind 바뀌면 해당 kind의 첫 옵션으로 format 동기화
+  useEffect(() => {
+    if (!kind) return;
+    const first = KIND_FORMAT_OPTIONS[kind as FileKind][0]?.value;
+    if (first && format !== first) setFormat(first);
+  }, [kind]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+
+    await getFileDwn(projectId, kind).then((res) => {
+      const url = res.data.data.projectUrl;
+      downloadAs(url, `${projectName}.${format}`);
+    });
+  };
+
   return (
     <Modal onCloseModal={onCloseModal}>
       <p className="modal-title">다운로드</p>
-      <div className="modal-wrap">
+
+      <form className="modal-wrap" onSubmit={handleSubmit}>
+        {/* 파일 종류 선택 */}
         <div className="file-wrap">
           <h3>파일 선택</h3>
           <div className="radio-container">
-            <div className="radio-wrap mind-map">
-              <div className="img"></div>
-              <input type="radio" name="file" id="mind-map" value="1"/>
+            <label
+              className={`radio-wrap mind-map ${
+                kind === "MINDMAP" ? "active" : ""
+              }`}
+              htmlFor="mind-map"
+            >
+              <div className="img" />
+              <input
+                type="radio"
+                name="file"
+                id="mind-map"
+                value="MINDMAP"
+                checked={kind === "MINDMAP"}
+                onChange={() => setKind("MINDMAP")}
+                required
+              />
               <div className="radio-title">마인드맵</div>
-            </div>
-            <div className="radio-wrap record">
-              <div className="img"></div>
-              <input type="radio" name="file" id="record" value="2"/>
+            </label>
+
+            <label
+              className={`radio-wrap record ${
+                kind === "RECORDING" ? "active" : ""
+              }`}
+              htmlFor="record"
+            >
+              <div className="img" />
+              <input
+                type="radio"
+                name="file"
+                id="record"
+                value="RECORDING"
+                checked={kind === "RECORDING"}
+                onChange={() => setKind("RECORDING")}
+                required
+              />
               <div className="radio-title">음성・스크립트</div>
-            </div>
-            <div className="radio-wrap summary">
-              <div className="img"></div>
-              <input type="radio" name="file" id="summary" value="3"/>
+            </label>
+
+            <label
+              className={`radio-wrap summary ${
+                kind === "SUMMARY" ? "active" : ""
+              }`}
+              htmlFor="summary"
+            >
+              <div className="img" />
+              <input
+                type="radio"
+                name="file"
+                id="summary"
+                value="SUMMARY"
+                checked={kind === "SUMMARY"}
+                onChange={() => setKind("SUMMARY")}
+                required
+              />
               <div className="radio-title">요약본</div>
-            </div>
+            </label>
           </div>
         </div>
+
+        {/* 형식 선택 */}
         <div className="type-wrap">
           <h3>형식 선택</h3>
           <div className="select-wrap">
-            <select>
-              <option>JPG 이미지(.jpg)</option>
-              <option>PNG 이미지(.png)</option>
+            <select
+              aria-label="파일 형식"
+              value={format}
+              onChange={(e) => setFormat(e.target.value as FileFormat)}
+              disabled={!kind} // 종류 선택 전엔 비활성화
+            >
+              {!kind && <option value="">다운로드 파일을 선택하세요</option>}
+              {formatOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
-      </div>
+
+        <button type="submit" className="btn-primary" disabled={!canSubmit}>
+          다운로드
+        </button>
+      </form>
     </Modal>
   );
-};
-
-export default DwnModal;
+}

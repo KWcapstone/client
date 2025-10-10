@@ -96,14 +96,16 @@ const SideBar = ({
                 <div className="detail date">
                   <span className="detail-title">회의일자</span>
                   <span className="detail-des">
-                    {formatDateString(conferenceData.updateAt)}
+                    {formatDateString(conferenceData.updatedAt)}
                   </span>
                 </div>
                 <div className="detail creator">
                   <span className="detail-title">생성자</span>
                   <div className="creator-wrap">
                     <img src={test} alt="creator" className="creator-icon" />
-                    <span className="detail-des">{usrName}</span>
+                    <span className="detail-des">
+                      {conferenceData.projectId}
+                    </span>
                   </div>
                 </div>
               </div>

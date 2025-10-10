@@ -20,7 +20,7 @@ export default function ProjectViewPage() {
     projectId: "",
     projectName: "",
     imageUrl: "",
-    updateAt: "",
+    updatedAt: "",
     scriptions: [],
     summary: { title: "", content: "" },
   });

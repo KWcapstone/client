@@ -22,8 +22,6 @@ import PasswordChangeModal from "@/views/main/components/ChangePWModal";
 import News from "@/views/main/components/News";
 
 const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
-  console.log("SideBar Rendered: ", haveUnreadNews);
-
   const [sort, setSort] = useState<string>("/");
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -56,8 +54,6 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
       } else {
         setHaveUnreadNews(false);
       }
-
-      console.log("Unread News Num:", res.data.data.num);
     });
   }, [newsUnreadResponse]);
 
@@ -92,8 +88,6 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
             b.noticeId.timestamp - a.noticeId.timestamp
         );
 
-      console.log("All News:", allNews);
-      console.log("Unread News:", unreadNews);
       let message = "";
       if (allNews.length == 0) {
         message = "소식이 없습니다.";
