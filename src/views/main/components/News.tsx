@@ -66,12 +66,12 @@ const News = ({
           </div>
           <div
             className={`unread ${newsView === "unread" ? "active" : ""} ${
-              newsUnreadResponse ? "unread-relative" : ""
+              newsUnreadResponse.length > 0 ? "unread-relative" : ""
             }`}
             onClick={() => setNewsView("unread")}
           >
             안읽은 소식
-            {newsUnreadResponse ? (
+            {newsUnreadResponse.length > 0 ? (
               <img className="unread-dot" src={unread_dot} alt="안읽은 소식" />
             ) : null}
           </div>
@@ -82,7 +82,7 @@ const News = ({
       </div>
       {newsView === "all" ? (
         <div className="news-content">
-          {newsAllResponse ? (
+          {newsAllResponse.length > 0 ? (
             newsAllResponse.map((item) => (
               <NewsItem
                 key={item.noticeId.timestamp}
@@ -96,7 +96,7 @@ const News = ({
         </div>
       ) : (
         <div className="news-content">
-          {newsUnreadResponse ? (
+          {newsUnreadResponse.length > 0 ? (
             newsUnreadResponse.map((item) => (
               <NewsItem
                 key={item.noticeId.timestamp}

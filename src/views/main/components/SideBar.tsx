@@ -79,13 +79,26 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
         getNews("unread"),
       ]);
 
-      const allNews: newsItemData[] = resAll.data.data;
-      const unreadNews: newsItemData[] = resUnread.data.data;
+      const allNews: newsItemData[] = (resAll.data.data ?? [])
+        .slice()
+        .sort(
+          (a: newsItemData, b: newsItemData) =>
+            b.noticeId.timestamp - a.noticeId.timestamp
+        );
+      const unreadNews: newsItemData[] = (resUnread.data.data ?? [])
+        .slice()
+        .sort(
+          (a: newsItemData, b: newsItemData) =>
+            b.noticeId.timestamp - a.noticeId.timestamp
+        );
+
+      console.log("All News:", allNews);
+      console.log("Unread News:", unreadNews);
 
       let message = "";
-      if (!allNews) {
+      if (allNews.length == 0) {
         message = "소식이 없습니다.";
-      } else if (!unreadNews) {
+      } else if (unreadNews.length == 0) {
         message = "모든 소식을 읽었습니다.";
       }
 
