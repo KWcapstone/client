@@ -103,7 +103,9 @@ const SideBar = ({
                   <span className="detail-title">생성자</span>
                   <div className="creator-wrap">
                     <img src={test} alt="creator" className="creator-icon" />
-                    <span className="detail-des">{usrName}</span>
+                    <span className="detail-des">
+                      {conferenceData.projectId}
+                    </span>
                   </div>
                 </div>
               </div>
