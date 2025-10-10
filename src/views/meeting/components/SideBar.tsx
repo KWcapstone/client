@@ -96,7 +96,7 @@ const SideBar = ({
                 <div className="detail date">
                   <span className="detail-title">회의일자</span>
                   <span className="detail-des">
-                    {formatDateString(conferenceData.updateAt)}
+                    {formatDateString(conferenceData.updatedAt)}
                   </span>
                 </div>
                 <div className="detail creator">

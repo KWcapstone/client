@@ -2,7 +2,7 @@ export interface conferenceData {
   projectId: string;
   projectName: string;
   imageUrl: string;
-  updateAt: string;
+  updatedAt: string;
   scriptions?: scriptionsData[];
   summary?: summarysWithTitleData;
 }
