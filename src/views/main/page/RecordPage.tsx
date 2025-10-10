@@ -6,6 +6,7 @@ import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 // api
 import { getSearch } from "@/api/common/common";
 import { getRecord } from "@/api/main/record";
+import { getNewsNum } from "@/api/main/news";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -26,6 +27,7 @@ const RecordPage = () => {
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [checkCount, setCheckCount] = useState<number>(0);
   const [record, setRecord] = useState<Array<recordData>>([]);
+  const [isHavedUnreadNews, setIsHaveUnreadNews] = useState<boolean>(false);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
   // 전체 선택 여부 체크
@@ -128,9 +130,24 @@ const RecordPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    getNewsNum().then((res: any) => {
+      if (res.data.data.num > 0) {
+        setIsHaveUnreadNews(true);
+      } else {
+        setIsHaveUnreadNews(false);
+      }
+
+      console.log("Unread News Num:", res.data.data.num);
+    });
+  }, []);
+
   return (
     <div className="main">
-      <SideBar />
+      <SideBar
+        haveUnreadNews={isHavedUnreadNews}
+        setHaveUnreadNews={setIsHaveUnreadNews}
+      />
       <div className="record-wrap">
         <div className="nevigation-wrap">
           <div className="title-wrap">

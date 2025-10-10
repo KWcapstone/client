@@ -5,10 +5,12 @@ import arrowDown from "@/assets/imgs/icon/arrow_down_black.svg";
 
 // utils
 import { downloadAs } from "@/utils/download";
+
 // api
 import { getSearch } from "@/api/common/common";
 import { getSummary } from "@/api/main/summary";
 import { getFileDwn } from "@/api/main/fileDwn";
+import { getNewsNum } from "@/api/main/news";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -29,6 +31,7 @@ const SummaryPage = () => {
   const [isCheck, setIsCheck] = useState<boolean>(false);
   const [checkCount, setCheckCount] = useState<number>(0);
   const [summary, setSummary] = useState<Array<summaryData>>([]);
+  const [isHavedUnreadNews, setIsHaveUnreadNews] = useState<boolean>(false);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
   // 전체 선택 여부 체크
@@ -120,9 +123,24 @@ const SummaryPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    getNewsNum().then((res: any) => {
+      if (res.data.data.num > 0) {
+        setIsHaveUnreadNews(true);
+      } else {
+        setIsHaveUnreadNews(false);
+      }
+
+      console.log("Unread News Num:", res.data.data.num);
+    });
+  }, []);
+
   return (
     <div className="main">
-      <SideBar />
+      <SideBar
+        haveUnreadNews={isHavedUnreadNews}
+        setHaveUnreadNews={setIsHaveUnreadNews}
+      />
       <div className="summary-wrap">
         <div className="nevigation-wrap">
           <div className="title-wrap">

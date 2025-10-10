@@ -94,7 +94,6 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
 
       console.log("All News:", allNews);
       console.log("Unread News:", unreadNews);
-
       let message = "";
       if (allNews.length == 0) {
         message = "소식이 없습니다.";
