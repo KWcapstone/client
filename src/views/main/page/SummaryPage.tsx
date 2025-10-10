@@ -97,7 +97,6 @@ const SummaryPage = () => {
       }));
       setSummary(dataWithSelection);
     });
-    // console.log(summary)
   };
 
   useEffect(() => {
@@ -130,8 +129,6 @@ const SummaryPage = () => {
       } else {
         setIsHaveUnreadNews(false);
       }
-
-      console.log("Unread News Num:", res.data.data.num);
     });
   }, []);
 

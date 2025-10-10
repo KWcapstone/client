@@ -104,7 +104,6 @@ const RecordPage = () => {
       }));
       setRecord(dataWithSelection);
     });
-    // console.log(record)
   };
 
   useEffect(() => {
@@ -137,8 +136,6 @@ const RecordPage = () => {
       } else {
         setIsHaveUnreadNews(false);
       }
-
-      console.log("Unread News Num:", res.data.data.num);
     });
   }, []);
 

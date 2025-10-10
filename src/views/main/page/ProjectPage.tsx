@@ -96,8 +96,6 @@ const ProjectPage = () => {
       } else {
         setIsHaveUnreadNews(false);
       }
-
-      console.log("Unread News Num:", res.data.data.num);
     });
   }, []);
 
