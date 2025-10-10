@@ -100,10 +100,66 @@ $border: #E5E5E7
 
     .type-wrap
       +padding(top 24px)
+      +size(100%, auto)
 
       h3
         line-height: 21px
         font-weight: 500
 
       .select-wrap
-        +padding(top 8px)
+        +margin(top 8px)
+        +padding(0 15px)
+        position: relative
+        border: 1px solid $border
+        border-radius: 8px
+        // 커스텀 화살표 (회색)
+        background: url('/src/assets/imgs/icon/arrow_down_gray.svg') no-repeat right 12px center / 16px auto
+        // select 포커스가 들어오면 테두리 보라색
+        &:focus-within
+          border-color: $purple
+          box-shadow: 0 0 0 2px rgba($purple, .1)
+
+        select
+          +size(100%, 36px)
+          font-size: 14px
+          border: none
+          outline: none
+          // 기본 화살표 제거 (브라우저별)
+          appearance: none
+          -webkit-appearance: none
+          -moz-appearance: none
+          background: transparent
+          // 오른쪽 화살표 영역만큼 여백 확보
+          padding-right: 36px
+          cursor: pointer
+
+          // (선택) placeholder가 있을 경우 색상
+          &:invalid
+            color: $gray-500
+
+          // 구형 IE/Edge 레거시 화살표 제거
+          &::-ms-expand
+            display: none
+
+    .btn-primary
+      +margin(top 32px)
+      +size(100%, 48px)
+      +box-sizing(border-box)
+      +padding(0 15px)
+
+      font-size: 14px
+      font-weight: 700
+      border-radius: 8px
+
+      &:disabled
+        background-color: #E5E5E7
+        cursor: not-allowed
+        border: none
+      &:enabled
+        background-color: $purple-500
+        color: $white
+        transition: background-color .15s ease
+        cursor: pointer
+        border: none
+
+    

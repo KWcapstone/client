@@ -112,14 +112,10 @@ const DwnModal = ({ onCloseModal, onSubmit }: DwnModalProps) => {
         </div>
 
         {/* 액션 버튼 */}
-        <div className="actions">
-          <button type="button" className="btn-cancel" onClick={onCloseModal}>
-            취소
-          </button>
-          <button type="submit" className="btn-primary" disabled={!canSubmit}>
-            다운로드
-          </button>
-        </div>
+
+        <button type="submit" className="btn-primary" disabled={!canSubmit}>
+          다운로드
+        </button>
       </form>
     </Modal>
   );
