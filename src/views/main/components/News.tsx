@@ -3,6 +3,7 @@ import "@/views/main/style/news.sass";
 import modal_close from "@/assets/imgs/icon/modal_close.svg";
 import user_img from "@/assets/imgs/common/user.svg";
 import news_img from "@/assets/imgs/common/news.svg";
+import unread_dot from "@/assets/imgs/icon/unread_dot.svg";
 
 // import
 import { useState } from "react";
@@ -64,10 +65,15 @@ const News = ({
             전체
           </div>
           <div
-            className={`unread ${newsView === "unread" ? "active" : ""}`}
+            className={`unread ${newsView === "unread" ? "active" : ""} ${
+              newsUnreadResponse ? "unread-relative" : ""
+            }`}
             onClick={() => setNewsView("unread")}
           >
             안읽은 소식
+            {newsUnreadResponse ? (
+              <img className="unread-dot" src={unread_dot} alt="안읽은 소식" />
+            ) : null}
           </div>
         </div>
         <div className="right" onClick={onClick}>
@@ -78,7 +84,11 @@ const News = ({
         <div className="news-content">
           {newsAllResponse ? (
             newsAllResponse.map((item) => (
-              <NewsItem key={item.noticeId.timestamp} data={item} />
+              <NewsItem
+                key={item.noticeId.timestamp}
+                data={item}
+                isUnread={item.isRead ? false : true}
+              />
             ))
           ) : (
             <div className="no-news">{errMessage}</div>
@@ -88,7 +98,11 @@ const News = ({
         <div className="news-content">
           {newsUnreadResponse ? (
             newsUnreadResponse.map((item) => (
-              <NewsItem key={item.noticeId.timestamp} data={item} />
+              <NewsItem
+                key={item.noticeId.timestamp}
+                data={item}
+                isUnread={true}
+              />
             ))
           ) : (
             <div className="no-news"> {errMessage}</div>
@@ -117,14 +131,29 @@ const timeAgo = ({ timestamp }: { timestamp: string }) => {
   return <span>{date.fromNow()}</span>;
 };
 
-const NewsItem = ({ data }: { data: newsItemData }) => {
+const NewsItem = ({
+  data,
+  isUnread,
+}: {
+  data: newsItemData;
+  isUnread: boolean;
+}) => {
   return (
     <div className="news-item">
-      <img
-        className="news-item-image"
-        src={data.official ? news_img : user_img}
-        alt="User"
-      />
+      <div className={`news-item-image ${isUnread ? "news-item-unread" : ""}`}>
+        <img
+          className="item-img"
+          src={data.official ? news_img : user_img}
+          alt="User"
+        />
+        {isUnread && (
+          <img
+            className="news-item-unread-dot"
+            src={unread_dot}
+            alt="안읽은 소식"
+          />
+        )}
+      </div>
       <div className="news-item-content">
         <div className="news-item-title">
           {data.url ? (
