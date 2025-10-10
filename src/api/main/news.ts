@@ -6,3 +6,10 @@ export const getNews = (type: "all" | "unread") => {
     url: `/main/notice?type=${type}`,
   });
 };
+
+export const getNewsNum = () => {
+  return Send({
+    method: "get",
+    url: `/main/notice/num`,
+  });
+};

@@ -17,3 +17,8 @@ export interface newsItemData {
   official: boolean;
   isRead: boolean;
 }
+
+export interface sideBarPropsOfNews {
+  haveUnreadNews: boolean;
+  setHaveUnreadNews: (value: boolean) => void;
+}

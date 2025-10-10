@@ -2,14 +2,16 @@
 import "@/views/main/style/side-bar.sass";
 import logo from "@/assets/imgs/common/logo.svg";
 import test from "@/assets/imgs/common/user.svg";
+import new_icon from "@/assets/imgs/icon/new_notice.svg";
+import notification from "@/assets/imgs/icon/notification.svg";
 
 // api
 import { getProfile } from "@/api/main/profile";
-import { getNews } from "@/api/main/news.ts";
+import { getNews, getNewsNum } from "@/api/main/news.ts";
 
 // type
 import { profileData } from "@/types/profileData";
-import { newsItemData } from "@/types/news";
+import { newsItemData, sideBarPropsOfNews } from "@/types/news";
 
 // component
 import { useState, useEffect } from "react";
@@ -19,7 +21,9 @@ import UserModal from "@/views/main/components/UserModal";
 import PasswordChangeModal from "@/views/main/components/ChangePWModal";
 import News from "@/views/main/components/News";
 
-const SideBar = () => {
+const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
+  console.log("SideBar Rendered: ", haveUnreadNews);
+
   const [sort, setSort] = useState<string>("/");
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -44,6 +48,18 @@ const SideBar = () => {
       setProfile(res.data.data);
     });
   }, []);
+
+  useEffect(() => {
+    getNewsNum().then((res: any) => {
+      if (res.data.data.num > 0) {
+        setHaveUnreadNews(true);
+      } else {
+        setHaveUnreadNews(false);
+      }
+
+      console.log("Unread News Num:", res.data.data.num);
+    });
+  }, [newsUnreadResponse]);
 
   useEffect(() => {
     if (pathname === "/" || pathname === "/project") {
@@ -99,7 +115,9 @@ const SideBar = () => {
           <Link to="/" className="logo-wrap">
             <img src={logo} alt="LOGO" />
           </Link>
-          <button className="new" onClick={() => onNewsClick(false)}></button>
+          <button className="new" onClick={() => onNewsClick(false)}>
+            <img src={haveUnreadNews ? new_icon : notification} alt="" />
+          </button>
         </div>
         <div className="user-wrap">
           <div className="user" onClick={openUserModal}>

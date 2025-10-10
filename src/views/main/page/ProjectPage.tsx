@@ -8,6 +8,7 @@ import projectImg from "@/assets/imgs/common/project_img.svg";
 // api
 import { getSearch, patchProjectName } from "@/api/common/common";
 import { getProject, deleteProject } from "@/api/main/project";
+import { getNewsNum } from "@/api/main/news";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -31,6 +32,7 @@ const ProjectPage = () => {
   const [projectList, setProjectList] = useState<Array<projectData>>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedTitle, setEditedTitle] = useState<string>("");
+  const [isHavedUnreadNews, setIsHaveUnreadNews] = useState<boolean>(false);
   const menuRef = useRef<HTMLUListElement | null>(null);
   const orderRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,6 +90,18 @@ const ProjectPage = () => {
   }, [order, tap]);
 
   useEffect(() => {
+    getNewsNum().then((res: any) => {
+      if (res.data.data.num > 0) {
+        setIsHaveUnreadNews(true);
+      } else {
+        setIsHaveUnreadNews(false);
+      }
+
+      console.log("Unread News Num:", res.data.data.num);
+    });
+  }, []);
+
+  useEffect(() => {
     const menuClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenuId(null);
@@ -111,7 +125,10 @@ const ProjectPage = () => {
 
   return (
     <div className="main">
-      <SideBar />
+      <SideBar
+        haveUnreadNews={isHavedUnreadNews}
+        setHaveUnreadNews={setIsHaveUnreadNews}
+      />
       <div className="project-wrap">
         <div className="nevigation-wrap">
           <div className="title-wrap">
