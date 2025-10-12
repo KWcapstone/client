@@ -12,8 +12,8 @@ import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
 import { getTest } from "@/api/common/common";
 
 import splashIcon from "@/assets/imgs/common/splashIcon.svg";
-import mainImage from "@/assets/imgs/common/mainImage.svg";
-import solarSystem from "@/assets/imgs/common/solarSystem.svg";
+import mainImage from "@/assets/imgs/common/splash_main_img.svg";
+import solarSystem from "@/assets/imgs/common/splash_solarSystem.svg";
 
 const SplashPage = () => {
   type ModalType = "login" | "signup" | "agree" | "resetPw" | null;

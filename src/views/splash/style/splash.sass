@@ -7,7 +7,7 @@
 .splash-wrap
   +padding(90px 0)
   +box-sizing(border-box)
-  +size(100%)
+  +size(100%, 8000px)
   
   background: linear-gradient( #F3F1FF, #FFFFFF)
   .splash-container
@@ -47,7 +47,9 @@
         font-size: 16px
         font-weight: 600
         line-height: 150%
-  
+  .main-image
+    +animation("appear")
+
   .spacial-container
     +flex-box(center, center)
     +size(100%, 100%)
