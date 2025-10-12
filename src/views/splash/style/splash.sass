@@ -7,7 +7,7 @@
 .splash-wrap
   +padding(90px 0)
   +box-sizing(border-box)
-  +size(100%)
+  +size(100%, 8000px)
   
   background: linear-gradient( #F3F1FF, #FFFFFF)
   .splash-container
@@ -47,7 +47,9 @@
         font-size: 16px
         font-weight: 600
         line-height: 150%
-  
+  .main-image
+    +animation("appear_y")
+
   .spacial-container
     +flex-box(center, center)
     +size(100%, 100%)
@@ -75,3 +77,22 @@
       text-align: center
       font-size: 13px
       line-height: 160%
+
+    .spacial-img
+      +position(relative)
+      
+      .keyword1
+        +position(absolute, 10%, null, null, 13%)
+        +animation("appear_y")
+      .keyword2
+        +position(absolute, 4%, null, null, 58%)
+        +animation("appear_y")
+      .keyword3
+        +position(absolute, 34%, null, null, 66%)
+        +animation("appear_y")  
+      .keyword4
+        +position(absolute, 53%, null, null, 7%)
+        +animation("appear_y")
+      .keyword5
+        +position(absolute, 63%, null, null, 86%)
+        +animation("appear_y")

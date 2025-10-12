@@ -1,19 +1,27 @@
-import Navbar from "@/views/splash/components/Navbar";
-
+// style
 import "@/views/splash/style/splash.sass";
 import "@/views/components/style/modal.sass";
+import splashIcon from "@/assets/imgs/common/splashIcon.svg";
+import mainImage from "@/assets/imgs/common/splash_main_img.svg";
+import solarSystem from "@/assets/imgs/common/splash_solarSystem.svg";
+import keyword1 from "@/assets/imgs/common/splash_keyword1.svg";
+import keyword2 from "@/assets/imgs/common/splash_keyword2.svg";
+import keyword3 from "@/assets/imgs/common/splash_keyword3.svg";
+import keyword4 from "@/assets/imgs/common/splash_keyword4.svg";
+import keyword5 from "@/assets/imgs/common/splash_keyword5.svg";
 
+// library
 import { useState, useEffect, useRef } from "react";
 
+// component
+import Navbar from "@/views/splash/components/Navbar";
 import LoginModal from "@/views/splash/components/LoginModal";
 import SignupModal from "@/views/splash/components/SignupModal";
 import AgreeModal from "@/views/splash/components/AgreeModal";
 import PasswordResetModal from "@/views/splash/components/PasswordResetModal";
-import { getTest } from "@/api/common/common";
 
-import splashIcon from "@/assets/imgs/common/splashIcon.svg";
-import mainImage from "@/assets/imgs/common/mainImage.svg";
-import solarSystem from "@/assets/imgs/common/solarSystem.svg";
+// api
+import { getTest } from "@/api/common/common";
 
 const SplashPage = () => {
   type ModalType = "login" | "signup" | "agree" | "resetPw" | null;
@@ -133,8 +141,14 @@ const SplashPage = () => {
               <img
                 src={solarSystem}
                 alt="solarSystem"
-                className="spacial-img-img"
+                className="spacial-solar-img"
               />
+
+              <img src={keyword1} alt="keyword1" className="keyword1" />
+              <img src={keyword2} alt="keyword2" className="keyword2" />
+              <img src={keyword3} alt="keyword3" className="keyword3" />
+              <img src={keyword4} alt="keyword4" className="keyword4" />
+              <img src={keyword5} alt="keyword5" className="keyword5" />
             </div>
           </div>
         </div>
