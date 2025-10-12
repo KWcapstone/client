@@ -1,3 +1,53 @@
+@mixin keyframe($name) {
+  // #{}는 템플릿 리터럴과 비슷한 역할을 한다. 인자를 쿼리명으로 받는다.
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+@include keyframe(appear) {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@include keyframe(appear_x) {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@include keyframe(appear_y) {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@mixin animation(
+  $name,
+  $timingFunction: linear,
+  $animationRange: "entry 0% cover 40%"
+) {
+  animation: #{$name} $timingFunction;
+  animation-timeline: view();
+  animation-range: #{$animationRange};
+}
+
 @mixin size($width: null, $height: null) {
   $width_attr: width, max, min;
   $height_attr: height, max, min;
