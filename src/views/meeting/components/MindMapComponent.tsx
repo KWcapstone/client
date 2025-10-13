@@ -161,22 +161,9 @@ const MindMapComponent = ({
         console.error("❌ STOMP 에러:", frame);
       },
     });
-    console.log(client);
     client.activate();
     clientRef.current = client;
   };
-
-  // const handleDownload = (title: string, ref: React.RefObject<HTMLDivElement>) => () => {
-  //   if (!ref.current) return;
-
-  //   html2canvas(ref.current).then((canvas) => {
-  //     const link = document.createElement('a');
-  //     link.href = canvas.toDataURL('image/png');
-  //     link.download = title === '' ? '제목없음' : title;
-  //     document.body.appendChild(link);
-  //     link.click();
-  //   });
-  // };
 
   useEffect(() => {
     if (finalTranscript !== "") {
@@ -226,49 +213,6 @@ const MindMapComponent = ({
 
           setScriptList([]);
         }
-
-        // if (updated.length >= 7) {
-        //   const testString = updated.map((item) => item.script).join(" ");
-
-        //   let data = {
-        //     event: "script",
-        //     projectId: conferenceData.projectId,
-        //     scription: testString,
-        //   };
-        //   postScript(conferenceData.projectId, data).then((res: any) => {
-        //     setScriptList([]);
-
-        //     setSummary((prev) => [
-        //       ...prev,
-        //       {
-        //         time: formattedTime,
-        //         title: res.data.data.summary.title,
-        //         item: res.data.data.summary.content,
-        //       },
-        //     ]);
-
-        //     setInitialNodes(res.data.data.nodes);
-        //     const edges = res.data.data.nodes
-        //       .filter((node: any) => node.parentId)
-        //       .map((node: any, index: number) => ({
-        //         id: `${index}`,
-        //         source: node.parentId!,
-        //         target: node.id,
-        //       }));
-
-        //     setInitialEdges(edges);
-        //     setMainKeyword(
-        //       JSON.parse(res.data.data.mainKeywords).map(
-        //         (x: any, i: number) => ({ id: i, value: x })
-        //       )
-        //     );
-        //     setRecommendKeyword(
-        //       JSON.parse(res.data.data.recommendedKeywords)
-        //         .filter(Boolean)
-        //         .map((x: any, i: number) => ({ id: i, value: x }))
-        //     );
-        //   });
-        // }
 
         return updated.length >= 2 ? [] : updated;
       });
