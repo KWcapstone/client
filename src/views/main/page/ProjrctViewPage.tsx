@@ -115,7 +115,6 @@ export default function ProjectViewPage() {
               scripts={scripts}
               conferenceData={conferenceData}
               summarys={summarys}
-              view={true}
             />
             <div
               className="project-content"
