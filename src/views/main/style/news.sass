@@ -58,11 +58,13 @@
       cursor: pointer
 
   .news-content
+    +box-sizing(border-box)
     +flex-box(column, flex-start)
+    +size(100%, 370px)
     +margin(16px 0 16px 0)
 
     flex-direction: column
-    overflow-y: auto
+    overflow-y: scroll
 
     /* Scrollbar styles */
     &::-webkit-scrollbar
