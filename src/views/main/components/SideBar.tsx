@@ -34,6 +34,7 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
   const openChangePWModal = () => setModalType("changePW");
   const openUserModal = () => setModalType("user");
   const [profile, setProfile] = useState<profileData>();
+  const [userName, setUserName] = useState<string>("");
   const [newsAllResponse, setNewsAllResponse] = useState<newsItemData[]>([]);
   const [newsUnreadResponse, setNewsUnreadResponse] = useState<newsItemData[]>(
     []
@@ -44,6 +45,7 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
   useEffect(() => {
     getProfile().then((res: any) => {
       setProfile(res.data.data);
+      setUserName(res.data.data.name);
     });
   }, []);
 
@@ -133,7 +135,7 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
               alt=""
             />
             <div className="info-wrap">
-              <div className="name">{profile?.name}</div>
+              <div className="name">{userName}</div>
               <div className="email">{profile?.email}</div>
             </div>
           </div>
@@ -189,6 +191,7 @@ const SideBar = ({ haveUnreadNews, setHaveUnreadNews }: sideBarPropsOfNews) => {
           <UserModal
             onCloseModal={closeModal}
             onOpenChangePW={openChangePWModal}
+            setUserName={setUserName}
           />
         </div>
       )}
