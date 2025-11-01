@@ -85,32 +85,27 @@ const PasswordChangeModal = ({
     setTimeout(() => setNextBtnShake(false), 500);
   };
 
-  const handleNextClick = () => {
-    let hasError = false;
+  const handleNextClick = async () => {
     if (!currentPWValue) {
       setCurrentPWError("현재 비밀번호를 입력해주세요.");
-      hasError = true;
-    }
-
-    if (hasError) {
       triggerNextShake();
       return;
     }
 
-    // console.log("현재 비밀번호 입력");
+    try {
+      const res = await PostCheckPW(currentPWValue);
 
-    PostCheckPW(currentPWValue)
-      .then((res) => {
-        if (res.status === 200) {
-          setBtnClicked(true);
-        } else {
-          alert(res.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error check pw:", error);
-      });
-    setBtnClicked(true);
+      if (res.status === 200) {
+        setBtnClicked(true);
+      } else {
+        setCurrentPWError("현재 비밀번호가 일치하지 않습니다.");
+        triggerNextShake();
+      }
+    } catch (error) {
+      console.error("Error check pw:", error);
+      setCurrentPWError("현재 비밀번호가 일치하지 않습니다.");
+      triggerNextShake();
+    }
   };
 
   // 비밀번호 변경 버튼 애니메이션
@@ -245,7 +240,9 @@ const PasswordChangeModal = ({
               type="text"
               placeholder="현재 비밀번호를 입력해주세요"
               className={
-                currentPWError ? "modal-input modal-input-error" : "modal-input"
+                currentPWError.length > 0
+                  ? "modal-input modal-input-error"
+                  : "modal-input"
               }
               onChange={(e) => setCurrentPWInput(e.target.value)}
               onKeyDown={handleKeyDown}
