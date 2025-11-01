@@ -195,7 +195,9 @@ const PasswordChangeModal = ({
             />
             {newPWError && <p className="modal-error">{newPWError}</p>}
             <p className="infopw">
-              영문/숫자/특수문자 중 2가지 이상 조합, 8자~15자리
+              비밀번호는 6자 이상 12자 이하이며, 영문자, 숫자, 특수문자를
+              <br />
+              각각 최소 1개 이상 포함해야 합니다.
             </p>
           </div>
           <div className="input-wrap">
