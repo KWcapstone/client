@@ -8,6 +8,7 @@ import { getSearch } from "@/api/common/common";
 import { getRecord } from "@/api/main/record";
 import { getNewsNum } from "@/api/main/news";
 import { getFileDwn } from "@/api/main/fileDwn";
+import { deleteProject } from "@/api/main/project";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -112,6 +113,22 @@ const RecordPage = () => {
       }));
       setRecord(dataWithSelection);
     });
+  };
+
+  const clickRecordDelete = (recordID: string[]) => {
+    if (confirm("정말 음성・스크립트를 삭제하시겠습니까?")) {
+      const updatedList = recordID.map((id) => ({
+        projectId: id,
+        type: "record",
+      }));
+
+      console.log(updatedList);
+
+      deleteProject(updatedList).then(() => {
+        alert("음성・스크립트가 정상적으로 삭제되었습니다.");
+        getRecordList();
+      });
+    }
   };
 
   useEffect(() => {
@@ -261,7 +278,19 @@ const RecordPage = () => {
                       >
                         다운로드 하기
                       </button>
-                      <button className="del">삭제하기</button>
+                      <button
+                        className="del"
+                        onClick={() => {
+                          const selectedRecordIds = record
+                            .filter((row) => row.selected)
+                            .map((row) => row.recordId);
+
+                          console.log(selectedRecordIds);
+                          clickRecordDelete(selectedRecordIds);
+                        }}
+                      >
+                        삭제하기
+                      </button>
                       <button
                         className="cancel"
                         onClick={async () => {
