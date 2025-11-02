@@ -160,7 +160,7 @@ const RecordPage = () => {
             <div className="search-wrap">
               <input
                 type="text"
-                placeholder="음성명 검색"
+                placeholder="음성・스크립트명 검색"
                 onChange={(e) => handleSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
