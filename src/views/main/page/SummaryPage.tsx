@@ -11,6 +11,7 @@ import { getSearch } from "@/api/common/common";
 import { getSummary } from "@/api/main/summary";
 import { getFileDwn } from "@/api/main/fileDwn";
 import { getNewsNum } from "@/api/main/news";
+import { deleteProject } from "@/api/main/project";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -102,6 +103,22 @@ const SummaryPage = () => {
       }));
       setSummary(dataWithSelection);
     });
+  };
+
+  const clickSummaryDelete = (recordID: string[]) => {
+    if (confirm("정말 요약본을 삭제하시겠습니까?")) {
+      const updatedList = recordID.map((id) => ({
+        projectId: id,
+        type: "summary",
+      }));
+
+      console.log(updatedList);
+
+      deleteProject(updatedList).then(() => {
+        alert("요약본이 정상적으로 삭제되었습니다.");
+        getSummaryList();
+      });
+    }
   };
 
   useEffect(() => {
@@ -249,7 +266,18 @@ const SummaryPage = () => {
                       >
                         다운로드 하기
                       </button>
-                      <button className="del">삭제하기</button>
+                      <button
+                        className="del"
+                        onClick={() =>
+                          clickSummaryDelete(
+                            summary
+                              .filter((row) => row.selected)
+                              .map((row) => row.projectId)
+                          )
+                        }
+                      >
+                        삭제하기
+                      </button>
                       <button
                         className="cancel"
                         onClick={() =>
