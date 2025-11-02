@@ -18,13 +18,13 @@ import SideBar from "@/views/main/components/SideBar";
 // import
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { debounce } from "lodash";
 
 // type
 import { summaryData } from "@/types/summaryData";
 
 const SummaryPage = () => {
   // value
-  const [keyword, setKeyword] = useState<string>("");
   const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
   const [showOrder, setShowOrder] = useState<boolean>(false);
@@ -54,12 +54,12 @@ const SummaryPage = () => {
     setSummary(newData);
   };
 
-  const getSearchList = () => {
+  const getSearchList = (val: string) => {
     setTap("all");
     setOrder("latest");
     let params = {
       tap: "summary",
-      keyword: keyword,
+      keyword: val,
     };
     getSearch(params)
       .then((res: any) => {
@@ -83,6 +83,11 @@ const SummaryPage = () => {
         setSummary([]);
       });
   };
+  const handleSearch = useRef(
+    debounce((val: string) => {
+      getSearchList(val);
+    }, 500)
+  ).current;
 
   const getSummaryList = () => {
     let params = {
@@ -146,11 +151,10 @@ const SummaryPage = () => {
               <input
                 type="text"
                 placeholder="요약본명 검색"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    getSearchList();
+                    getSearchList(e.currentTarget.value);
                   }
                 }}
               />

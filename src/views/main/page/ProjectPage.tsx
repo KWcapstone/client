@@ -18,13 +18,13 @@ import ShareModal from "@/views/components/ShareModal";
 // import
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { debounce } from "lodash";
 
 // type
 import { projectData } from "@/types/projectData";
 
 const ProjectPage = () => {
   // value
-  const [keyword, setKeyword] = useState<string>("");
   const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
   const [showOrder, setShowOrder] = useState<boolean>(false);
@@ -59,13 +59,13 @@ const ProjectPage = () => {
     }
   };
 
-  const getSearchList = () => {
+  const getSearchList = (val: string) => {
     setTap("all");
     setOrder("latest");
 
     let params = {
       tap: "entire",
-      keyword: keyword,
+      keyword: val,
     };
     getSearch(params)
       .then((res: any) => {
@@ -75,6 +75,12 @@ const ProjectPage = () => {
         setProjectList([]);
       });
   };
+
+  const handleSearch = useRef(
+    debounce((val: string) => {
+      getSearchList(val);
+    }, 500)
+  ).current;
 
   const getProjectList = () => {
     let params = {
@@ -137,11 +143,12 @@ const ProjectPage = () => {
                 type="text"
                 placeholder="회의명 검색"
                 className="search-input"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    getSearchList();
+                    getSearchList(e.currentTarget.value);
                   }
                 }}
               />
