@@ -159,9 +159,11 @@ const NewsItem = ({
           {data.url ? (
             <>
               {data.title}
-              <a className="news-item-url" href={data.url}>
-                read more
-              </a>
+              <div>
+                <a className="news-item-url" href={data.url}>
+                  read more
+                </a>
+              </div>
             </>
           ) : (
             data.title

@@ -8,6 +8,7 @@ import { getSearch } from "@/api/common/common";
 import { getRecord } from "@/api/main/record";
 import { getNewsNum } from "@/api/main/news";
 import { getFileDwn } from "@/api/main/fileDwn";
+import { deleteProject } from "@/api/main/project";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -15,6 +16,7 @@ import SideBar from "@/views/main/components/SideBar";
 // import
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { debounce } from "lodash";
 
 // type
 import { recordData } from "@/types/recordData";
@@ -22,7 +24,6 @@ import { downloadAs } from "@/utils/download";
 
 const RecordPage = () => {
   // value
-  const [keyword, setKeyword] = useState<string>("");
   const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
   const [showOrder, setShowOrder] = useState<boolean>(false);
@@ -49,12 +50,12 @@ const RecordPage = () => {
     setRecord(newData);
   };
 
-  const getSearchList = () => {
+  const getSearchList = (val: string) => {
     setTap("all");
     setOrder("latest");
     let params = {
       tap: "record",
-      keyword: keyword,
+      keyword: val,
     };
     getSearch(params)
       .then((res: any) => {
@@ -79,6 +80,12 @@ const RecordPage = () => {
         setRecord([]);
       });
   };
+
+  const handleSearch = useRef(
+    debounce((val: string) => {
+      getSearchList(val);
+    }, 500)
+  ).current;
 
   const formatDuration = (seconds: number): string => {
     const hrs = Math.floor(seconds / 3600);
@@ -106,6 +113,22 @@ const RecordPage = () => {
       }));
       setRecord(dataWithSelection);
     });
+  };
+
+  const clickRecordDelete = (recordID: string[]) => {
+    if (confirm("정말 음성・스크립트를 삭제하시겠습니까?")) {
+      const updatedList = recordID.map((id) => ({
+        projectId: id,
+        type: "record",
+      }));
+
+      console.log(updatedList);
+
+      deleteProject(updatedList).then(() => {
+        alert("음성・스크립트가 정상적으로 삭제되었습니다.");
+        getRecordList();
+      });
+    }
   };
 
   useEffect(() => {
@@ -154,12 +177,11 @@ const RecordPage = () => {
             <div className="search-wrap">
               <input
                 type="text"
-                placeholder="음성명 검색"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                placeholder="음성・스크립트명 검색"
+                onChange={(e) => handleSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    getSearchList();
+                    getSearchList(e.currentTarget.value);
                   }
                 }}
               />
@@ -256,7 +278,19 @@ const RecordPage = () => {
                       >
                         다운로드 하기
                       </button>
-                      <button className="del">삭제하기</button>
+                      <button
+                        className="del"
+                        onClick={() => {
+                          const selectedRecordIds = record
+                            .filter((row) => row.selected)
+                            .map((row) => row.recordId);
+
+                          console.log(selectedRecordIds);
+                          clickRecordDelete(selectedRecordIds);
+                        }}
+                      >
+                        삭제하기
+                      </button>
                       <button
                         className="cancel"
                         onClick={async () => {

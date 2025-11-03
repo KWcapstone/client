@@ -11,6 +11,7 @@ import { getSearch } from "@/api/common/common";
 import { getSummary } from "@/api/main/summary";
 import { getFileDwn } from "@/api/main/fileDwn";
 import { getNewsNum } from "@/api/main/news";
+import { deleteProject } from "@/api/main/project";
 
 // component
 import SideBar from "@/views/main/components/SideBar";
@@ -18,13 +19,13 @@ import SideBar from "@/views/main/components/SideBar";
 // import
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { debounce } from "lodash";
 
 // type
 import { summaryData } from "@/types/summaryData";
 
 const SummaryPage = () => {
   // value
-  const [keyword, setKeyword] = useState<string>("");
   const [tap, setTap] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
   const [showOrder, setShowOrder] = useState<boolean>(false);
@@ -54,12 +55,12 @@ const SummaryPage = () => {
     setSummary(newData);
   };
 
-  const getSearchList = () => {
+  const getSearchList = (val: string) => {
     setTap("all");
     setOrder("latest");
     let params = {
       tap: "summary",
-      keyword: keyword,
+      keyword: val,
     };
     getSearch(params)
       .then((res: any) => {
@@ -83,6 +84,11 @@ const SummaryPage = () => {
         setSummary([]);
       });
   };
+  const handleSearch = useRef(
+    debounce((val: string) => {
+      getSearchList(val);
+    }, 500)
+  ).current;
 
   const getSummaryList = () => {
     let params = {
@@ -97,6 +103,22 @@ const SummaryPage = () => {
       }));
       setSummary(dataWithSelection);
     });
+  };
+
+  const clickSummaryDelete = (recordID: string[]) => {
+    if (confirm("정말 요약본을 삭제하시겠습니까?")) {
+      const updatedList = recordID.map((id) => ({
+        projectId: id,
+        type: "summary",
+      }));
+
+      console.log(updatedList);
+
+      deleteProject(updatedList).then(() => {
+        alert("요약본이 정상적으로 삭제되었습니다.");
+        getSummaryList();
+      });
+    }
   };
 
   useEffect(() => {
@@ -146,11 +168,10 @@ const SummaryPage = () => {
               <input
                 type="text"
                 placeholder="요약본명 검색"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    getSearchList();
+                    getSearchList(e.currentTarget.value);
                   }
                 }}
               />
@@ -245,7 +266,18 @@ const SummaryPage = () => {
                       >
                         다운로드 하기
                       </button>
-                      <button className="del">삭제하기</button>
+                      <button
+                        className="del"
+                        onClick={() =>
+                          clickSummaryDelete(
+                            summary
+                              .filter((row) => row.selected)
+                              .map((row) => row.projectId)
+                          )
+                        }
+                      >
+                        삭제하기
+                      </button>
                       <button
                         className="cancel"
                         onClick={() =>

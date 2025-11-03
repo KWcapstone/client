@@ -18,9 +18,14 @@ import { clearTokens } from "@/utils/auth";
 interface UserModalProps {
   onCloseModal: () => void;
   onOpenChangePW: () => void;
+  setUserName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const UserModal = ({ onCloseModal, onOpenChangePW }: UserModalProps) => {
+const UserModal = ({
+  onCloseModal,
+  onOpenChangePW,
+  setUserName,
+}: UserModalProps) => {
   const [profile, setProfile] = useState<profileData>();
   const [isEdit, setIsEdit] = useState(false);
   const [editName, setEditName] = useState("");
@@ -81,13 +86,14 @@ const UserModal = ({ onCloseModal, onOpenChangePW }: UserModalProps) => {
                 if (e.key === "Enter") {
                   const newName = e.currentTarget.value;
                   setIsEdit(false);
+                  setUserName(newName);
                   setEditName(newName);
                   patchProfile({
                     name: newName,
                     imageUrl: profile?.imageUrl ?? "",
                   } as profileData).then(() => {
                     setProfile((prev) => prev && { ...prev, name: newName });
-                    window.location.reload();
+                    // window.location.reload();
                   });
                 }
               }}

@@ -1,6 +1,6 @@
 export interface recordData {
   creator: string;
-  recordId: Array<string>;
+  recordId: string;
   name: string;
   sizeInBytes: string;
   length: number;
