@@ -120,7 +120,9 @@ const SplashPage = () => {
                 아이디어는 자유롭게, 정리는 자동으로.
                 <br /> 브레인스토밍이 가벼워지는 순간을 경험해보세요.
               </div>
-              <div className="intro-btn">바로 무료 시작하기</div>
+              <button className="intro-btn" onClick={openLoginModal}>
+                바로 무료 시작하기
+              </button>
             </div>
             <div className="hero-logo">
               <img src={splashIcon} alt="logo" className="hero-logo-img" />

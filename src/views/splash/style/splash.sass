@@ -36,17 +36,20 @@
         line-height: 150%
 
       .intro-btn
+        +btn(136px, 40px)
         +margin(20px 0 0 0) 
         +padding(0 16px)
         +border-radius(8px)
-        +size(120px, 40px)
+        +box-sizing(border-box)
         +flex-box(center, center)
         background: $purple-500
         color: $white
         font-family: Pretendard
-        font-size: 16px
+        font-size: 14px
         font-weight: 600
         line-height: 150%
+        &:hover
+          background: $purple-600
   .main-image
     +animation("appear_y")
 
