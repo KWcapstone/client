@@ -7,9 +7,9 @@
 .splash-wrap
   +padding(90px 0)
   +box-sizing(border-box)
-  +size(100%, 8000px)
+  +size(100%, 6045px)
   
-  background: linear-gradient( #F3F1FF, #FFFFFF)
+  background: linear-gradient( #F3F1FF, #ffffff)
   .splash-container
     +flex-box(center, center)
     flex-direction: column
@@ -99,3 +99,190 @@
       .keyword5
         +position(absolute, 63%, null, null, 86%)
         +animation("appear_y")
+
+
+  .explanation-container
+    +size(100%, 100%)
+    +box-sizing(border-box)
+
+    &.right
+      +padding(160px 160px 121px 0) //trbl
+      +flex-box(start, center, 140px)
+    
+    &.left
+      +padding(160px 0px 121px 160px) //trbl
+      +flex-box(start, center, 140px)
+
+    .explanation-paragraph
+      +flex-box(start, left, 16px)
+      +margin(46px 0 0 0)
+
+      flex-direction: column
+
+      .paragraph-mini
+        font-family: Pretendard
+        font-weight: 700
+        color: $purple-400
+        font-size: 18px
+        line-height: 150%
+
+      .paragraph-title
+        font-family: Pretendard
+        font-weight: 700
+        color: $gray-900
+        font-size: 36px
+        line-height: 150%
+
+      .paragraph-content
+        +margin(2px 0 0 0)
+        font-family: Pretendard
+        font-weight: 500
+        color: $gray-800
+        font-size: 18px
+        line-height: 160%
+
+      .paragraph-icon
+        +margin(16px 0 0 0)
+
+
+  .summary-container
+    +flex-box(center, center, 56px)
+    +padding(120px 160px 180px 160px)
+    +box-sizing(border-box)
+
+    background: $white
+    flex-direction: column
+
+    .summary-paragraph
+      +flex-box(center, center, 16px)
+      flex-direction: column
+
+      .paragraph-mini
+        font-family: Pretendard
+        font-weight: 700
+        color: $purple-400
+        font-size: 18px
+        line-height: 150%
+
+      .paragraph-title
+        +margin(4px 0 0 0)
+        font-family: Pretendard
+        font-weight: 700
+        color: $gray-900
+        font-size: 36px
+        line-height: 150%
+
+      .paragraph-content
+        font-family: Pretendard
+        font-weight: 500
+        color: $gray-800
+        font-size: 18px
+        line-height: 160%
+
+    .summary-cards
+      +flex-box(center, center, 24px)
+      +margin(40px 0 0 0)
+
+      .card
+        +flex-box(center, center, 40px)
+        +box-sizing(border-box)
+        +border-radius(16px)
+        +border(1px solid #F7F7F7)
+        +padding(40px 0)
+        +size(262px, 380px)
+        +box-shadow(4px 4px 10px 0 rgba(0, 0, 0, 0.02))
+
+        flex-direction: column
+        
+        &.blue
+          background: #F2FBFF
+        &.red
+          background: #FFF4F1
+        &.yellow
+          background: #FFFDF4
+        &.purple
+          background: #F4F2FF
+
+        .card-paragraph
+          +flex-box(center, center, 12px)
+          flex-direction: column
+
+          .card-title
+            font-family: Pretendard
+            font-weight: 600
+            color: $black
+            font-size: 20px
+            line-height: 150%
+
+          .card-content
+            text-align: center
+            font-family: Pretendard
+            font-weight: 500
+            color: #3C3C3C
+            font-size: 18px
+            line-height: 150%
+
+  .last-container
+    +flex-box(center, center, 20px)
+    +padding(94px 400px) //trbl
+    +box-sizing(border-box)
+    +size(100vw, 100%)
+
+    background-image: url('/src/assets/imgs/splash/footer.svg')
+    background-size: cover
+    background-position: center
+    flex-direction: column
+
+    .last-title
+      font-family: Pretendard
+      font-weight: 700
+      color: $white
+      font-size: 36px
+      line-height: 150%
+      text-align: center
+    
+    .last-content
+      font-family: Pretendard
+      font-weight: 500
+      color: $gray-100
+      font-size: 18px
+      line-height: 150%
+      text-align: center
+
+    .last-btn
+      +btn(136px, 40px)
+      +margin(20px 0 0 0)
+      +padding(0 16px)
+      +border-radius(8px)
+      +box-sizing(border-box)
+
+      background: $purple-500
+      color: $white
+      font-family: Pretendard
+      font-size: 14px
+      font-weight: 600
+      line-height: 150%
+
+      &:hover
+        background: $purple-600
+
+  footer
+    +flex-box(space-between, center)
+    +size(100vw, 120px)
+    +padding(40px)
+    +box-sizing(border-box)
+
+    background: $black
+
+    .footer-nav
+      +flex-box(center, center, 10px)
+
+      .nav-tab
+        background: none
+        border: none
+        font-family: Pretendard
+        font-weight: 400
+        color: $gray-500
+        font-size: 14px
+        line-height: 150%
+        cursor: pointer
