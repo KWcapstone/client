@@ -146,10 +146,10 @@ const PasswordResetModal = ({
     }
 
     if (!nameValue) {
-      setNameError("이름을 입력해주세요.");
+      setNameError("닉네임을 입력해주세요.");
       hasError = true;
     } else if (nameValue.length < 2) {
-      setNameError("이름은 2자 이상이어야 합니다.");
+      setNameError("닉네임은 2자 이상이어야 합니다.");
       hasError = true;
     }
 
