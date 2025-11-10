@@ -53,7 +53,7 @@ const MindMapView = ({
       },
       onConnect: () => {
         client.subscribe(
-          `/topic/conference/${projectId}`,
+          `/topic/conference/${projectId}/history`,
           (message: any) => {
             const data: any = JSON.parse(message.body);
             console.log(data);
@@ -83,9 +83,50 @@ const MindMapView = ({
               ]);
             }
 
+            if (data.event === "script_history") {
+                if (Array.isArray(data.scriptList)) {
+                  setScripts(prev => [
+                    ...prev,
+                    ...data.scriptList.filter((x:any) => x && x.time && x.script),
+                  ]);
+                }
+            }
+
             if (data.event === "script") {
-              console.log(data.scription)
               setScripts((prev) => [...prev, data.scription]);
+            }
+          }
+        );
+
+        client.subscribe(
+          `/topic/conference/${projectId}`,
+          (message: any) => {
+            const data: any = JSON.parse(message.body);
+            console.log(data);
+
+            if (data.event === "create_node") {
+              setInitialNodes(data.nodes);
+
+              const edges = data.nodes
+                .filter((node: any) => node.parentId)
+                .map((node: any, index: number) => ({
+                  id: `${index}`,
+                  source: node.parentId!,
+                  target: node.id,
+                }));
+
+              setInitialEdges(edges);
+            }
+
+            if (data.event === "summary") {
+              setSummary((prev) => [
+                ...prev,
+                {
+                  time: data.time,
+                  title: data.title,
+                  item: data.content,
+                },
+              ]);
             }
 
             if (data.event === "main_keywords") {

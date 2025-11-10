@@ -209,8 +209,6 @@ const MindMapComponent = ({
             body: JSON.stringify(data),
           });
 
-          console.log(JSON.stringify(data));
-
           setScriptList([]);
         }
 
@@ -220,6 +218,50 @@ const MindMapComponent = ({
       resetTranscript();
     }
   }, [finalTranscript]);
+
+  const updateNode = () => {
+    if (clientRef.current?.connected) {
+      const liveNodes = buildNodesForLive(nodes, edges);
+      const payload = {
+        event: "live_on",
+        projectId: conferenceData.projectId,
+        nodes: JSON.stringify(liveNodes),
+      };
+      console.log(payload)
+      clientRef.current.publish({
+        destination: `/app/conference/${conferenceData.projectId}/live_on`,
+        body: JSON.stringify(payload),
+      });
+    }
+  }
+
+  // 컴포넌트 상단(함수 바깥 X) 어딘가에 추가
+  type LiveNode = {
+    id: string;
+    type: string;
+    data: { label: string };
+    position: { x: number; y: number };
+    parentId: string | null;
+  };
+
+  const buildNodesForLive = (nodes: Node[], edges: Edge[]): LiveNode[] => {
+    return nodes.map((n) => {
+      // 들어오는 간선 하나를 parent로 간주 (없으면 루트)
+      const incoming = edges.find((e) => e.target === n.id);
+      const label =
+        typeof (n.data as any)?.label === "string"
+          ? (n.data as any).label
+          : String((n.data as any)?.label ?? "");
+
+      return {
+        id: n.id,
+        type: (n.type as string) ?? "default",
+        data: { label },
+        position: n.position, // ReactFlow 절대 좌표
+        parentId: incoming?.source ?? null,
+      };
+    });
+  };
 
   const stopClick = async () => {
     try {
@@ -403,6 +445,9 @@ const MindMapComponent = ({
               onNodesDelete={onNodesDelete}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
+              nodesDraggable={mode !== "live"}
+              nodesConnectable={mode !== "live"}
+              elementsSelectable={mode !== "live"}
               fitView
               attributionPosition="top-right"
             ></ReactFlow>
@@ -439,7 +484,12 @@ const MindMapComponent = ({
                       type="checkbox"
                       id="live"
                       onClick={() => {
-                        setMode(mode === "live" ? "meeting" : "live");
+                        if (mode === "live") {
+                          setMode("meeting");
+                        } else {
+                          updateNode();
+                          setMode("live");
+                        }
                       }}
                       checked={mode === "live"}
                     />
