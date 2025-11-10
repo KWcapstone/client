@@ -58,31 +58,6 @@ const MindMapView = ({
             const data: any = JSON.parse(message.body);
             console.log(data);
 
-            if (data.event === "create_node") {
-              setInitialNodes(data.nodes);
-
-              const edges = data.nodes
-                .filter((node: any) => node.parentId)
-                .map((node: any, index: number) => ({
-                  id: `${index}`,
-                  source: node.parentId!,
-                  target: node.id,
-                }));
-
-              setInitialEdges(edges);
-            }
-
-            if (data.event === "summary") {
-              setSummary((prev) => [
-                ...prev,
-                {
-                  time: data.time,
-                  title: data.title,
-                  item: data.content,
-                },
-              ]);
-            }
-
             if (data.event === "script_history") {
                 if (Array.isArray(data.scriptList)) {
                   setScripts(prev => [
@@ -105,6 +80,20 @@ const MindMapView = ({
             console.log(data);
 
             if (data.event === "create_node") {
+              setInitialNodes(data.nodes);
+
+              const edges = data.nodes
+                .filter((node: any) => node.parentId)
+                .map((node: any, index: number) => ({
+                  id: `${index}`,
+                  source: node.parentId!,
+                  target: node.id,
+                }));
+
+              setInitialEdges(edges);
+            }
+
+            if (data.event === "live_on_node") {
               setInitialNodes(data.nodes);
 
               const edges = data.nodes

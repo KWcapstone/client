@@ -29,6 +29,7 @@ interface SideBarProps {
   summarys?: RealTimeSummaryData[];
   summary?: summarysWithTitleData;
   view?: boolean;
+  headerLess? : boolean;
 }
 
 const SideBar = ({
@@ -39,6 +40,7 @@ const SideBar = ({
   summarys,
   summary,
   view = false,
+  headerLess = false
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
@@ -74,10 +76,7 @@ const SideBar = ({
   }, []);
 
   return (
-    <div
-      className={`side-bar ${isSidebarOpen ? "open" : "closed"} ${
-        view ? "" : "side-bar-header"
-      }`}
+    <div className={`side-bar ${isSidebarOpen ? 'open' : 'closed'} ${view ? '' : 'side-bar-header'} ${headerLess ? 'less' : ''}`}
       style={{ width: isSidebarOpen ? 340 : 56 }}
     >
       {isSidebarOpen ? (

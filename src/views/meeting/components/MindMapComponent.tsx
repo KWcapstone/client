@@ -229,7 +229,7 @@ const MindMapComponent = ({
       };
       console.log(payload)
       clientRef.current.publish({
-        destination: `/app/conference/${conferenceData.projectId}/live_on`,
+        destination: `/app/conference/live_on`,
         body: JSON.stringify(payload),
       });
     }

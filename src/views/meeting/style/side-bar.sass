@@ -10,7 +10,7 @@
   +padding(16px 0)
   transition: width 0.3s ease  // 추가
   z-index: 10
-  
+
   flex-direction: column
   border-right: 1px solid $gray-100
   background-color: $white
@@ -19,14 +19,17 @@
   &.side-bar-header
     +margin(60px 0 0 0)
 
+  &.less
+    +margin(0)
+
   .side-bar-wrap
     +size(100%, null)
     +box-sizing(border-box)
     +padding(0 16px)
-    +flex-box(center, end) 
+    +flex-box(center, end)
     flex: 0 0 auto
     flex-direction: column
-    
+
 
 
     .side-bar-title-wrap
@@ -47,7 +50,7 @@
         flex-direction: column
 
         .detail
-          +flex-box(flex-start, center, 20px) 
+          +flex-box(flex-start, center, 20px)
           .detail-title
             +size(48px, null)
             color: $gray-500
@@ -64,7 +67,7 @@
             font-style: normal
             font-weight: 500
             line-height: 150%
-          
+
           .creator-wrap
             +flex-box(flex-start, center, 4px)
             img
@@ -76,7 +79,7 @@
               align-items: center
               gap: 10px
               aspect-ratio: 1/1
-            
+
   .content-wrap
     +size(100%, 100%)
     +flex-box(center, start)
@@ -104,7 +107,7 @@
       .active
         +border(2px solid $black,bottom)
         color: $gray-900
-    
+
     .content-des
       +size(100%, 100%)
       +box-sizing(border-box)
@@ -123,7 +126,7 @@
           font-weight: 400
           line-height: 160% /* 22.4px */
         .des-title
-          
+
           color: $black
           font-family: Pretendard
           font-size: 14px
@@ -134,14 +137,14 @@
           list-style-type: disc
           padding-inline-start: 15px
         .des-item
-          
+
           color: $gray-800
           font-family: Pretendard
           font-size: 14px
           font-style: normal
           font-weight: 400
           line-height: 170% /* 23.8px */
-                
+
 .mini-side-bar
   +size(56px, calc(100vh - 60px))
   +box-sizing(border-box)
