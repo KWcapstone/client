@@ -17,7 +17,7 @@ import mindmap from "@/assets/imgs/splash/mindmap.svg";
 import mindmapComponent from "@/assets/imgs/splash/mindmapComponent.svg";
 import nodeedit from "@/assets/imgs/splash/nodeedit.svg";
 import nodeeditComponent from "@/assets/imgs/splash/nodeeditComponent.svg";
-import curser from "@/assets/imgs/splash/curser.svg";
+import curser from "@/assets/imgs/splash/cuser.svg";
 import card1 from "@/assets/imgs/splash/card1.svg";
 import card2 from "@/assets/imgs/splash/card2.svg";
 import card3 from "@/assets/imgs/splash/card3.svg";
@@ -189,6 +189,11 @@ const SplashPage = () => {
           </div>
           <div className="explanation-container right">
             <img src={mindmap} alt="" className="explanation-image" />
+            <img
+              src={mindmapComponent}
+              alt="마인드맵 컴포넌트"
+              className="mindmap-component-image"
+            />
             <div className="explanation-paragraph">
               <div className="paragraph-mini">라이브모드</div>
               <div className="paragraph-title">
@@ -226,6 +231,12 @@ const SplashPage = () => {
               />
             </div>
             <img src={nodeedit} alt="" className="explanation-image" />
+            <img src={curser} alt="커서 이미지" className="curser-image" />
+            <img
+              src={nodeeditComponent}
+              alt="노드 에딧 컴포넌트"
+              className="nodeedit-component-image"
+            />
           </div>
           <div className="summary-container">
             <div className="summary-paragraph">

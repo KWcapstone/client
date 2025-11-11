@@ -104,6 +104,7 @@
   .explanation-container
     +size(100%, 100%)
     +box-sizing(border-box)
+    +position(relative)
 
     &.right
       +padding(160px 160px 121px 0) //trbl
@@ -112,6 +113,19 @@
     &.left
       +padding(160px 0px 121px 160px) //trbl
       +flex-box(start, center, 140px)
+
+    .mindmap-component-image
+      +position(absolute, 65%, null, null, 5%)
+      +animation("appear_x")
+
+    .curser-image
+      +position(absolute, 54%, null, null, 58%)
+      +animation("appear_y_reverse")
+    
+    .nodeedit-component-image
+      +position(absolute, 58%, null, null, 43%)
+      +animation("appear")
+      
 
     .explanation-paragraph
       +flex-box(start, left, 16px)
@@ -182,6 +196,7 @@
     .summary-cards
       +flex-box(center, center, 24px)
       +margin(40px 0 0 0)
+      +animation("appear")
 
       .card
         +flex-box(center, center, 40px)
