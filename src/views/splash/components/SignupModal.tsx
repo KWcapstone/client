@@ -321,7 +321,9 @@ const SignupModal = ({
             </div>
             {pwError && <p className="modal-error">{pwError}</p>}
             <p className="modal-pw-info">
-              영문/숫자/특수문자 중 2가지 이상 조합, 8자~15자리
+              비밀번호는 6자 이상 12자 이하이며,
+              <br />
+              영문자, 숫자, 특수문자를 각각 최소 1개 이상 포함해야 합니다.
             </p>
           </div>
           <div className="modal-inputs-wrap">
