@@ -14,12 +14,13 @@ import { conferenceData, scriptionsData } from "@/types/conferanceData";
 import { RealTimeSummaryData } from "@/types/realTimeSummaryData";
 
 export default function ProjectViewPage() {
-  const [status, setStatus] = useState<string>('Done');
+  const [status, setStatus] = useState<string>("Done");
   const navigate = useNavigate();
   const { projectID } = useParams<{ projectID: string }>();
   const [scripts, setScripts] = useState<scriptionsData[]>([]); // 스크립트 상태
   const [summarys, setSummary] = useState<RealTimeSummaryData[]>([]); // 요약 상태
 
+  const [userName, setUserName] = useState<string>("");
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,14 +42,23 @@ export default function ProjectViewPage() {
     }
 
     getStatus(projectID).then((res: any) => {
-      let status = res.data.data.status
-      if(status === "Before"){
-        alert('회의가 시작 전입니다. 회의 시작 후 다시 접속해 주세요.')
+      let status = res.data.data.status;
+      if (status === "Before") {
+        alert("회의가 시작 전입니다. 회의 시작 후 다시 접속해 주세요.");
         navigate("/project");
-      } else if(status === "Processing") {
-        setStatus(status)
+      } else if (status === "Processing") {
+        setStatus(status);
+        setConferenceData({
+          projectId: res.data.data.projectId,
+          projectName: res.data.data.projectName,
+          imageUrl: "",
+          updatedAt: res.data.data.updatedAt,
+          scriptions: [],
+          summary: { title: "", content: "" },
+        });
+        setUserName(res.data.data.creator);
       } else {
-        setStatus(status)
+        setStatus(status);
         let cancelled = false;
 
         (async () => {
@@ -73,65 +83,65 @@ export default function ProjectViewPage() {
       }
       console.log(res.data.data.status);
     });
-
   }, [projectID]);
 
-  if (status === "Done" && loading) return <div style={{ padding: 16 }}>불러오는 중…</div>;
-  if (status === "Done" && error) return <div style={{ padding: 16, color: "red" }}>{error}</div>;
+  if (status === "Done" && loading)
+    return <div style={{ padding: 16 }}>불러오는 중…</div>;
+  if (status === "Done" && error)
+    return <div style={{ padding: 16, color: "red" }}>{error}</div>;
   if (status === "Done" && !conferenceData.imageUrl)
     return <div style={{ padding: 16 }}>이미지 없음</div>;
 
   return (
     <>
-      {
-        status === "Done" ? (
-          <>
-            <SideBar
-              isSidebarOpen={isSidebarOpen}
-              setIsSidebarOpen={setIsSidebarOpen}
-              scripts={conferenceData.scriptions}
-              conferenceData={conferenceData}
-              summary={conferenceData.summary}
-              view={true}
+      {status === "Done" ? (
+        <>
+          <SideBar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+            scripts={conferenceData.scriptions}
+            conferenceData={conferenceData}
+            summary={conferenceData.summary}
+            view={true}
+          />
+          <div
+            className="project-content"
+            style={{
+              paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
+            }}
+          >
+            <img
+              src={conferenceData.imageUrl}
+              alt="project view"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
-            <div
-              className="project-content"
-              style={{
-                paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
-              }}
-            >
-              <img
-                src={conferenceData.imageUrl}
-                alt="project view"
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <SideBar
-              isSidebarOpen={isSidebarOpen}
-              setIsSidebarOpen={setIsSidebarOpen}
-              scripts={scripts}
-              conferenceData={conferenceData}
-              summarys={summarys}
-              headerLess={true}
+          </div>
+        </>
+      ) : (
+        <>
+          <SideBar
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+            scripts={scripts}
+            conferenceData={conferenceData}
+            summarys={summarys}
+            headerLess={true}
+            creatorName={userName}
+          />
+          <div
+            className="project-content"
+            style={{
+              paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
+            }}
+          >
+            <MindMapView
+              setScripts={setScripts}
+              projectId={projectID ?? ""}
+              setSummary={setSummary}
             />
-            <div
-              className="project-content"
-              style={{
-                paddingLeft: isSidebarOpen ? "340px" : "56px", // 동적 패딩
-              }}
-            >
-              <MindMapView
-                setScripts={setScripts}
-                projectId={projectID ?? ""}
-                setSummary={setSummary}
-              />
-            </div>
-          </>
-        )
-      }
+          </div>
+        </>
+      )}
     </>
   );
 }

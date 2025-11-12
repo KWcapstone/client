@@ -29,7 +29,8 @@ interface SideBarProps {
   summarys?: RealTimeSummaryData[];
   summary?: summarysWithTitleData;
   view?: boolean;
-  headerLess? : boolean;
+  headerLess?: boolean;
+  creatorName?: string;
 }
 
 const SideBar = ({
@@ -40,7 +41,8 @@ const SideBar = ({
   summarys,
   summary,
   view = false,
-  headerLess = false
+  headerLess = false,
+  creatorName = "",
 }: SideBarProps) => {
   const [isScript, setIsScript] = useState(false);
   const [isSummary, setIsSummary] = useState(true);
@@ -76,7 +78,10 @@ const SideBar = ({
   }, []);
 
   return (
-    <div className={`side-bar ${isSidebarOpen ? 'open' : 'closed'} ${view ? '' : 'side-bar-header'} ${headerLess ? 'less' : ''}`}
+    <div
+      className={`side-bar ${isSidebarOpen ? "open" : "closed"} ${
+        view ? "" : "side-bar-header"
+      } ${headerLess ? "less" : ""}`}
       style={{ width: isSidebarOpen ? 340 : 56 }}
     >
       {isSidebarOpen ? (
@@ -102,7 +107,9 @@ const SideBar = ({
                   <span className="detail-title">생성자</span>
                   <div className="creator-wrap">
                     <img src={test} alt="creator" className="creator-icon" />
-                    <span className="detail-des">{usrName}</span>
+                    <span className="detail-des">
+                      {headerLess ? creatorName : usrName}
+                    </span>
                   </div>
                 </div>
               </div>
